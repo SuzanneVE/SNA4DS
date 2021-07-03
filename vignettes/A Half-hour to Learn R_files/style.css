@@ -1,0 +1,104 @@
+* {
+  line-height: 1.6;
+  margin: 1.6rem 0;
+  padding: 0;
+}
+
+html {
+  font-size: 95%;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  color: #333;
+  max-width: 50rem;
+  margin: 0 auto 1.6rem auto;
+  padding: 0 1rem;
+}
+
+h1, h2 {
+  color: #000;
+  font-weight: 800;
+}
+h1 {
+  margin: 4.8rem 0 3.2rem 0;
+  font-size: 1.4rem;
+  text-align: center;
+}
+h2 {
+  font-size: 1rem;
+  margin-top: 4.8rem;
+}
+
+code {
+  font-family: SFMono, Consolas, "Roboto Mono", "Liberation Mono", Menlo, monospace;
+}
+pre {
+  overflow: auto;
+  background: #f5f4f2;
+  font-size: 0.85rem;
+  padding: 1.6rem;
+  border: 1px solid #c3c3c3;
+  border-radius: 4px;
+}
+
+blockquote {
+  font-style: italic;
+}
+blockquote p::before, blockquote p::after {
+  content: '"';
+  position: absolute;
+  color: black;
+  font-size: 1.8rem;
+  line-height: 0;
+}
+blockquote p::before {
+  margin-left: -1rem;
+  margin-top: 0.5rem;
+}
+blockquote p::after {
+  margin-top: 1.5rem;
+}
+
+a, a:visited {
+  text-decoration: none;
+  color: #C74848;
+}
+a[rel="author"] {
+  display: block;
+  color: #8a8a8a;
+  margin: 0 0 3.2rem 0;
+  border-bottom: 1px solid;
+  padding-bottom: 0.1rem;
+}
+
+ol, li {
+  margin: 0;
+}
+
+sup {
+  line-height: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+figure {
+  text-align: center;
+}
+
+table {
+  width: 100%;
+}
+td {
+  height: 1.6rem;
+}
+
+.citations {
+  margin: 3.2rem 0;
+}
+.citations :target {
+  background: #FFF1CE;
+}
