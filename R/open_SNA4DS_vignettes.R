@@ -1,0 +1,46 @@
+# INDEX <- read.table(
+#   file = "C:/Dropbox/R/eigen_packages/=git/SNA4DS_2021/doc/INDEX",
+#   header = TRUE, sep = ",", strip.white = TRUE)
+
+
+#' Open a SNA4DS vignette in the browser
+#'
+#' Open a SNA4DS vignette in your browser
+#'
+#' Shows a list of currently available online vignettes for the #' \code{SNA4DS} package.
+#' The user can pick the preferred vignette by entering the number that corresponds
+#' to the preferred vignette. The vignette will then open in the user's default
+#' web browser.
+#'
+#' When \code{graphics} is \code{TRUE}, a graphical choice menu is shown. If that
+#' is not preferred, or if the user's machine lacks the graphical tools needed,
+#' setting \code{graphics} to \code{FALSE} will show the list of vignettes in the
+#' R console.
+#'
+#' @param graphics logical, should the list of options be shown as a clickable
+#' graphical menu?
+#'
+#' @return nothing
+#' @export
+#' @examples
+#' \dontrun{
+#' open_SNA4DS_vignettes()
+#' }
+open_SNA4DS_vignettes <- function(graphics = TRUE) {
+  paths <- find.package("SNA4DS", lib.loc = NULL, quiet = TRUE)
+  paths <- paths[dir.exists(file.path(paths, "doc"))]
+  doc_path <- file.path(paths, "doc")
+  # htmls <- list.files(path = doc_path, pattern = "html$", full.names = TRUE)
+  
+  INDEX <- utils::read.table(
+    file = file.path(doc_path, "INDEX"), 
+    header = TRUE, sep = ",", strip.white = TRUE)
+  
+  INDEX$DOC <- file.path(doc_path, INDEX$DOC)
+  
+  perform <- glue::glue("browseURL('{vignette}')", vignette = INDEX$DOC)
+  cat("\n\nPlease pick which vignette you want to open, it will show in your default browser.\n")
+  cat("The following vignettes are currently available to pick from:\n")
+  pick <- utils::menu(INDEX$TITLE, graphics = graphics)
+  glue::identity_transformer(perform[pick], .GlobalEnv)
+}

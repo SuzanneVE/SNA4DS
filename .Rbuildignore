@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^doc$
 ^Meta$
 .tar.gz$
+^doc$
