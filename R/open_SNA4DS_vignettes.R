@@ -28,15 +28,20 @@
 #' }
 open_SNA4DS_vignettes <- function(graphics = TRUE) {
   paths <- find.package("SNA4DS", lib.loc = NULL, quiet = TRUE)
-  paths <- paths[dir.exists(file.path(paths, "doc"))]
-  doc_path <- file.path(paths, "doc")
-  # htmls <- list.files(path = doc_path, pattern = "html$", full.names = TRUE)
+
+  if (dir.exists(file.path(paths, "doc"))) {
+    paths <- file.path(paths, "doc")
+  } else if (dir.exists(file.path(paths, "inst", "doc"))) {
+    paths <- file.path(paths, "inst", "doc")
+  } else {
+    stop("The folder containing the vignettes does not exist")
+  }
   
   INDEX <- utils::read.table(
-    file = file.path(doc_path, "INDEX"), 
+    file = file.path(paths, "INDEX"), 
     header = TRUE, sep = ",", strip.white = TRUE)
   
-  INDEX$DOC <- file.path(doc_path, INDEX$DOC)
+  INDEX$DOC <- file.path(paths, INDEX$DOC)
   
   perform <- glue::glue("browseURL('{vignette}')", vignette = INDEX$DOC)
   cat("\n\nPlease pick which vignette you want to open, it will show in your default browser.\n")
