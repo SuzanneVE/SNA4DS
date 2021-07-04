@@ -46,6 +46,6 @@ open_SNA4DS_vignettes <- function(graphics = TRUE) {
   perform <- glue::glue("browseURL('{vignette}')", vignette = INDEX$DOC)
   cat("\n\nPlease pick which vignette you want to open, it will show in your default browser.\n")
   cat("The following vignettes are currently available to pick from:\n")
-  pick <- utils::menu(INDEX$TITLE, graphics = graphics)
+  pick <- utils::menu(INDEX$TITLE, graphics = graphics, title = "Select your favorite vignette")
   glue::identity_transformer(perform[pick], .GlobalEnv)
 }
