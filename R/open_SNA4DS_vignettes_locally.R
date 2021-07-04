@@ -32,6 +32,6 @@
 #' @export
 #'
 #' @examples
-get_SNA4DS_vignettes <- function() {
+open_SNA4DS_vignettes_locally <- function() {
   utils::browseVignettes(package = "SNA4DS")
 }
