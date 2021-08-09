@@ -12,7 +12,7 @@ Authors@R:
 					role = c("aut"),
 					email = "C.Zucca@jads.nl"))
 Maintainer: Roger Leenders <r.t.a.j.leenders@jads.nl>
-Description: This package contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2021-2022). Update the package frequently, to have access to the most up-to-date tutorials. The tutorials will be added throughout the semester. The package contains a vignette that shows the most important functions you need to know for this course.
+Description: Contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2021-2022). Update the package frequently, to have access to the most up-to-date tutorials. The tutorials will be added throughout the semester. The package contains a vignette that shows the most important functions you need to know for this course.
 Depends: R (>= 4.1.0)
 Encoding: UTF-8
 LazyData: true
@@ -21,7 +21,20 @@ BugReports: https://github.com/SNAnalyst/SNA4DS/issues
 RoxygenNote: 7.1.1
 Imports:
     glue,
+	igraph,
+	intergraph,
     knitr,
     learnr,
-    rmarkdown
+	ndtv,
+	network,
+	networkDynamic,
+	remotes,
+    rmarkdown,
+	sna
+Suggests:
+	desc,
+	fs,
+	rlang,
+	rprojroot,
+	usethis
 License: AGPL (>= 3) + file LICENSE
