@@ -1,16 +1,16 @@
 Package: SNA4DS
 Type: Package
 Title: Social Network Analysis for Data Science
-Version: 1.0.0
+Version: 0.9.9
 Authors@R:
 	c(person(given = "Roger",
 					family = "Leenders",
 					role = c("aut", "cre"),
-					email = "r.t.a.j.leenders@jads.nl"),
+					email = "SNA4DS@jads.nl"),
 	  person(given = "Claudia",
 					family = "Zucca",
 					role = c("aut"),
-					email = "C.Zucca@jads.nl"))
+					email = "SNA4DS@jads.nl"))
 Maintainer: Roger Leenders <r.t.a.j.leenders@jads.nl>
 Description: Contains the tutorials for the JADS course "Social Network Analysis for Data Science" (2021-2022). Update the package frequently, to have access to the most up-to-date tutorials. The tutorials will be added throughout the semester. The package contains a vignette that shows the most important functions you need to know for this course.
 Depends: R (>= 4.1.0)
