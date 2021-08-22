@@ -1,6 +1,6 @@
 ---
 title: "Lab 01 - Intro to R"
-description: "Week 1: Introductory tutorial about how to program in the R language"
+description: "Week 1: An iIntroductory tutorial for programming in the R language"
 output: 
   learnr::tutorial:
     fig_caption: no
@@ -1484,7 +1484,7 @@ str(mtcars)
 
 str(mtcars)
 
-mtsub <-mtcars[ , 1:3]
+mtsub <- mtcars[ , 1:3]
 ```
 
 ```{r grade_code171-check}
@@ -1892,7 +1892,7 @@ helper <- function(arg1, arg2, arg3, arg4, ...) {
 }
 ```
 
-Consider the `iris` data set again and employ the function in this way
+Consider the *iris* data set again and employ the function in this way
 
 * arg1 <- Sepal.Length
 * arg2 <- Sepal.Width
@@ -2313,7 +2313,7 @@ plot(x = x,
 
 It's not too hard! Right? Now it's your turn. 
 
-Make a plot using the `iris` data. Place *Sepal.Length* on the x axis, and 
+Make a plot using the *iris* data. Place *Sepal.Length* on the x axis, and 
 *Sepal.Width* on the y one. Make it print points, choosing option 16. Make it 
 blue. Put x and y labels with the names of the variables, and set 
 "Iris Sepal Plot" as the main title.
