@@ -38,7 +38,6 @@ you to the next level!
 
 So, let's get started!
 
-\if{html}{\figure{cat.png}{options: width=100 alt="Figure: cat.png"}}
 
 
 ## Checking installation
