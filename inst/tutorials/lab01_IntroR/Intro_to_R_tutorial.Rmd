@@ -106,7 +106,7 @@ You need to have a few packages installed
 # Function to check whether package is installed
 
 # insert here packages that the students need to have installed.
-pkg <- c("SNA4DSData", "igraph", "sna", "gradethis")
+pkg <- c("SNA4DSData", "igraph", "sna", "gradethis", "papaja", "ina")
 
 
 is.installed <- function(mypkg){
