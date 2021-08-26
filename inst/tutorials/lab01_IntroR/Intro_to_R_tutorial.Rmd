@@ -2049,12 +2049,13 @@ The structure of a nested loop is
 	
 }`
 
-It's a little difficult, but I KNOW THAT YOU CAN DO IT!!!
+It's a little difficult, but I KNOW THAT YOU CAN DO IT!!! Cal your indexes *kid*
+and *animal*. As *kid* in *Kids* and *animal* in *Animals*.
 
 
-```{r grade_code23, exercise = TRUE, echo = TRUE, exercise.setup = "try_something39"}
+```{r grade_code23, exercise = TRUE, echo = TRUE}
 
-Kids <- as.factor(c("Anna", "Barbara", "Max", "Luke", "Jack", "Martha"))
+Kids <- c("Anna", "Barbara", "Max", "Luke", "Jack", "Martha")
 Animals <- c("cats", "dogs", "crocodiles")
 
  
