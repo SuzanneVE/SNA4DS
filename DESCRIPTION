@@ -34,6 +34,7 @@ Imports:
 	sna
 Remotes:
 	github::rstudio-education/gradethis
+	github::SNAnalyst/SNA4DSData (>= 0.9.9000)
 Suggests:
 	desc,
 	fs,
