@@ -130,7 +130,9 @@ if (window.hljs) {
 <pre><code>## Great! You have the SNA4DSData package
 ## Great! You have the igraph package
 ## Great! You have the sna package
-## Great! You have the gradethis package</code></pre>
+## Great! You have the gradethis package
+## Great! You have the papaja package
+## Great! You have the ina package</code></pre>
 <p>Do you have <code>SNA4DSData</code> installed? If not run this line of code on your <em>R</em> console:</p>
 <p><code>remotes::install_github("SNAnalyst/SNA4DSData", dependencies = TRUE)</code></p>
 <p>Ok, check up completed! Did you pass the checks? Yes? Great! Let’s get started for real! If not, please close the tutorial, update/download and come back!</p>
@@ -471,8 +473,6 @@ attributes(grades)</code></pre>
 </div>
 <p>yes! Now it is correct! Try to compare the original vector and the one turned into numeric to see whether they match!</p>
 <div class="tutorial-exercise" data-label="grade_code5" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>a &lt;- 3
-b &lt;- 5</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="grade_code5-solution" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -967,7 +967,7 @@ L[[1]]$col1</code></pre>
 <div class="tutorial-exercise-support" data-label="grade_code171-solution" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>str(mtcars)
 
-mtsub &lt;-mtcars[ , 1:3]</code></pre>
+mtsub &lt;- mtcars[ , 1:3]</code></pre>
 </div>
 <p>How about deleting these three columns instead? Hint: Use the operator - and round brackets…</p>
 <div class="tutorial-exercise" data-label="grade_code172" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -1170,7 +1170,7 @@ mtcars$cyl &lt;- ifelse(mtcars$gear == 8, &quot;cool&quot;, &quot;not_cool&quot;
 }</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Consider the <code>iris</code> data set again and employ the function in this way</p>
+<p>Consider the <em>iris</em> data set again and employ the function in this way</p>
 <ul>
 <li>arg1 &lt;- Sepal.Length</li>
 <li>arg2 &lt;- Sepal.Width</li>
@@ -1204,7 +1204,10 @@ f &lt;- helper(iris$Sepal.Length, iris$Sepal.Width, iris$Petal.Length, iris$Peta
 <h3>While loops</h3>
 <p>Do you remember the conditions we already used a lot? Well, a while loop does something for you <em>while</em> a condition is TRUE. How nice of it?</p>
 <p>This is the logic</p>
-<p><code>while (test_expression) { statement }</code></p>
+<p>`while (test_expression)</p>
+<p>{</p>
+<p>statement</p>
+<p>}`</p>
 <p>The while loop will stop doing whatever it is doing when the condition expires. For instance, you eat a yogurt jar while it is good. When it expires, you stop eating it and toss it away (Well, at least we don’t eat when mold is inside…YAK!!)</p>
 <p>Let’s try with a simple example.</p>
 <div class="tutorial-exercise" data-label="try_something40" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -1218,14 +1221,15 @@ i = i+1
 }</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>In this example, the while loop is printing (the function <code>cat()</code>) a progression of numbers, but only while they are still smaller than 6.</p>
+<p>In this example, the while loop is printing (the function <code>cat()</code>) a progression of numbers, but only while they are still smaller than 10.</p>
 </div>
 <div id="section-for-loops" class="section level3">
 <h3>For Loops</h3>
 <p>Do you remember when Bart Simpson had two write the same sentence over and over? Bart would have needed a for loop!</p>
 <p>The for loop does the same thing as many times as you tell it to do it! Lovely, isn’t it?</p>
 <p>The logic is</p>
-<p>`for (this number of times that I’m telling you here) {</p>
+<p>`for (this number of times that I’m telling you here)</p>
+<p>{</p>
 <p>Enter the data structure and do this for me!</p>
 <p>}`</p>
 <p>Let’s say that you want to print the sentence <em>The year is …</em> for as many years as you need, that’s how you do it!</p>
@@ -1234,7 +1238,7 @@ i = i+1
 
 for (i in 1:length(y) ){
   
-  print(paste(&quot;The year is&quot;, i))
+  print(paste(&quot;The year is&quot;, y[i]))
   
 }</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -1252,7 +1256,8 @@ for (i in 1:length(y) ){
 <p>You have a vector of 6 Kids and a vector of 3 Animals. If your indexes are respectively <em>kid</em> and <em>animal</em>, can you write a nested for loop so that you print a total of 6*3 sentences where each kid loves each animal? For example:</p>
 <p>“Anna loves cats”</p>
 <p>The structure of a nested loop is</p>
-<p>`for( …) { for(for…) {</p>
+<p>`for(…) {</p>
+<pre><code>for(...) {</code></pre>
 <p>statement</p>
 <pre><code>}</code></pre>
 <p>}`</p>
@@ -1421,7 +1426,7 @@ plot(x = x,
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>It’s not too hard! Right? Now it’s your turn.</p>
-<p>Make a plot using the <code>iris</code> data. Place <em>Sepal.Length</em> on the x axis, and <em>Sepal.Width</em> on the y one. Make it print points, choosing option 16. Make it blue. Put x and y labels with the names of the variables, and set “Iris Sepal Plot” as the main title.</p>
+<p>Make a plot using the <em>iris</em> data. Place <em>Sepal.Length</em> on the x axis, and <em>Sepal.Width</em> on the y one. Make it print points, choosing option 16. Make it blue. Put x and y labels with the names of the variables, and set “Iris Sepal Plot” as the main title.</p>
 <div class="tutorial-exercise" data-label="grade_code261" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
@@ -2409,10 +2414,14 @@ output$`tutorial-exercise-grade_code5-output` <- renderUI({
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache("grade_code5", list(setup = NULL, chunks = list(list(label = "grade_code5", 
-    code = "\na <- 3\nb <- 5\n", opts = list(label = "\"grade_code5\"", 
-        exercise = "TRUE"), engine = "r")), code_check = NULL, 
-    error_check = NULL, check = structure("gradethis::grade_code(correct = \"Great job!\")", chunk_opts = list(
+learnr:::store_exercise_cache("grade_code5", list(setup = "grades <- c('mildly spicy', 'mildly spicy', 'very spicy', 'a bit spicy', 'Waw! Fire!', \n            'not spicy', 'very spicy', 'mildly spicy', 'a bit spicy', 'a bit spicy')\n\n\ngrades <- as.factor(grades)\n\nattributes(grades)", 
+    chunks = list(list(label = "try_something13", code = "grades <- c('mildly spicy', 'mildly spicy', 'very spicy', 'a bit spicy', 'Waw! Fire!', \n            'not spicy', 'very spicy', 'mildly spicy', 'a bit spicy', 'a bit spicy')\n\n\ngrades <- as.factor(grades)\n\nattributes(grades)", 
+        opts = list(label = "\"try_something13\"", exercise = "TRUE", 
+            echo = "TRUE"), engine = "r"), list(label = "grade_code5", 
+        code = "\n\n", opts = list(label = "\"grade_code5\"", 
+            exercise = "TRUE", exercise.setup = "\"try_something13\""), 
+        engine = "r")), code_check = NULL, error_check = NULL, 
+    check = structure("gradethis::grade_code(correct = \"Great job!\")", chunk_opts = list(
         label = "grade_code5-check")), solution = structure(c("", 
     "", "grades", "as.numeric(grades)", "", ""), chunk_opts = list(
         label = "grade_code5-solution")), options = list(eval = FALSE, 
@@ -2434,10 +2443,10 @@ learnr:::store_exercise_cache("grade_code5", list(setup = NULL, chunks = list(li
         max.print = 1000, tutorial = TRUE, exercise.timelimit = 60, 
         exercise.checker = "function (...) \n{\n    lifecycle::deprecate_soft(\"0.2.2\", \"grade_learnr()\", \"gradethis_exercise_checker()\")\n    gradethis_exercise_checker(...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "grade_code5", exercise = TRUE, code = c("", 
-        "a <- 3", "b <- 5", ""), out.width.px = 624, out.height.px = 384, 
-        params.src = "grade_code5, exercise = TRUE", fig.num = 0, 
-        exercise.df_print = "paged"), engine = "r"))
+        label = "grade_code5", exercise = TRUE, exercise.setup = "try_something13", 
+        code = c("", "", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "grade_code5, exercise = TRUE, exercise.setup = \"try_something13\"", 
+        fig.num = 0L, exercise.df_print = "paged"), engine = "r"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -3554,7 +3563,7 @@ learnr:::store_exercise_cache("grade_code171", list(setup = NULL, chunks = list(
         exercise = "TRUE", echo = "TRUE"), engine = "r")), code_check = NULL, 
     error_check = NULL, check = structure("gradethis::grade_code(correct = \"Fantastic!\")", chunk_opts = list(
         label = "grade_code171-check")), solution = structure(c("", 
-    "str(mtcars)", "", "mtsub <-mtcars[ , 1:3]"), chunk_opts = list(
+    "str(mtcars)", "", "mtsub <- mtcars[ , 1:3]"), chunk_opts = list(
         label = "grade_code171-solution")), options = list(eval = FALSE, 
         echo = TRUE, results = "markup", tidy = FALSE, tidy.opts = NULL, 
         collapse = FALSE, prompt = FALSE, comment = NA, highlight = FALSE, 
@@ -4205,7 +4214,7 @@ output$`tutorial-exercise-try_something411-output` <- renderUI({
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::store_exercise_cache("try_something411", list(setup = NULL, chunks = list(list(label = "try_something411", 
-    code = "\ny <- c(2010, 2011, 2012, 2013, 2014, 2015)\n\nfor (i in 1:length(y) ){\n  \n  print(paste(\"The year is\", i))\n  \n}\n", 
+    code = "\ny <- c(2010, 2011, 2012, 2013, 2014, 2015)\n\nfor (i in 1:length(y) ){\n  \n  print(paste(\"The year is\", y[i]))\n  \n}\n", 
     opts = list(label = "\"try_something411\"", exercise = "TRUE"), 
     engine = "r")), code_check = NULL, error_check = NULL, check = NULL, 
     solution = NULL, options = list(eval = FALSE, echo = TRUE, 
@@ -4229,8 +4238,8 @@ learnr:::store_exercise_cache("try_something411", list(setup = NULL, chunks = li
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "try_something411", exercise = TRUE, code = c("", 
         "y <- c(2010, 2011, 2012, 2013, 2014, 2015)", "", "for (i in 1:length(y) ){", 
-        "  ", "  print(paste(\"The year is\", i))", "  ", "}", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "try_something411, exercise = TRUE", 
+        "  ", "  print(paste(\"The year is\", y[i]))", "  ", 
+        "}", ""), out.width.px = 624, out.height.px = 384, params.src = "try_something411, exercise = TRUE", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"))
 </script>
  
@@ -5037,7 +5046,7 @@ learnr:::store_exercise_cache("try_something55", list(setup = "\nx <- c(1, 2, 3,
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","highr","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","rstudioapi","sass","shiny","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.2.5.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.27","0.3.2","0.14","1.1.0","0.2.3.9001","4.1.1","4.1.1","0.9","0.5.1.1","1.5.3","1.6.1","0.1.4","1.7.2","1.33","1.3.0","0.10.1.9011","1.0.0","2.0.1","1.1","4.1.1","0.11","1.2.0.1","2.5.0","1.0.7","0.4.11","2.10","2.0.2","0.13","0.4.0","1.6.0","4.1.1","1.7.3","1.4.0","4.1.1","4.1.1","2.4.2","0.25","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","highr","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","rstudioapi","sass","shiny","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.2.5.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.27","0.3.2","0.14","1.1.0","0.2.3.9001","4.1.1","4.1.1","0.9","0.5.1.1","1.5.3","1.6.1","0.1.4","1.7.2","1.33","1.3.0","0.10.1.9011","1.0.0","2.0.1","1.1","4.1.1","0.11","1.2.0.1","2.5.1","1.0.7","0.4.11","2.10","2.0.2","0.13","0.4.0","1.6.0","4.1.1","1.7.3","1.4.0","4.1.1","4.1.1","2.4.2","0.25","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>

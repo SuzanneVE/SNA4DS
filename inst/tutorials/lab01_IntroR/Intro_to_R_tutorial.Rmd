@@ -630,10 +630,9 @@ attributes(grades)
 yes! Now it is correct! Try to compare the original vector and the one turned into 
 numeric to see whether they match!
 
-```{r grade_code5, exercise = TRUE}
+```{r grade_code5, exercise = TRUE, exercise.setup = "try_something13"}
 
-a <- 3
-b <- 5
+
 
 ```
 
@@ -1997,6 +1996,7 @@ Lovely, isn't it?
 The logic is
 
 `for (this number of times that I'm telling you here)
+
 {
 
 Enter the data structure and do this for me!
