@@ -1952,13 +1952,13 @@ something for you *while* a condition is TRUE. How nice of it?
 
 This is the logic
 
-`while (test_expression)
+while (test_expression)
 
 {
 
 statement
 
-}`
+}
 
 The while loop will stop doing whatever it is doing when the condition expires. 
 For instance, you eat a yogurt jar while it is good. When it expires, you stop 
@@ -1995,13 +1995,13 @@ Lovely, isn't it?
 
 The logic is
 
-`for (this number of times that I'm telling you here)
+for (this number of times that I'm telling you here)
 
 {
 
 Enter the data structure and do this for me!
 
-}`
+}
 
 Let's say that you want to print the sentence *The year is ...* for as many 
 years as you need, that's how you do it!
@@ -2039,7 +2039,7 @@ You have a vector of 6 Kids and a vector of 3 Animals. If your indexes are respe
 
 The structure of a nested loop is
 
-`for(...) {
+for(...) {
 
 	for(...) {
 
@@ -2047,7 +2047,7 @@ The structure of a nested loop is
 
 	}
 	
-}`
+}
 
 It's a little difficult, but I KNOW THAT YOU CAN DO IT!!! Cal your indexes *kid*
 and *animal*. As *kid* in *Kids* and *animal* in *Animals*.
