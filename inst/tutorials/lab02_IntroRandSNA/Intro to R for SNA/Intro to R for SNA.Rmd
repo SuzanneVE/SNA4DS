@@ -23,18 +23,24 @@ knitr::opts_chunk$set(echo = TRUE)
 # Function to check whether package is installed
 check_packages <- function() {
   # insert here packages that the students need to have installed.
-  pkg <- c("SNA4DSData", "igraph", "sna", "gradethis", "intergraph")
-  version <- c("0.9.9000", "1.2.6", "2.6", "0.2.3.9001", "2.0-2")
-  where <- c("SNAnalyst/SNA4DSData", "CRAN", "CRAN", "rstudio/gradethis", "CRAN")
   
-  
-  pkgs <- cbind(pkg, version, where) |> 
+  pkgs <- matrix(c(
+    "gradethis", "0.2.3.9001", "rstudio/gradethis",
+    "igraph", "1.2.6", "CRAN",
+    "influenceR", "0.1.0", "CRAN",
+    "intergraph", "2.0-2", "CRAN",
+    "network", "1.17.1", "CRAN",
+    "networkD3", "0.4", "CRAN",
+    "sna", "2.6", "CRAN",
+    "SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
+  ), byrow = TRUE, ncol = 3) |> 
     as.data.frame()
   
+  colnames(pkgs) <- c("pkg", "version", "where")
+
   all_installed <- installed.packages()
-  
+  cat("...checking individual packages now...\n")
   for (pak in 1:nrow(pkgs)) {
-    cat("...checking individual packages now...\n")
     installed <- which(all_installed[, "Package"] == pkgs[pak, "pkg"]) |> unname()
     if (length(installed) == 0) {   # not installed
       if (pkgs[pak, "where"] == "CRAN") {
@@ -125,7 +131,7 @@ No worries, we will start gently and become quite advanced as this course advanc
 
 The purpose of this tutorial is:
 
-* to set some conventions (*best practices*) that we will strictly adhere to in 
+* to set some best practices that we will strictly adhere to in 
 this course and that are very useful when analyzing network data;
 * to learn how to construct social networks in R;
 * to get an introduction to the main packages that support the analysis of 
@@ -170,6 +176,238 @@ advise you to upgrade `SNA4DS`).
 ```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
 check_packages()
 ```
+
+
+### Stay up-to-date!
+
+Note that the `SNA4DS` package will continue to be updated throughout the
+semester, you will probably need additional packages as we go along. If you
+continue to refresh the package by weekly running
+`remotes::install_github(SNAnalyst/SNA4DS, dependencies = TRUE)`, you should be
+fine. Without the `dependencies = TRUE` argument, you may miss some
+dependencies, which can cause you to get errors at some point.
+
+
+## R Best Practices
+
+In the previous tutorial, you already learned that it is best to indent your 
+code appropriately, that you should use the `<-` assignment operator instead 
+of `=`, and some other ways to make your code nicely useable.
+
+Before we start working on some networks, I want to repeat one of the best practices
+from the previous tutorial and add an additional one.
+These two best practices are **especially important for network analysis**. 
+Trust us, we learnt the hard way...
+
+Therefore, we are going to strictly adhere to these two best practices 
+throughout the course.
+
+
+## Best Practice I: Don't load R packages
+
+In many code examples in books and on the internet, you see that a library is
+loaded/attached (for the purpose of this course, we will use these two terms
+interchangeably) using `library(package_name)`. This makes the functions inside
+that package directly accessible to the user. 
+That may seem like a useful thing.<br>
+But, actually, it is almost always a **really really really bad idea**. There are
+many reasons for this, but these are the most important ones:
+
+1. If a function moves from one package to another (and this actually happens
+quite frequently), your code won't work anymore and, more importantly, you don't
+really know why. This makes debugging really hard.
+2. The habit of using `library(package_name)` may cause you to use it in
+your own interactive work as well. 
+Then, once you save a script based on your interactive code, 
+chances are it won't work well, because it depends on specific
+packages being loaded that may not have been included when you created your
+own script. 
+As a result, debugging becomes a nightmare. Trust us, we have way too
+much experience with this scenario ourselves...
+3. When you load anything into R, it gets attached R's "search path." 
+Generally
+speaking, when you attach _package1_, R places on the top of the search path.
+That is handy, because all of the functions of _package1_ will be fully
+available to you. 
+Then, when you attach _package2_, that will move to the front
+and _package1_ will become second in the path. 
+That is all fine, until you
+load packages that have functions with the same name.
+
+Let's see this in action.
+
+```{r nw_data-laden, echo = FALSE, include = FALSE}
+load("nw_data.RData")
+```
+
+You have a network in your R session that is called `friendship`. 
+This is what it looks like:
+
+```{r MyClickScript, echo = FALSE}
+MyClickScript <- 'alert("You clicked " + d.name + " which is in row " +
+       (d.index + 1) +  " of your original R data frame");'
+networkD3::forceNetwork(Links = g3$links, Nodes = g3$nodes,
+             Source = 'source', Target = 'target',
+             NodeID = 'name', Group = 'group', legend = FALSE,
+             opacity = 0.8, opacityNoHover = TRUE, clickAction = MyClickScript)
+try(detach(package:influenceR), silent = TRUE)
+```
+
+You load the `sna` package to calculate the betweenness scores of the actors in
+the network (no worries, next week we will discuss the betweenness measure in
+detail). Run the following and see what happens:
+
+```{r load_data, include = FALSE}
+friendship <- SNA4DS:::lab1_friendship
+```
+![]()
+
+```{r library1, message = FALSE, warning = FALSE, exercise = TRUE, exercise.setup = "load_data"}
+library(sna)
+betweenness(friendship)
+```
+
+Nice, and if you wanted to see the names of the actors next to their scores, you 
+could run:
+
+```{r load_data_and_sna, include = FALSE, message = FALSE, warning = FALSE}
+friendship <- SNA4DS:::lab1_friendship
+library(sna, quietly = TRUE)
+```
+
+
+```{r library1a, exercise = TRUE, exercise.setup = "load_data_and_sna", message = FALSE, warning = FALSE}
+data.frame(betweenness = betweenness(friendship), 
+           names = network::get.vertex.attribute(friendship, "name"))
+```
+
+
+Well, that works nicely. You loaded the `sna` package and then could easily
+calculate the betweenness scores. Now, you want to use some of the
+functionalities from the `influenceR` package. Load that.
+
+```{r influenceR_laden, exercise = TRUE, exercise.setup = "library1a", message = TRUE, warning = TRUE}
+library(influenceR)
+```
+
+You want to use the `influenceR` package to calculate some measures on the
+relative importance of the actors in the network. But first, what again were the
+betweenness scores for the actors in this network? Let's run our previous code
+again. Below, we set the function name to `betweenness` and run the code.
+
+```
+betweenness(friendship)
+```
+
+<center><b><span style='background:red'>NOT A GRAPH OBJECT</span></b></center><br>
+
+Hey, what happened? Well, `influenceR` also has a function that is called
+`betweenness` and since you loaded `influenceR` last, the `betweenness` function
+of the `influenceR` package is now higher in R's search path than the
+`betweenness` function of the `sna` package. In this case, the `influenceR`
+package throws an error ("<code>__Not a graph object__</code>"), because it expects
+an object in a different form than the object `g`. But if `influenceR` would
+have been able to deal with this `friendship` object, it would not have given
+you an error and might have given you a very different result than you wanted
+(because who says that the `betweenness` function does the exact same thing in
+both the `influenceR` and the `sna` packages?).
+
+
+### Solution
+The best practice is to explicitly refer to external functions using the syntax
+`package::function()`. That way R will always use the function from the required
+package.
+
+Try it out:
+
+```{r influenceR_setup2, warning = FALSE, message = FALSE, include = FALSE}
+library(sna, quietly = TRUE)
+library(influenceR, quietly = TRUE)
+friendship <- SNA4DS:::lab1_friendship
+```
+
+
+```{r library3, exercise = TRUE, exercise.setup = "influenceR_setup2"}
+sna::betweenness(friendship)
+```
+
+you now run `betweenness` from `sna` on the `betweenness` object, regardless of 
+any other packages that you might have currently loaded. Of course, this requires 
+that the package is __installed__, but it need not be attached. In fact, stop 
+attaching at all!
+
+If you use a lot of functions from other packages this is can become rather
+verbose. There’s also a minor performance penalty associated with :: (on the
+order of 5µs, so it will only matter if you call the function millions of
+times). But, either way: it is generally __STUPID__ to use `library` and
+__SMART__ to use `::`!
+
+> it is generally __STUPID__ to use `library` and
+__SMART__ to use `::`!
+So, in this course we expect you to use `::` throughout. There are a few
+exceptions to this rule, and we will let you know explicitly. Unless we tell you
+explicitly that you can make a specific exception, use `::` always!
+
+Try it out. In the code block below, write the code such that it will calculate
+closeness scores on this friendship network using the `sna` package. The
+appropriate function is called `closeness`. As just agreed upon, do not load the
+`sna` package for this.
+
+```{r library4, exercise = TRUE, exercise.setup = "library3"}
+
+```
+
+```{r library4-solution}
+sna::closeness(friendship)
+```
+
+```{r library4-check}
+grade_code(correct = "Excellent, this is how we want it! Keep doing it this way for the rest of your life!")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Introduction
