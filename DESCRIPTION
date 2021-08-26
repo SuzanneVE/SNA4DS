@@ -21,6 +21,7 @@ BugReports: https://github.com/SNAnalyst/SNA4DS/issues
 RoxygenNote: 7.1.1
 Imports:
     glue,
+    gradethis,
 	igraph,
 	intergraph,
     knitr,
@@ -31,6 +32,8 @@ Imports:
 	remotes,
     rmarkdown,
 	sna
+Remotes:
+	github::rstudio-education/gradethis
 Suggests:
 	desc,
 	fs,
