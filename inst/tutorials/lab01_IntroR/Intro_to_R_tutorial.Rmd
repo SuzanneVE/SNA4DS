@@ -1954,8 +1954,11 @@ something for you *while* a condition is TRUE. How nice of it?
 This is the logic
 
 `while (test_expression)
+
 {
+
 statement
+
 }`
 
 The while loop will stop doing whatever it is doing when the condition expires. 
@@ -1979,7 +1982,7 @@ i = i+1
 ```
 
 In this example, the while loop is printing (the function `cat()`) a progression
-of numbers, but only while they are still smaller than 6. 
+of numbers, but only while they are still smaller than 10. 
 
 
 
@@ -2010,7 +2013,7 @@ y <- c(2010, 2011, 2012, 2013, 2014, 2015)
 
 for (i in 1:length(y) ){
   
-  print(paste("The year is", i))
+  print(paste("The year is", y[i]))
   
 }
 
@@ -2036,12 +2039,14 @@ You have a vector of 6 Kids and a vector of 3 Animals. If your indexes are respe
 
 The structure of a nested loop is
 
-`for( ...) {
-	for(for...) {
+`for(...) {
+
+	for(...) {
 
   statement
 
 	}
+	
 }`
 
 It's a little difficult, but I KNOW THAT YOU CAN DO IT!!!
