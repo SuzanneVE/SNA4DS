@@ -1,0 +1,990 @@
+---
+title: "Lab 02 - Network Analysis in R"
+description: "Week 2: Introductory tutorial about how to use R for network analysis"
+output: 
+  learnr::tutorial:
+    fig_caption: no
+    progressive: true
+    allow_skip: true
+    toc: true
+    toc_depth: 3
+    theme: readable
+runtime: shiny_prerendered
+---
+
+```{r setup, include = FALSE}
+library(learnr)
+library(gradethis)
+# library(magrittr)
+tutorial_options(exercise.checker = gradethis::grade_learnr)
+knitr::opts_chunk$set(echo = TRUE)
+
+
+# Check whether required packages are installed
+pkgs <- matrix(c(
+  "gradethis", "0.2.3.9001", "rstudio/gradethis",
+  "igraph", "1.2.6", "CRAN",
+  "influenceR", "0.1.0", "CRAN",
+  "intergraph", "2.0-2", "CRAN",
+  "network", "1.17.1", "CRAN",
+  "networkD3", "0.4", "CRAN",
+  "sna", "2.6", "CRAN",
+  "SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
+), byrow = TRUE, ncol = 3) |> 
+  as.data.frame() |> 
+  setNames(c("pkg", "version", "where"))
+
+check_pkgs <- function(.pkgs = pkgs) {
+  SNA4DS:::check_packages(.pkgs)
+}
+
+# RStudio, at least 4.1717
+check_RStudio <- function(x = 4.1717) {
+  SNA4DS:::check_rstudio(x)
+}
+
+
+# R check version (required 4.1.1)
+check_R <- function(x) {
+  SNA4DS:::check_r_equal(4, 1.1)
+}
+```
+
+```{css, echo = FALSE}
+.green {
+  color: #87FF30;
+}
+
+.emphasized {
+  font-size: 1.2em;
+  color: #FF6000;
+}
+```
+
+
+
+## Introduction
+
+In the previous tutorial, you learned the basics of using R. 
+That tutorial was meant to introduce you to R as a progamming language. 
+It is very useful to know how to use R--not just for network analysis--
+because it offers an extremely powerful programming experience. 
+
+Now, it is time to start pointing your freshly developed R power at 
+the analysis of networks. 
+No worries, we will start gently and become **quite advanced** as this course advances.
+
+The purpose of this tutorial is:
+
+* to set some best practices that we will strictly adhere to in 
+this course and that are very useful when analyzing network data;
+* to learn how to construct social networks in R;
+* to get an introduction to the main packages that support the analysis of 
+social network data in R.
+
+
+_Let's get to it!_
+
+
+## Checking installation
+
+First, let's make sure you have all of the required packages installed. .
+
+### R Version 
+
+You need to have installed R version 4.1.1 and this tutorial is going to check it
+for you. Please hit the `Run Code` button.
+
+```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_R()
+```
+
+
+### R Studio Version
+
+You need to have installed RStudio version 1.4.1717 or above.
+Let's check by clicking `Run Code`:
+
+```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_RStudio()
+```
+
+
+### Packages
+
+You need to have a few packages installed. 
+Click the `Run Code` to check. 
+It will check whether you have the required packages installed and will 
+attempt to install any missing packages in case there are any (or it will 
+advise you to upgrade `SNA4DS`).
+
+```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_pkgs()
+```
+
+
+### Stay up-to-date!
+
+Note that the `SNA4DS` package will continue to be updated throughout the
+semester, you will probably need additional packages as we go along. If you
+continue to refresh the package by weekly running
+`remotes::install_github(SNAnalyst/SNA4DS, dependencies = TRUE)`, you should be
+fine. Without the `dependencies = TRUE` argument, you may miss some
+dependencies, which can cause you to get errors at some point.
+
+
+## R Best Practices
+
+In the previous tutorial, you already learned that it is best to indent your 
+code appropriately, that you should use the `<-` assignment operator instead 
+of `=`, and some other ways to make your code nicely useable.
+
+Before we start working on some networks, I want to repeat one of the best practices
+from the previous tutorial and add an additional one.
+These two best practices are **especially important for network analysis**. 
+Trust us, we learnt the hard way...
+
+Therefore, we are going to strictly adhere to these two best practices 
+throughout the course.
+
+
+### Best Practice I: Don't load R packages
+
+In many code examples in books and on the internet, you see that a library is
+loaded/attached (for the purpose of this course, we will use these two terms
+interchangeably) using `library(package_name)`. This makes the functions inside
+that package directly accessible to the user. 
+That may seem like a useful thing.<br>
+But, actually, it is almost always a **really really really bad idea**. There are
+many reasons for this, but these are the most important ones:
+
+1. If a function moves from one package to another (and this actually happens
+quite frequently), your code won't work anymore and, more importantly, you don't
+really know why. This makes debugging really hard.
+2. The habit of using `library(package_name)` may cause you to use it in
+your own interactive work as well. 
+Then, once you save a script based on your interactive code, 
+chances are it won't work well, because it depends on specific
+packages being loaded that may not have been included when you created your
+own script. 
+As a result, debugging becomes a nightmare. Trust us, we have way too
+much experience with this scenario ourselves...
+3. When you load anything into R, it gets attached R's "search path." 
+Generally
+speaking, when you attach _package1_, R places on the top of the search path.
+That is handy, because all of the functions of _package1_ will be fully
+available to you. 
+Then, when you attach _package2_, that will move to the front
+and _package1_ will become second in the path. 
+That is all fine, until you
+load packages that have functions with the same name.
+
+Let's see this in action.
+
+You have a network in your R session that is called `friendship`. 
+This is what it looks like:
+
+```{r MyClickScript, echo = FALSE}
+g <- SNA4DS:::tutorial_2_example
+MyClickScript <- 'alert("You clicked " + d.name + " which is in row " +
+       (d.index + 1) +  " of your original R data frame");'
+networkD3::forceNetwork(Links = g$links, Nodes = g$nodes,
+             Source = 'source', Target = 'target',
+             NodeID = 'name', Group = 'group', legend = FALSE,
+             opacity = 0.8, opacityNoHover = TRUE, clickAction = MyClickScript)
+try(detach(package:influenceR), silent = TRUE)
+```
+
+You load the `sna` package to calculate the betweenness scores of the actors in
+the network (no worries, next week we will discuss the betweenness measure in
+detail). Run the following and see what happens:
+
+```{r load_data, include = FALSE}
+friendship <- SNA4DS:::lab1_friendship
+```
+![]()
+
+```{r library1, message = FALSE, warning = FALSE, exercise = TRUE, exercise.setup = "load_data"}
+library(sna)
+betweenness(friendship)
+```
+
+Nice.<br>
+If you wanted to see the names of the actors next to their scores, you 
+could run <span class = "green">(don't worry if you don't understand this code yet, you will be a wizard at the end of this course)</span>:
+
+```{r load_data_and_sna, include = FALSE, message = FALSE, warning = FALSE}
+friendship <- SNA4DS:::lab1_friendship
+library(sna, quietly = TRUE)
+```
+
+
+```{r library1a, exercise = TRUE, exercise.setup = "load_data_and_sna", message = FALSE, warning = FALSE}
+data.frame(betweenness = betweenness(friendship), 
+           names = network::get.vertex.attribute(friendship, "name"))
+```
+
+
+<br><br>
+Well, that works nicely. You loaded the `sna` package and then could easily
+calculate the betweenness scores. 
+
+Now, you want to use some of the
+functionalities from the `influenceR` package. Load that.
+
+```{r influenceR_laden, exercise = TRUE, exercise.setup = "library1a", message = TRUE, warning = TRUE}
+library(influenceR)
+```
+
+You want to use the `influenceR` package to calculate some measures on the
+relative importance of the actors in the network. But first, what again were the
+betweenness scores for the actors in this network? YOu realize you forgot them. Well, not to worry, let's just run our previous code
+again. Below, we set the function name to `betweenness` and run the code for you <span class = "green">(note: you will not see a 'Run Code" button, the code has run automatically already)</span>.
+
+```
+betweenness(friendship)
+```
+
+<center><b><span style='background:red'>NOT A GRAPH OBJECT</span></b></center><br>
+
+Hey, what happened? Well, just like the `sna` package, `influenceR` also has a function that is called
+`betweenness` and since you loaded `influenceR` last, the `betweenness` function
+of the `influenceR` package is now higher in R's search path than the
+`betweenness` function of the `sna` package. 
+As a result, R uses the `betweenness` function from the `influenceR` package. But that causes an error because `influenceR` expects
+an object in a different form than the object `friendship`. 
+
+Of course, it is possible that `influenceR` would have been able to deal with this `friendship` object. In that case, you not have received an error. This is even worse, because now you think all is working well. 
+However, the `betweenness` function in `influenceR` does something that is not exactly the same as the  `betweenness` function in `sna`. 
+Hence, even though you did not get an error, **you are actually getting a different result than you expected.** 
+But, if this is part of a longer analysis pipeline, you may not notice and hence report results that are incorrect/do not mean what you think they do. 
+
+Oh, and this is not specific to network analysis packages. 
+Because there are many thousands of R packages, there are loads of 
+options for such clashes. 
+This even happens with straightforward function names like `filter`, `select`, `cut`, et cetera.
+
+> So, with or without the error message, just running `betweenness(friendship)` is dangerous and unwise. 
+
+Be smarter than that.
+
+### Solution
+This whole ordeal is easy to solve and prevent. 
+The best practice is to **explicitly** refer to external functions using the syntax
+`package::function()`. That way R will always use the function from the required
+package.
+
+Try it out:
+
+```{r influenceR_setup2, warning = FALSE, message = FALSE, include = FALSE}
+library(sna, quietly = TRUE)
+library(influenceR, quietly = TRUE)
+friendship <- SNA4DS:::lab1_friendship
+```
+
+
+```{r library3, exercise = TRUE, exercise.setup = "influenceR_setup2"}
+library(influenceR)
+sna::betweenness(friendship)
+```
+
+You now run `betweenness` from `sna` on the `betweenness` object, regardless of 
+any other packages that you might have currently loaded. Of course, this requires 
+that the package is __installed__, but it need not be attached. In fact, stop 
+attaching at all!
+
+If you use a lot of functions from other packages this is can become rather
+verbose. There’s also a minor performance penalty associated with :: (on the
+order of 5µs, so it will only matter if you call the function millions of
+times). But, either way: it is generally __STUPID__ to use `library()` and
+__SMART__ to use `::`!
+
+> it is generally __STUPID__ to use `library()` and
+__SMART__ to use `::`!
+So, in this course we expect you to use `::` throughout. There are a few
+exceptions to this rule, and we will let you know explicitly. Unless we tell you
+explicitly that you can make a specific exception, use `::` always!
+
+Try it out. In the code block below, write the code such that it will calculate
+*closeness* scores on this friendship network using the `sna` package. The
+appropriate function is called `closeness`. As just agreed upon, do not load the
+`sna` package for this.
+
+```{r library4, exercise = TRUE, exercise.setup = "library3"}
+
+```
+
+```{r library4-solution}
+sna::closeness(friendship)
+```
+
+```{r library4-check}
+grade_code(correct = "Excellent, this is how we want it! Keep doing it this way for the rest of your life!")
+```
+
+
+Oh, let's develop your R skills a bit further and use that same coding block above to calculate the *mean* closeness score. 
+And how about the standard deviation? And the sum?
+
+For your reference, the correct answers are:
+
+- mean: 0.3318175
+
+- standard deviation: 0.1935711
+
+- sum: 3.318175
+
+
+
+### Best Practice II: Informative Names
+
+For all of the objects you use in your code, make sure to give them _informative
+names_. It is bad habit to call your network `g` or `x`, because you will likely
+not understand the code when you read it a few weeks or months later.
+And neither will the
+instructors, so helping you with/commenting on your code will become
+unnecessarily cumbersome. 
+*Make sure to give all of your objects informative
+names, ie. names that make it immediately clear what the object is.*
+It may take you a
+little bit more time at first, but will save you tremendous amounts of time on
+the long run.
+
+> Always use informative names for all of your objects
+
+
+
+## Using R for Social Network Analysis
+
+<span class="emphasized">OK, that's all good and fine, but were are here to learn Social Network Analysis! So, give me some SNA!</span>
+
+Alright then, let's do that now.
+
+What you need to know is that there is not a single R package that 
+contains all of the SNA functionality you could possibly want. 
+In fact, there are dozens of dedicated SNA packages in R that all 
+have their specific focus and strength.
+
+Actually, there isn't such a thing as **the** network object in R. 
+Different packages can expect input objects of different structure. 
+
+The good news is that there are two packages that are by far the most important for our purposes. 
+Let's introduce the two.
+
+
+__The first is `igraph`.__ The `igraph` package actually has implementations in
+C/C++, Python, Mathematica, and R. 
+Although the `igraph` functions are slightly
+different between these three environments, you will benefit from the code in
+this course if you want to use `igraph` in another environment at a later time.
+
+The general `igraph` page is [here](https://igraph.org/) and the 
+extended documentation for the R version is [here](https://igraph.org/r/#docs).
+
+__The second is the (creatively named) `network` package.__ 
+This package
+implements a class of _network_ objects that can be analyzed by packages such as the `sna` package you already used in this tutorial. 
+
+Actually, `sna` and `network` are part of the _statnet_ suite of packages, that all work together). 
+We will make use of this set of packages a lot in this course.
+
+Unfortunately, the `igraph` and `network` network objects are **not
+interchangeable**. 
+You already experienced this! 
+The `sna` package works on objects of class `network`. The `friendship`
+ network you just used is of that class, so there was no problem 
+ running `sna::betweenness(friendship)` on it.<br>
+ The `influenceR` package actually expects as object of 
+ class `igraph`. That is why `sna::betweenness(friendship)` did not work. As I said,  the `igraph` and `network` network objects are **not
+interchangeable**.
+
+This is really unfortunate, because the `network`/`sna` and `igraph` packages are complementary
+ in their functionality, 
+ so you often might want to combine them in a single analysis. Fortunately, but there
+are ways to move between the packages by transforming the object to fit the
+other package. 
+You will learn how to do that later in this tutorial.
+
+
+## `igraph`
+Let's start with the `igraph` package.
+
+We can easily create a network and add a few nodes and links. Nodes
+are called _vertices_ and referred to by integer IDs; links are called _edges_.
+
+```{r book_1_2a, echo = TRUE, include = TRUE, exercise = TRUE}
+g <- igraph::make_empty_graph()
+
+# add one vertex
+g <- igraph::add_vertices(g, 1)
+plot(g)
+
+# add two more vertices
+g <- igraph::add_vertices(g, 2)
+plot(g)
+
+# add an edge from 1 -> 2
+g <- igraph::add_edges(g, c(1, 2))
+g
+plot(g)
+```
+
+
+The code below generates a graph with three edges. The numbers are
+interpreted as vertex IDs, so the edges are 1–>2, 2–>3, 3–>1.
+
+```{r g1, include = TRUE, echo = TRUE, exercise = TRUE}
+g1 <- igraph::graph(edges = c(1, 2, 2, 3, 3, 1), n = 3, directed = F) 
+plot(g1)
+class(g1)
+g1
+```
+
+As you see, `igraph` creates a network object of class _igraph_. 
+
+```{r named_net, echo = TRUE, exercise = TRUE}
+named_net <- igraph::graph( c("Jane", "Ali", "Ali", "Hassan", "Jane", "Hassan")) # named vertices
+
+# When the edge list has vertex names, the number of nodes is not needed
+plot(named_net)
+named_net
+```
+
+
+You access the set of nodes (_vertices_), links (_edges_), and neighbors as follows:
+
+```{r load_named_net, include = FALSE}
+named_net <- SNA4DS:::named_net
+```
+
+```{r named_net_neighbors, exercise = TRUE, exercise.setup = "load_named_net"}
+igraph::V(named_net)
+igraph::E(named_net)
+igraph::neighbors(named_net, "Jane")
+
+# you can also access Jane through her ID, she is the first vertex.
+# NOTE: R starts counting at 1 (while Python starts counting at 0)
+igraph::neighbors(named_net, 1)
+```
+
+Wanna loop over the nodes?
+```{r named_net_loop, exercise = TRUE, exercise.setup = "load_named_net"}
+for (n in igraph::V(named_net)) {
+  cat("The neighors of vertex", n, ":", igraph::neighbors(named_net, n), "\n")
+}
+
+# or, with vertex names
+for (n in igraph::V(named_net)$name) {
+  cat("The neighors of vertex", n, ":", igraph::neighbors(named_net, n)$name, "\n")
+}
+```
+
+Looping over the links:
+```{r named_net_loop2, exercise = TRUE, exercise.setup = "load_named_net"}
+for (edge in igraph::E(named_net)) {
+  print(igraph::E(named_net)[edge])
+}
+```
+
+To get the number of vertices and edges, you do the following
+
+```{r named_net_count, exercise = TRUE, exercise.setup = "load_named_net"}
+igraph::ecount(named_net)
+igraph::vcount(named_net)
+```
+
+To get the partners of a given node, or just the vertices linking to or from,
+you can do the following (for actor "Ali)":
+
+```{r named_net_neighbors2, exercise = TRUE, exercise.setup = "load_named_net"}
+igraph::neighbors(named_net, 2, mode = "all") # incoming and outgoing
+igraph::neighbors(named_net, 2, mode = "in") # incoming 
+igraph::neighbors(named_net, 2, mode = "out") # outgoing
+```
+
+
+
+The `igraph` package has many functions available that will generate networks with 
+particular structures, in case you really want to start from a specific network 
+design. Here are just a few:
+
+
+```{r make, exercise = TRUE}
+plot(igraph::make_full_bipartite_graph(4, 5))
+plot(igraph::make_ring(4))
+plot(igraph::make_star(6))
+plot(igraph::make_star(6, mode = "undirected", center = 2))
+```
+
+We will meet more interesting network structures later in this course. Anyway, 
+you now have all the R code to do the equivalent to section 1.2 in the book. 
+
+Let's move on from here.
+
+### Creating small graphs
+Small graphs can also be generated using symbols in the
+`igraph::graph_from_literal` function:
+
+* "--" for undirected tie
+* "+-" or "-+" for directed ties pointing to the left or to the right
+* "++" for a symmetric tie
+* ":" for sets of vertices.
+
+
+```{r literal, exercise = TRUE, echo = TRUE}
+demo_net <- igraph::graph_from_literal(Mary++Magdalena++Janet, Jim+-Pete, Mary-+Roberto, 
+Mary-+Ivan-+Kelly:Danielle, Jesse, Janis, Fabio, Rumana)
+plot(demo_net, edge.arrow.size = .5, vertex.color = "gold", vertex.size = 15, 
+     vertex.frame.color = "gray", vertex.label.color = "black", 
+     vertex.label.cex = 0.8, vertex.label.dist = 2, edge.curved = 0.2) 
+demo_net
+```
+            
+This works just fine when you have small networks (or you want to generate some 
+simple artificial networks to test your data), but is not feasible for larger 
+networks. 
+
+### Basic network data types
+Let's continue with network `demo_net`.
+
+#### Adjacency matrix
+
+An _adjacency matrix_ is a matrix in which the rows and columns represent
+different nodes. In an unweighted adjacency matrix, the edges (i.e., lines) are
+0 or 1, indicating whether these two nodes are connected. If two nodes are
+connected, they are said to be _adjacent_ (hence the name, _adjacency matrix_).
+In a weighted matrix, however, the cells can have different values, indicating
+different edge qualities (or tie strengths).
+
+For this network, the adjacency matrix looks as follows
+
+```{r load_demo_net, include = FALSE}
+demo_net <- SNA4DS:::demo_net
+```
+
+```{r demo_net_asadj, exercise = TRUE, exercise.setup = "load_demo_net"}
+igraph::as_adjacency_matrix(demo_net, sparse = FALSE)
+```
+
+Note the argument `sparse = FALSE` in the code above. This displays the zeroes
+in the adjacency matrix. When  `sparse = TRUE`, in the output 0's are replaced
+with a period, making it easier to see very large matrices.
+
+```{r demo_net_asadj2, exercise = TRUE, exercise.setup = "load_demo_net"}
+igraph::as_adjacency_matrix(demo_net, sparse = TRUE)
+```
+
+When the network is undirected and unweighted, the corresponding adjacency
+matrix is symmetrical and binary.
+
+### Edge List
+A very common data structure is the _edge list_. An edge list is a two-column
+matrix, with the sender in the first column and the reciever in the second (ie.
+the edge goes from the vertex in the first column to the vertex in the second
+column). In an undirected network, the order of the vertices don’t matter. For
+weighted networks, you may have a third column that indicates the edge weight.
+
+
+```{r demo_net_asedge, exercise = TRUE, exercise.setup = "load_demo_net"}
+igraph::as_edgelist(demo_net)
+```
+
+### Adjacency List
+An _adjacency list_ (or _node list_, is a list that presents the ‘focal’ node
+and then all the other nodes that are connected to it (i.e., that are "adjacent"
+to it). This looks as follows:
+
+```{r ge_asadj, exercise = TRUE, exercise.setup = "load_demo_net"}
+igraph::as_adj_list(demo_net, mode = "total")
+```
+
+
+
+## `statnet`
+As we talked about a little before, `statnet` is not really a package by itself, but a *collection of packages* that are all
+devoted to network data and are all mutually compatible. 
+The focus of these
+packages is mainly on the mathematical and statistical analysis of network data.
+Just as in `igraph`, the visualization engines are quite poor, although we will
+introduce you to the `ndtv` package later in this course, in which you'll build a cool movie of
+a dynamically changing network.
+
+The two main packages within the `statnet` universe that we will be using this week
+are `network` and `sna`. 
+The `network` package has a single purpose in life: to
+create and manipulate network data into a well-structured R network object.
+The `sna` package is useful for mathematical analyses of the data and some statistical
+analyses.
+
+The general `statnet` help page is [here](https://cran.r-project.org/web/packages/statnet/index.html)
+and the `statnet` website is [here](http://statnet.org/).
+
+
+Let's first generate an empty network with 5 nodes.
+
+```{r net_start, exercise = TRUE}
+net <- network::network.initialize(5)
+net
+class(net)
+summary(net)
+plot(net)
+```
+
+You can then add some edges.
+
+```{r net_add, exercise = TRUE}
+net <- network::network.initialize(5)
+net <- network::add.edge(net, 1, 2)
+net <- network::add.edge(net, 1, 3)
+net <- network::add.edge(net, 2, 3)
+net <- network::add.edge(net, 2, 4)
+net <- network::add.edge(net, 3, 2)
+net <- network::add.edge(net, 5, 3)
+plot(net)
+```
+
+
+Here's that same network, constructed from an adjacency matrix.
+
+```{r first_network, exercise = TRUE}
+my_first_network <- rbind(c(0, 1, 1, 0, 0),
+                          c(0, 0, 1, 1, 0),
+                          c(0, 1, 0, 0, 0),
+                          c(0, 0, 0, 0, 0),
+                          c(0, 0, 1, 0, 0))
+rownames(my_first_network) <- c("A", "B", "C", "D", "E")
+colnames(my_first_network) <- rownames(my_first_network)
+my_first_network <- network::network(my_first_network, matrix = "adjacency")
+class(my_first_network)
+summary(my_first_network)
+plot(my_first_network)
+```
+
+Did you notice that the `network` package creates an object of class `network`?
+
+The object has a bunch of attributes (stored in lists). You can add as many user-defined attributes
+as you want, but the following attributes are required of all network objects.
+
+- bipartite: indicates the presence of a bipartition
+
+- directed: are edges are to be interpreted as directed?
+
+- hyper: is the network allowed to contain hyperedges?
+
+- loops: are loops permitted within the network?
+
+- multiple: are multiplex edges permitted within the network? Where multiple is `FALSE`, network
+methods assume all edges to be unique.
+
+- n: the number of vertices in the network (this can be 0).
+
+
+How do we access the info inside the network object? Let's start by loading an interesting
+network dataset.
+
+```{r emon}
+data("emon", package = "network")
+```
+
+This is actually an object that contains 7 networks.
+
+```{r emon-laden, include = FALSE}
+data("emon", package = "network")
+Cheyenne <- emon$Cheyenne
+```
+
+
+```{r length_emon, exercise = TRUE, exercise.setup = "emon-laden"}
+length(emon)
+```
+
+Let's take the first one.
+
+```
+Cheyenne <- emon$Cheyenne
+```
+
+```{r cheyenne, echo = FALSE}
+data("emon", package = "network")
+Cheyenne <- emon$Cheyenne
+```
+
+This is an interorganizational network in the context of search and rescue (SAR) activities.
+
+Do you remember how to access the help file on this data set? Try it out below:
+
+```{r grade_emon_help1, exercise = TRUE, exercise.setup = "emon-laden"}
+
+```
+
+```{r grade_emon_help1-solution}
+?network::emon
+```
+
+```{r grade_emon_help1-check}
+gradethis::grade_code(correct = "Excellent work.")
+```
+
+Now, below look at the object `Cheyenne`. Print it and get a summary.
+
+```{r grade_emon_print, exercise = TRUE, exercise.setup = "emon-laden"}
+
+```
+
+```{r grade_emon_print-solution}
+print(Cheyenne)
+summary(Cheyenne)
+```
+
+Don't worry about the plot being very ugly, we will teach you how to make beautiful network plots
+later in this course.
+
+```{r cheyenne-attrs, exercise = TRUE, exercise.setup = "emon-laden"}
+# let's see the edges of actor 1
+# limit ourselves to the first three, to prevent lengthy output in this tutorial
+network::get.edges(Cheyenne, 1)[1:3]
+
+# get the attributes of the network
+network::list.network.attributes(Cheyenne)
+
+# get the value of the `directed` attribute
+network::get.network.attribute(Cheyenne, "directed")
+
+# what attributes to the nodes have?
+network::list.vertex.attributes(Cheyenne)
+
+# let's set an additional attribute
+network::set.vertex.attribute(Cheyenne, "Status", c("high", "high", "high", "high", "high", "high",
+                                                    "high", "high", "low", "low", "low", "low", "low", "low"))
+network::get.vertex.attribute(Cheyenne, "Status")
+```
+
+The `network` package offers various options to manually construct a network. See the help 
+for the package to find out more. But, you will rarely construct a network by hand, 
+it is just no fun. And if you do, it is probably easier to use `igraph` and then 
+convert to the `network` format. We find `igraph` easier to use and you'll only have 
+to learn the api for one of two packages. That's much easier. But feel free to do 
+the handowkr in `network` if you feel the urge to.
+
+What you *will* do, is read in data (edge lists, dataframes, csv files, et cetera) 
+and construct networks from there. So let's do that here.
+
+Above you can already see how you would read in an adjacendy matrix (for example from 
+a csv file) and turn that into a matrix.
+
+
+
+## Going from Data to Networks
+
+You can  construct networks from data frames with `igraph` as follows:
+
+```
+graph_from_data_frame(d, directed = TRUE, vertices = NULL)
+```
+
+
+where <code>d</code> is a data frame containing a symbolic edge list in the first
+two columns. Additional columns are considered as edge attributes.
+(copied from the igraph help page)
+
+In other words, the first column of <code>d</code> contains the sender and the
+second column the receiver. If you have any additional variables for each
+edge, you would put those in columns 3, 4, 5, et cetera. If you have no additional
+edge variables, <code>d</code> would then just have the two columns.
+
+If you have an undirected network, you only need to specify one direction of the
+edge (e.g., from Pete to Mary), as long as you add <code>directed = FALSE</code>.
+
+Any variables you might want to add about the vertices can be added through a
+data frame called as <code>vertices</code>. But you can leave that out, or add it
+later.
+
+
+I have loaded two objects into your workspace: `advice_data_frame` (which 
+contains the edgelist of this network) and `advice_attributes` 
+(that contains characteristics of the actors). 
+
+
+Since the edge list is a bit long to display here, let's look at just the top six rows via head()...
+
+```{r nw_data_inladen, include = FALSE}
+advice_attributes <- SNA4DS:::advice_attributes
+advice_data_frame <- SNA4DS:::advice_data_frame
+```
+
+
+```{r head, exercise = TRUE, exercise.setup = "nw_data_inladen"}
+head(advice_data_frame)
+
+# ... or the bottom six rows via tail().
+tail(advice_data_frame)
+```
+
+The attributes:
+
+```{r attributes_as_is, exercise = TRUE, exercise.setup = "nw_data_inladen"}
+# view the attributes data just as is
+advice_attributes
+```
+
+The `advice_attributes` contain the attributes for the vertices, the `advice_data_frame` 
+has the edgelist. Let's make a directed network from that using `igraph`.
+
+
+
+```{r maak_advice_igraph, exercise = TRUE, exercise.setup = "nw_data_inladen"}
+advice_igraph <- igraph::graph_from_data_frame(advice_data_frame, directed = TRUE, 
+                                               vertices = advice_attributes)
+advice_igraph
+```
+
+
+```{r load_intergraph, include = FALSE}
+advice_igraph <- SNA4DS:::advice_igraph
+advice_network <- SNA4DS:::advice_network
+```
+
+Let's look at the network a little bit.
+```{r igraph_nw, exercise.setup = "load_intergraph", exercise = TRUE}
+# you can see the adjacency matrix as follows:
+igraph::as_adjacency_matrix(advice_igraph)
+
+# density
+igraph::edge_density(advice_igraph)
+
+# betweenness scores
+igraph::betweenness(advice_igraph)
+```
+
+To do this with `network`, we do this as follows:
+
+```{r network_nw, exercise = TRUE, exercise.setup = "nw_data_inladen"}
+# construct the network with the edges
+advice_network <- network::network.edgelist(advice_data_frame, network::network.initialize(21,directed = TRUE), ignore.eval = FALSE)
+
+# now add the vertex attributes
+advice_network <- network::set.vertex.attribute(advice_network, attrname = "AGE", value = advice_attributes$AGE)
+advice_network <- network::set.vertex.attribute(advice_network, attrname = "TENURE", value = advice_attributes$TENURE)
+advice_network <- network::set.vertex.attribute(advice_network, attrname = "LEVEL", value = advice_attributes$LEVEL)
+advice_network <- network::set.vertex.attribute(advice_network, attrname = "DEPT", value = advice_attributes$DEPT)
+
+# this is the result
+advice_network
+```
+
+This is the same network, check:
+
+```{r nw_check, exercise.setup = "load_intergraph", exercise = TRUE}
+# you can see the adjacency matrix as follows:
+adj_network <- network::as.sociomatrix(advice_network)
+
+# density
+network::network.density(advice_network)
+
+# betweenness scores
+sna::betweenness(advice_network)
+```
+
+
+## `intergraph`
+
+In actual analyses, you often want to use functionality from both `statnet` and 
+`sna`. 
+Unfortunately, you need an `igraph` network object to use with `igraph` 
+and a `network` network object to use in `statnet`.
+
+It can be quite annoying to have to construct network objects for both packages. 
+Happily, there is a solution for that, because the `intergraph` package offers 
+functions to convert an `igraph` object to a `network` object, and vice versa. 
+It is not perfect, but it works and can save you some annoying work.
+
+Use the `advice_network` and `advice_igraph` objects below, they contain the 
+same networks, but `network` and `igraph` format, respectively. 
+With these objects, you can experiment with how `intergraph` works.
+
+
+### From `network` to `igraph`
+```{}
+class(advice_network)    # network
+```
+
+Convert it to a `network` object.
+
+```{r ig_check, exercise = TRUE, exercise.setup = "load_intergraph"}
+advice_ig <- intergraph::asIgraph(advice_network)
+
+# is it now indeed a correct `igraph` object?
+cat("The class of the object:")
+class(advice_ig)
+
+cat("Printing the object:")
+advice_ig
+
+# check whether the objects are the same
+cat("The 'AGE' values for both objects:")
+igraph::get.vertex.attribute(advice_ig, "AGE")
+igraph::get.vertex.attribute(advice_igraph, "AGE")
+```
+
+It works wonderfully. Awesomeness.
+
+### From `igraph` to `network`
+
+```{}
+class(advice_igraph)     # igraph
+```
+
+Now convert it to `igraph`
+
+```{r check_network, exercise = TRUE, exercise.setup = "load_intergraph"}
+# convert it
+as_network <- intergraph::asNetwork(advice_igraph)
+
+# is it now indeed a correct `network` object?
+cat("The class of the object:")
+class(as_network)
+cat("Printing the object:")
+as_network
+
+# check if the objects are the same
+cat("The 'AGE' values for both objects:")
+network::get.vertex.attribute(as_network, "AGE")
+network::get.vertex.attribute(advice_network, "AGE")
+```
+
+Voilà. You did it! Happiness.
+
+
+## The R ecosystem of network packages
+
+There are literally dozens of really useful network packages. Many of them
+specialize in the analysis of certain types of applications (such as social networks,
+animal foraging networks, bio-networks, causal networks, epidemiology,
+psychological networks, narrative networks, et cetera).
+Or they specialize in certain types of networks, such as static networks,
+bipartite networks, signed networks, multiplex networks, dynamic networks
+
+Or they specialize in specific *things* they do with the network data, such as 
+visualization, community
+detection, mathematical analysis, statistical analysis, et cetera.
+
+It is impossible to list all packages that do network stuff here, or even to
+know of all of the packages that exist for network data in R.
+The good news is that `igraph` and the `network` packages are
+very widely used and many other packages can read in data from
+either of these two. 
+So, by starting with these two packages, you are starting your network analysis journey in
+a clever way.
+
+ENJOY the ride!
+
+
+<br><br><br>
+
+```{r, fig.align='center', echo = FALSE}
+knitr::include_graphics("images/roadtrip.gif")
+```
+
+
+
+
