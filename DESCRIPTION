@@ -23,6 +23,7 @@ Imports:
     glue,
     gradethis,
 	igraph,
+	influenceR,
 	intergraph,
     knitr,
     learnr,
@@ -31,10 +32,11 @@ Imports:
 	networkDynamic,
 	remotes,
     rmarkdown,
+	rstudioapi,
 	sna
 Remotes:
-	github::rstudio-education/gradethis
-	github::SNAnalyst/SNA4DSData (>= 0.9.9000)
+	github::rstudio-education/gradethis,
+	github::SNAnalyst/SNA4DSData
 Suggests:
 	desc,
 	fs,
