@@ -51,8 +51,8 @@ check_R <- function(x) {
 ```
 
 ```{css, echo = FALSE}
-.green {
-  color: #87FF30;
+.red {
+  color: #FF0000;
 }
 
 .emphasized {
@@ -211,7 +211,7 @@ betweenness(friendship)
 
 Nice.<br>
 If you wanted to see the names of the actors next to their scores, you 
-could run <span class = "green">(don't worry if you don't understand this code yet, you will be a wizard at the end of this course)</span>:
+could run <span class = "red">(don't worry if you don't understand this code yet, you will be a wizard at the end of this course)</span>:
 
 ```{r load_data_and_sna, include = FALSE, message = FALSE, warning = FALSE}
 friendship <- SNA4DS:::lab1_friendship
@@ -239,7 +239,7 @@ library(influenceR)
 You want to use the `influenceR` package to calculate some measures on the
 relative importance of the actors in the network. But first, what again were the
 betweenness scores for the actors in this network? YOu realize you forgot them. Well, not to worry, let's just run our previous code
-again. Below, we set the function name to `betweenness` and run the code for you <span class = "green">(note: you will not see a 'Run Code" button, the code has run automatically already)</span>.
+again. Below, we set the function name to `betweenness` and run the code for you <span class = "red">(note: you will not see a 'Run Code" button, the code has run automatically already)</span>.
 
 ```
 betweenness(friendship)
