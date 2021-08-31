@@ -98,7 +98,7 @@ if(ver < 4.1717) {
 
 ### Packages
 
-You need to have a few packages installed 
+You need to have a few packages installed:
 
 
 
@@ -216,8 +216,8 @@ how about expressing logical statements in R?
 
 * & and - It will return true when both conditions are true
 * && and - It will return true when both conditions are true but it works only for the first element
-* | or - It will return true when at-least one of the conditions is true
-* || or - It will return true when at-least one of the conditions is true but it works only for the first element
+* \| or - It will return true when at-least one of the conditions is true
+* \|| or - It will return true when at-least one of the conditions is true but it works only for the first element
 * ! not - If the condition is TRUE , logical not operator will return FALSE
 
 Can you write that 5 or 10 are larger or equal to 5?
@@ -341,7 +341,7 @@ In R indentation is important to keep your code readable, but it is not crucial.
 It will be running even if you write it in the most terrible way. R uses curly 
 braces and that's what matters the most.
 
-Just please DON'T
+.center[Just please DON'T!]
 
 R studio will automatically indent your code if you select it and click CRTL I. 
 Try to write some messed up code and to indent it afterward.
@@ -630,7 +630,7 @@ attributes(grades)
 yes! Now it is correct! Try to compare the original vector and the one turned into 
 numeric to see whether they match!
 
-```{r grade_code5, exercise = TRUE, exercise.setup = "try_something13"}
+```{r grade_code5, exercise = TRUE, exercise.setup = "try_something14"}
 
 
 

@@ -126,7 +126,7 @@ if (window.hljs) {
 </div>
 <div id="section-packages" class="section level3">
 <h3>Packages</h3>
-<p>You need to have a few packages installed</p>
+<p>You need to have a few packages installed:</p>
 <pre><code>## Great! You have the SNA4DSData package
 ## Great! You have the igraph package
 ## Great! You have the sna package
@@ -194,7 +194,7 @@ if (window.hljs) {
 <ul>
 <li>&amp; and - It will return true when both conditions are true</li>
 <li>&amp;&amp; and - It will return true when both conditions are true but it works only for the first element</li>
-<li><div class="line-block">or - It will return true when at-least one of the conditions is true</div></li>
+<li>| or - It will return true when at-least one of the conditions is true</li>
 <li>|| or - It will return true when at-least one of the conditions is true but it works only for the first element</li>
 <li>! not - If the condition is TRUE , logical not operator will return FALSE</li>
 </ul>
@@ -268,7 +268,7 @@ isFALSE((a + b) == 8)</code></pre>
 <div id="section-indenting" class="section level3">
 <h3>Indenting</h3>
 <p>In R indentation is important to keep your code readable, but it is not crucial. It will be running even if you write it in the most terrible way. R uses curly braces and that’s what matters the most.</p>
-<p>Just please DON’T</p>
+<p>.center[Just please DON’T!]</p>
 <p>R studio will automatically indent your code if you select it and click CRTL I. Try to write some messed up code and to indent it afterward.</p>
 <div class="tutorial-exercise" data-label="try_something3" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>   2 + 2</code></pre>
@@ -1204,10 +1204,10 @@ f &lt;- helper(iris$Sepal.Length, iris$Sepal.Width, iris$Petal.Length, iris$Peta
 <h3>While loops</h3>
 <p>Do you remember the conditions we already used a lot? Well, a while loop does something for you <em>while</em> a condition is TRUE. How nice of it?</p>
 <p>This is the logic</p>
-<p>`while (test_expression)</p>
+<p>while (test_expression)</p>
 <p>{</p>
 <p>statement</p>
-<p>}`</p>
+<p>}</p>
 <p>The while loop will stop doing whatever it is doing when the condition expires. For instance, you eat a yogurt jar while it is good. When it expires, you stop eating it and toss it away (Well, at least we don’t eat when mold is inside…YAK!!)</p>
 <p>Let’s try with a simple example.</p>
 <div class="tutorial-exercise" data-label="try_something40" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -1228,10 +1228,10 @@ i = i+1
 <p>Do you remember when Bart Simpson had two write the same sentence over and over? Bart would have needed a for loop!</p>
 <p>The for loop does the same thing as many times as you tell it to do it! Lovely, isn’t it?</p>
 <p>The logic is</p>
-<p>`for (this number of times that I’m telling you here)</p>
+<p>for (this number of times that I’m telling you here)</p>
 <p>{</p>
 <p>Enter the data structure and do this for me!</p>
-<p>}`</p>
+<p>}</p>
 <p>Let’s say that you want to print the sentence <em>The year is …</em> for as many years as you need, that’s how you do it!</p>
 <div class="tutorial-exercise" data-label="try_something411" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>y &lt;- c(2010, 2011, 2012, 2013, 2014, 2015)
@@ -1256,14 +1256,14 @@ for (i in 1:length(y) ){
 <p>You have a vector of 6 Kids and a vector of 3 Animals. If your indexes are respectively <em>kid</em> and <em>animal</em>, can you write a nested for loop so that you print a total of 6*3 sentences where each kid loves each animal? For example:</p>
 <p>“Anna loves cats”</p>
 <p>The structure of a nested loop is</p>
-<p>`for(…) {</p>
+<p>for(…) {</p>
 <pre><code>for(...) {</code></pre>
 <p>statement</p>
 <pre><code>}</code></pre>
-<p>}`</p>
-<p>It’s a little difficult, but I KNOW THAT YOU CAN DO IT!!!</p>
+<p>}</p>
+<p>It’s a little difficult, but I KNOW THAT YOU CAN DO IT!!! Cal your indexes <em>kid</em> and <em>animal</em>. As <em>kid</em> in <em>Kids</em> and <em>animal</em> in <em>Animals</em>.</p>
 <div class="tutorial-exercise" data-label="grade_code23" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>Kids &lt;- as.factor(c(&quot;Anna&quot;, &quot;Barbara&quot;, &quot;Max&quot;, &quot;Luke&quot;, &quot;Jack&quot;, &quot;Martha&quot;))
+<pre class="text"><code>Kids &lt;- c(&quot;Anna&quot;, &quot;Barbara&quot;, &quot;Max&quot;, &quot;Luke&quot;, &quot;Jack&quot;, &quot;Martha&quot;)
 Animals &lt;- c(&quot;cats&quot;, &quot;dogs&quot;, &quot;crocodiles&quot;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
@@ -2414,14 +2414,17 @@ output$`tutorial-exercise-grade_code5-output` <- renderUI({
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache("grade_code5", list(setup = "grades <- c('mildly spicy', 'mildly spicy', 'very spicy', 'a bit spicy', 'Waw! Fire!', \n            'not spicy', 'very spicy', 'mildly spicy', 'a bit spicy', 'a bit spicy')\n\n\ngrades <- as.factor(grades)\n\nattributes(grades)", 
+learnr:::store_exercise_cache("grade_code5", list(setup = "grades <- c('mildly spicy', 'mildly spicy', 'very spicy', 'a bit spicy', 'Waw! Fire!', \n            'not spicy', 'very spicy', 'mildly spicy', 'a bit spicy', 'a bit spicy')\n\n\ngrades <- as.factor(grades)\n\nattributes(grades)\nlevels(grades)<- c(\"not spicy\", \"a bit spicy\", \"mildly spicy\", \"very spicy\", \"Waw! Fire!\")\n\nattributes(grades)", 
     chunks = list(list(label = "try_something13", code = "grades <- c('mildly spicy', 'mildly spicy', 'very spicy', 'a bit spicy', 'Waw! Fire!', \n            'not spicy', 'very spicy', 'mildly spicy', 'a bit spicy', 'a bit spicy')\n\n\ngrades <- as.factor(grades)\n\nattributes(grades)", 
         opts = list(label = "\"try_something13\"", exercise = "TRUE", 
-            echo = "TRUE"), engine = "r"), list(label = "grade_code5", 
-        code = "\n\n", opts = list(label = "\"grade_code5\"", 
-            exercise = "TRUE", exercise.setup = "\"try_something13\""), 
-        engine = "r")), code_check = NULL, error_check = NULL, 
-    check = structure("gradethis::grade_code(correct = \"Great job!\")", chunk_opts = list(
+            echo = "TRUE"), engine = "r"), list(label = "try_something14", 
+        code = "levels(grades)<- c(\"not spicy\", \"a bit spicy\", \"mildly spicy\", \"very spicy\", \"Waw! Fire!\")\n\nattributes(grades)", 
+        opts = list(label = "\"try_something14\"", exercise = "TRUE", 
+            echo = "TRUE", exercise.setup = "\"try_something13\""), 
+        engine = "r"), list(label = "grade_code5", code = "\n\n", 
+        opts = list(label = "\"grade_code5\"", exercise = "TRUE", 
+            exercise.setup = "\"try_something14\""), engine = "r")), 
+    code_check = NULL, error_check = NULL, check = structure("gradethis::grade_code(correct = \"Great job!\")", chunk_opts = list(
         label = "grade_code5-check")), solution = structure(c("", 
     "", "grades", "as.numeric(grades)", "", ""), chunk_opts = list(
         label = "grade_code5-solution")), options = list(eval = FALSE, 
@@ -2443,9 +2446,9 @@ learnr:::store_exercise_cache("grade_code5", list(setup = "grades <- c('mildly s
         max.print = 1000, tutorial = TRUE, exercise.timelimit = 60, 
         exercise.checker = "function (...) \n{\n    lifecycle::deprecate_soft(\"0.2.2\", \"grade_learnr()\", \"gradethis_exercise_checker()\")\n    gradethis_exercise_checker(...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "grade_code5", exercise = TRUE, exercise.setup = "try_something13", 
+        label = "grade_code5", exercise = TRUE, exercise.setup = "try_something14", 
         code = c("", "", ""), out.width.px = 624, out.height.px = 384, 
-        params.src = "grade_code5, exercise = TRUE, exercise.setup = \"try_something13\"", 
+        params.src = "grade_code5, exercise = TRUE, exercise.setup = \"try_something14\"", 
         fig.num = 0L, exercise.df_print = "paged"), engine = "r"))
 </script>
  
@@ -4251,14 +4254,10 @@ output$`tutorial-exercise-grade_code23-output` <- renderUI({
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::store_exercise_cache("grade_code23", list(setup = "helper <- function(arg1, arg2, arg3, arg4, ...) {\n\n  newVar <- (arg1 + arg2) / (arg3 + arg4)  \n  newVar    \n  \n}", 
-    chunks = list(list(label = "try_something39", code = "helper <- function(arg1, arg2, arg3, arg4, ...) {\n\n  newVar <- (arg1 + arg2) / (arg3 + arg4)  \n  newVar    \n  \n}", 
-        opts = list(label = "\"try_something39\"", exercise = "TRUE", 
-            echo = "FALSE", include = "FALSE"), engine = "r"), 
-        list(label = "grade_code23", code = "\nKids <- as.factor(c(\"Anna\", \"Barbara\", \"Max\", \"Luke\", \"Jack\", \"Martha\"))\nAnimals <- c(\"cats\", \"dogs\", \"crocodiles\")\n\n ", 
-            opts = list(label = "\"grade_code23\"", exercise = "TRUE", 
-                echo = "TRUE", exercise.setup = "\"try_something39\""), 
-            engine = "r")), code_check = NULL, error_check = NULL, 
+learnr:::store_exercise_cache("grade_code23", list(setup = NULL, chunks = list(list(label = "grade_code23", 
+    code = "\nKids <- c(\"Anna\", \"Barbara\", \"Max\", \"Luke\", \"Jack\", \"Martha\")\nAnimals <- c(\"cats\", \"dogs\", \"crocodiles\")\n\n ", 
+    opts = list(label = "\"grade_code23\"", exercise = "TRUE", 
+        echo = "TRUE"), engine = "r")), code_check = NULL, error_check = NULL, 
     check = structure("gradethis::grade_code(correct = \"You are on fire!\")", chunk_opts = list(
         label = "grade_code23-check")), solution = structure(c("", 
     "Kids <- as.factor(c(\"Anna\", \"Barbara\", \"Max\", \"Luke\", \"Jack\", \"Martha\"))", 
@@ -4284,10 +4283,10 @@ learnr:::store_exercise_cache("grade_code23", list(setup = "helper <- function(a
         max.print = 1000, tutorial = TRUE, exercise.timelimit = 60, 
         exercise.checker = "function (...) \n{\n    lifecycle::deprecate_soft(\"0.2.2\", \"grade_learnr()\", \"gradethis_exercise_checker()\")\n    gradethis_exercise_checker(...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
-        label = "grade_code23", exercise = TRUE, exercise.setup = "try_something39", 
-        code = c("", "Kids <- as.factor(c(\"Anna\", \"Barbara\", \"Max\", \"Luke\", \"Jack\", \"Martha\"))", 
+        label = "grade_code23", exercise = TRUE, code = c("", 
+        "Kids <- c(\"Anna\", \"Barbara\", \"Max\", \"Luke\", \"Jack\", \"Martha\")", 
         "Animals <- c(\"cats\", \"dogs\", \"crocodiles\")", "", 
-        " "), out.width.px = 624, out.height.px = 384, params.src = "grade_code23, exercise = TRUE, echo = TRUE, exercise.setup = \"try_something39\"", 
+        " "), out.width.px = 624, out.height.px = 384, params.src = "grade_code23, exercise = TRUE, echo = TRUE", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"))
 </script>
  
