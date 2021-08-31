@@ -947,7 +947,7 @@ into a matrix using `cbind()`?
 
 ```{r grade_code9, exercise = TRUE, echo = TRUE}
 
-a <- 1:10
+a <- LETTERS[11:20]
 b <- LETTERS[1:10]
 
 ```
