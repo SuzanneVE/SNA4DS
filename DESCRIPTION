@@ -1,7 +1,7 @@
 Package: SNA4DS
 Type: Package
 Title: Social Network Analysis for Data Science
-Version: 0.9.9
+Version: 0.10.2
 Authors@R:
 	c(person(given = "Roger",
 					family = "Leenders",
@@ -23,6 +23,7 @@ Imports:
     glue,
     gradethis,
 	igraph,
+	influenceR,
 	intergraph,
     knitr,
     learnr,
@@ -31,9 +32,11 @@ Imports:
 	networkDynamic,
 	remotes,
     rmarkdown,
+	rstudioapi,
 	sna
 Remotes:
-	github::rstudio-education/gradethis
+	github::rstudio-education/gradethis,
+	github::SNAnalyst/SNA4DSData
 Suggests:
 	desc,
 	fs,
