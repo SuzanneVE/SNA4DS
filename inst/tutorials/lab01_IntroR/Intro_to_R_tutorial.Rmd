@@ -1584,7 +1584,7 @@ str(mtcars)
 
 str(mtcars)
 
-(mtsub <- subset(mtcars, disp < 100, select = -carb ))
+(mtsub <- subset(mtcars, -disp < 100, select = -carb ))
 
 ```
 
