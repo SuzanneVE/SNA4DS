@@ -1,7 +1,7 @@
 Package: SNA4DS
 Type: Package
 Title: Social Network Analysis for Data Science
-Version: 0.10.2
+Version: 0.10.3
 Authors@R:
 	c(person(given = "Roger",
 					family = "Leenders",
@@ -20,9 +20,11 @@ URL: https://github.com/SNAnalyst/SNA4DS
 BugReports: https://github.com/SNAnalyst/SNA4DS/issues
 RoxygenNote: 7.1.1
 Imports:
+	fontawesome,
     glue,
     gradethis,
 	igraph,
+	igraphdata,
 	influenceR,
 	intergraph,
     knitr,
