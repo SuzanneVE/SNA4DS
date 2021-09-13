@@ -39,17 +39,29 @@ edges <- matrix(c(1, 2,
 vertices <- data.frame(name = 1:8, code = LETTERS[1:8])
 internet <- igraph::graph_from_data_frame(edges, vertices = vertices)
 
-
+edges2 <- matrix(c(1, 2,
+                  1, 3,
+                  2, 4,
+                  2, 5,
+                  3, 6,
+                  3, 7,
+                  4, 1,
+                  4, 8,
+                  5, 1,
+                  5, 8,
+                  6, 7, # dit is anders
+                  7, 6, # dit is anders
+                  8, 1
+), ncol = 2, byrow = TRUE)
+vertices2 <- data.frame(name = 1:8, code = LETTERS[1:8])
+internet2 <- igraph::graph_from_data_frame(edges2, vertices = vertices2)
 
 # Check whether required packages are installed
 pkgs <- matrix(c(
   "gradethis", "0.2.3.9001", "rstudio/gradethis",
-  "fontawesome", "0.2.2", "CRAN",
   "igraph", "1.2.6", "CRAN",
-  "igraphdata", "1.0.0", "CRAN",
-  # "networkD3", "0.4", "CRAN",
-  "sna", "2.6", "CRAN",
-  "SNA4DSData", "0.9.901", "SNAnalyst/SNA4DSData"
+  "knitr", "1.34", "CRAN",
+  "SNA4DSData", "0.9.902", "SNAnalyst/SNA4DSData"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
@@ -96,19 +108,37 @@ judge_net <- SNA4DSData::judge_net
 
 ## Introduction
 
-So far, you learned the basics of R and were introduced to some first work 
-with network data.
+In this tutorial, you are going to learn two things.
 
-In this tutorial, you are going to learn how to compute a bunch of statistics 
-at the graph level and manipulate network objects a bit.
+1. First, we'll take a look at bipartite networks. 
+In particular, you will leanr how to handle those in `R` (specifically, in `igraph`) 
+and how to turn them into unipartite projections. 
+Not hard, but you do need to keep focused.
 
-Moreover, you'll learn how to find and extract subgroups from a network.
+1. Then, we'll discuss a measure that is used to quantify the centrality of 
+webpages on the internet.
+The internet is really a large network, so it can be (and usually is) studied 
+and managed using network tools. 
+Although all the measures you learn in this course are useful and imnportant to know, 
+some are more relevant to some kinds of networks than are others. 
+In this tutorial, we will look at the *pagerank* measure that is used by Google 
+to determine which pages are more "important" than others and should be displayed 
+higher in the search results. 
 
-Pretty cool stuff!
+Fun!
+
+![](images/pexels-alexander-dummer-1919030_640height.jpg)
 
 <br><br><br>
-Yep, that's what I said `r fontawesome::fa("far fa-smile-beam", fill = "blue")`<br>
-Let's get to it.
+
+One final note, before we get started. <br>
+In many of the exercise boxes, I include a line like `cat("This is what to do here")`. 
+This, of course, is not part of the actual solution. 
+So, before you `submit` an answer, remove that line first. 
+If you leave it, you will confuse the code checker. 
+That said, your code will actually run fine if you leave it.
+
+Without any further ado, let's get to it!
 
 
 ## Checking installation
@@ -179,19 +209,11 @@ Let's try it out.
 
 Load the `judge_net_bp` network from the `SNA4DSData` package. 
 This is a network of judges and the cases they worked on. 
-First, load the dataset, then print it. 
+
+First, get the dataset from the `SNA4DSData` package and then print it. 
 
 ```{r bp_data, exercise = TRUE}
-cat('load the "judge_net_bp" network and print the object')
-```
-
-```{r bp_data-solution}
-data(judge_net_bp, package = "SNA4DSData")
-igraph::print.igraph(judge_net_bp)
-```
-
-```{r bp_data-check}
-gradethis::grade_code(correct = "That's how it is done!")
+cat('load "judge_net_bp" from the "SNA4DSData" package and then print the object')
 ```
 
 Now, you should be able to answer this quiz question:
@@ -213,7 +235,7 @@ we'll just get a new one later.
 
 You get the incidence matrix for a bipartite network using 
 `igraph::as_incidence_matrix`. 
-Do that now and call the matrix *im* for short.
+Do that now.
 
 
 ```{r bp_incid, exercise = TRUE, exercise.setup = "load_bp"}
@@ -221,8 +243,7 @@ cat('Create the incidence matrix for "judge_net_bp" and call it "im". Then print
 ```
 
 ```{r bp_incid-solution}
-im <- igraph::as_incidence_matrix(judge_net_bp)
-im
+igraph::as_incidence_matrix(judge_net_bp)
 ```
 
 
@@ -237,6 +258,7 @@ As you will recall, an adjacency matrix tends to be squared: there are as many
 potential senders as receivers, so there are as many rows as columns. 
 That makes a matrix square.
 
+We will call the incidence matrix *im* for short. 
 Is `im` square? Let's look at the dimension of `im`.
 
 ```{r bp_table0, exercise = TRUE, exercise.setup = "load_im"}
@@ -296,14 +318,14 @@ question("Which value of 'type' represents a judge vertex?",
 
 Wonderful. 
 
-As you can see in the network object, theree is also a vertex attribute 
+As you can see in the network object, there is also a vertex attribute 
 called *JudgeSex*. Believe it or not, but this includes the gender of the judge. 
 
 Make a table of the gender of the vertices. 
 But, before you do, think about what you expect to see as an answer. 
 
 In this case, we will make use of the fact that the `table()` function has an 
-argument called `useNAa`. 
+argument called `useNA`. 
 Type `?table` in the box below to check out the documentation for the `table()` function.
 Below, we use the argument `useNA = "ifany"`. 
 Can you make sense of the output you get?
@@ -375,18 +397,14 @@ igraph::bipartite_projection_size(judge_net_bp)
 
 ## Centrality on the internet
 
-And now, for something completely different.
+> "And now, for something completely different."
 
-(Recognize the reference? 
-The youtube clip in te link below is not part of the course and feel free to skip it, 
+(Recognize the movie reference? 
+The [clip here](https://www.youtube.com/watch?v=dlCbFu5dpc8) 
+is not part of the course and feel free to skip it, 
 but I can use a humorous break every now and then).<br>
 
-****
-
-[And now, for something completely different--clip on youtube](https://www.youtube.com/watch?v=dlCbFu5dpc8)
-
-****
-
+<br><br><br><br>
 OK, back to serious (albeit intellectually entertaining) topics.
 
 It makes sense to consider the internet as a network of pages that point to each
@@ -397,7 +415,7 @@ developing internetwork over time.
 ![The Internet: 1997 - 2021](https://www.youtube.com/watch?v=OzDgI0sJQBA)
 
 Gorgeous! 
-There is a lot of research underlying this, [see here if you are interested](https://www.opte.org)
+There is a lot of research underlying this, [see here if you are interested](https://www.opte.org).
 
 You can calculate the same
 centrality measures for this network that we have already discussed in this
@@ -453,10 +471,9 @@ between the nodes until an equilibrium is reached.**
 
 ### Implementation
 
-Let's consider a small 8-vertex network, we call it `internet`. It looks as follows:<br>
-(for technical reasons, this has already run for you)
+Let's consider a small 8-vertex network, we call it `internet`. It looks as follows:
 
-```{r, out.width = 1000}
+```{r, out.width = 1000, echo = FALSE}
 par(mar = c(.5, .5, .5, .5))
 igraph::plot.igraph(internet, vertex.label = igraph::V(internet)$code, layout = coor, 
                     edge.arrow.size = 0.4, margin = .1)
@@ -481,8 +498,10 @@ outgoing edges (to B and C), so it "donates" 0.0625 (=1/16) to each.
 
 Page B points to pages D and E, so it donates 0.0625 to each.
 Andsoforth. After each page has donated its initial 0.125 to the other pages,
-calculate how much each page now has. Since PageRank is not created (and only
-re-allocated), the new PageRank scores should still add up to 1. **Give it a go
+calculate how much each page now has. Since PageRank is only
+re-allocated, the new PageRank scores should still add up to 1. 
+
+**Give it a go
 and click "Continue" once you are done to check your result.**
 
 ### After the first iteration
@@ -533,7 +552,7 @@ Did you get it right? If so, you clearly understand the algorithm.
 If we do this for enough steps, the PageRank scores will converge to stable
 values. Luckily, and unsurprisingly, there is an `igraph` function that does
 this for us. Can you guess its name? Once again, the name is very
-straightforward: `igraph::page.rank`. The function has a bunch of arguments and
+straightforward: `igraph::page_rank`. The function has a bunch of arguments and
 in most cases the default values are excellent. But in this case we are going to
 deviate from those just a bit (by setting `damping` to 0.999; I will explain
 this to you in a few minutes).
@@ -541,7 +560,7 @@ this to you in a few minutes).
 Try it out below.
 
 ```{r pagerank1, exercise = TRUE}
-igraph::page.rank(internet, damping = .999)
+igraph::page_rank(internet, damping = .999)
 ```
 
 You see that the final PageRank scores all correctly add up to 1 (see `value`)
@@ -557,32 +576,22 @@ against a case that happens a lot on the WWW where the "wrong" pages end up with
 all/most of the PageRank. Let's examine this case by making a simple change to
 the network: we make F and G point to each other and no longer to A. We call
 this graph `internet2`.
+This is what it looks like.
 
-```{r maak_internet2, include = FALSE}
-edges <- matrix(c(1, 2,
-                  1, 3,
-                  2, 4,
-                  2, 5,
-                  3, 6,
-                  3, 7,
-                  4, 1,
-                  4, 8,
-                  5, 1,
-                  5, 8,
-                  6, 7, # dit is anders
-                  7, 6, # dit is anders
-                  8, 1
-), ncol = 2, byrow = TRUE)
-vertices <- data.frame(name = 1:8, code = LETTERS[1:8])
-internet2 <- igraph::graph_from_data_frame(edges, vertices = vertices)
+
+```{r, echo = FALSE, eval=TRUE}
+print(internet2)
 ```
 
-Plot the new network.
 
-```{r plot_internet2, out.width = 1000, exercise = TRUE, exercise.setup = "maak_internet2"}
+
+```{r, echo = FALSE, eval=TRUE}
 par(mar = c(.5, .5, .5, .5))
-igraph::plot.igraph(internet2, vertex.label = igraph::V(internet)$code, layout = coor, edge.arrow.size = 0.4, margin = .1)
+igraph::plot.igraph(internet2, vertex.label = igraph::V(internet2)$code, layout = coor, edge.arrow.size = 0.4, margin = .1)
 ```
+
+
+
 
 Can you already guess what happens? All of the PageRank that A sends to C (which
 is half of the PageRank A has in each iteration of the algorithm) ends up "getting
@@ -592,8 +601,8 @@ PageRank.
 
 Calculate the final values for this network:
 
-```{r pagerank2, exercise = TRUE, exercise.setup = "maak_internet2"}
-igraph::page.rank(internet2, damping = .999)
+```{r pagerank2, exercise = TRUE}
+igraph::page_rank(internet2, damping = .999)
 ```
 
 As you can see, F and G have essentially eaten up almost the entire cake and
@@ -659,7 +668,7 @@ on Google.
 
 Ah, just to make sure, let's calculate the PageRank values with this updated
 approach. Use a damping factor of 0.85, which is also the default for
-`igraph::page.rank`. Do this below, and see that it works.
+`igraph::page_rank`. Do this below, and see that it works.
 
 For the original `internet` network:
 
@@ -668,7 +677,7 @@ cat("calculate the PageRank scores for the 'internet' network, with a damping fa
 ```
 
 ```{r grade_pagerank_final-solution}
-igraph::page.rank(internet, damping = .85)
+igraph::page_rank(internet, damping = .85)
 ```
 
 ```{r grade_pagerank_final-check}
@@ -680,19 +689,19 @@ network, without damping.
 
 And for the problem-causing `internet2` network:
 
-```{r grade_pagerank_final2, exercise = TRUE, exercise.setup = "maak_internet2"}
+```{r grade_pagerank_final2, exercise = TRUE}
 cat("calculate the PageRank scores for the 'internet2' network, with a damping factor of 0.85")
 ```
 
 ```{r grade_pagerank_final2-solution}
-igraph::page.rank(internet2, damping = .85)
+igraph::page_rank(internet2, damping = .85)
 ```
 
 ```{r grade_pagerank_final2-check}
 gradethis::grade_code(correct = "Brilliant job!")
 ```
 
-One final question: could we also meaningfully apply the algorithm to a network
+What do you think: could we also meaningfully apply the algorithm to a network
 of people, rather then to a network of webpages? When? What would it mean? That
 would make for an awesome exam question.
 
