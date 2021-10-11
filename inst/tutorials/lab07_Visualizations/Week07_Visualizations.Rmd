@@ -268,7 +268,7 @@ Yes, unless we are working with a toy network, we are not going to tell a story 
 the `plot()` function with an object of class `igraph`.
 
 
-## Visualizing the network structure
+### Visualizing the network structure
 
 So, when I said your story, I meant your story properly! The data that we are going to visualize is YOUR data—the data collected with the survey that we did together in week 4. 
 
@@ -296,7 +296,7 @@ net <- SNA4DSData::DSstudents
 Let's briefly explore the network.
 ```{r datacheck07, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
 
-net
+summary(net)
 
 ```
 
@@ -593,8 +593,8 @@ plot(net,
      vertex.label = NA, 
      vertex.color = "grey",
      vertex.size = igraph::V(net)$Hang.Out*3, 
-     edge.width = igraph::E(net)$closeness*2,
-     layout = layout_nicely
+     edge.width = igraph::E(net)$closeness*2 ,
+     layout = igraph::layout_nicely
      
 )
 
@@ -619,7 +619,7 @@ plot(net,
      vertex.color = "grey",
      vertex.size = igraph::V(net)$Hang.Out*3, 
      edge.width = igraph::E(net)$closeness*2,
-     layout = layout.sphere
+     layout = igraph::layout_on_sphere
      
 )
 ```
@@ -630,7 +630,7 @@ This one represents it as a sphere. LOL, it's funny but really not helpful in sh
 Let's try another one.
 
 
-```{r plot807, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
+```{r plot80799, echo=TRUE, exercise=TRUE, exercise.setup ="dataload"}
 
 plot(net,
      edge.arrow.size = .2, 
@@ -640,7 +640,7 @@ plot(net,
      vertex.color = "grey",
      vertex.size = igraph::V(net)$Hang.Out*3, 
      edge.width = igraph::E(net)$closeness*2,
-     layout = layout.random
+     layout = igraph::layout_as_tree
      
 )
 ```
@@ -661,7 +661,7 @@ plot(net,
      vertex.color = "grey",
      vertex.size = igraph::V(net)$Hang.Out*3, 
      edge.width = igraph::E(net)$closeness*2,
-     layout = layout.random
+     layout = igraph::layout.random
      
 )
 ```
