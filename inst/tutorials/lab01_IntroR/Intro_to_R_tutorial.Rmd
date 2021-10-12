@@ -80,9 +80,9 @@ Please read the message below.
 # R studio check version (required 1.4.1725 or above)
 ver <- rstudioapi::versionInfo()$version
 
-ver <- sub("1.", "", ver)
+ver <- sub("2021.9.", "", ver)
 
-if(ver < 4.1717) {
+if(ver != 0.351) {
 
   cat("Sorry! Your Rstudio is not update. Please download version 1.4.1725 or above")
 
