@@ -174,7 +174,7 @@ check_rstudio <- function(version = 0.351) {
 
   if(ver != version) {
 
-    verdict <- "Sorry! Your Rstudio is not update. Please download version 1.4.1725 or above"
+    verdict <- "Sorry! Your Rstudio is not update. Please download version 2021.9.0.351"
 
   } else {
 
