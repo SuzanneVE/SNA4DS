@@ -78,7 +78,7 @@ if((major == 4) & (minor == 1.1 )) {
 
 ### R Studio Version
 
-You need to have installed RStudio version 2021.9.0.351 or above.
+You need to have installed RStudio version 1.4.1717 or above.
 Please read the message below.
 
 ```{r rstudio check, include = TRUE}
