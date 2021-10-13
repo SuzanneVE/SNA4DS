@@ -1,36 +1,36 @@
 
 
 #' Check for presence of packages
-#' 
+#'
 #' Checks whether a set of packages is present and of the correct version
-#' 
+#'
 #' Useful inside a learnr tutorial.
-#' 
-#' \code{reqs} is a data.frame with column names "pkg", "version", "where". 
-#' All items are \code{character}! 
-#' 
+#'
+#' \code{reqs} is a data.frame with column names "pkg", "version", "where".
+#' All items are \code{character}!
+#'
 #' \itemize{
 #' \item{pkg}{names of the packages}
 #' \item{version}{the minimally required version}
 #' \item{where}{location of the package for download}
 #' }
-#' 
-#' For \code{where} there are two options. If the package resides on CRAN, 
-#' it should be "CRAN". If it is on github, it should be "username/reponame" (ie. 
+#'
+#' For \code{where} there are two options. If the package resides on CRAN,
+#' it should be "CRAN". If it is on github, it should be "username/reponame" (ie.
 #' whatever would go inside \code{remotes::install_github(where)}).
-#' 
-#' First, the function checks if a package is installed and, if installed, whether 
-#' it has the required version number or higher. 
-#' If eigher of these checks fail, it will attempt to download/upgrade the package.
-#' 
-#' After a first pass along all packages (as described above), a second check is 
-#' performed if a package is now installed and, if installed, whether 
-#' it has the required version number or higher. 
-#' 
-#' If a package is still not installed, a message is returned that tells the user 
-#' how to install it manually. 
-#' If a package still does not at least have the required version, 
-#' a message is returned that tells the user how to upgrade it manually. 
+#'
+#' First, the function checks if a package is installed and, if installed, whether
+#' it has the required version number or higher.
+#' If higher of these checks fail, it will attempt to download/upgrade the package.
+#'
+#' After a first pass along all packages (as described above), a second check is
+#' performed if a package is now installed and, if installed, whether
+#' it has the required version number or higher.
+#'
+#' If a package is still not installed, a message is returned that tells the user
+#' how to install it manually.
+#' If a package still does not at least have the required version,
+#' a message is returned that tells the user how to upgrade it manually.
 #'
 #' @param reqs data.frame (see details)
 #'
@@ -48,15 +48,15 @@
 #' "networkD3", "0.4", "CRAN",
 #' "sna", "2.6", "CRAN",
 #' "SNA4DSData", "0.9.9000", "SNAnalyst/SNA4DSData"
-#' ), byrow = TRUE, ncol = 3) |> 
-#'   as.data.frame() |> 
+#' ), byrow = TRUE, ncol = 3) |>
+#'   as.data.frame() |>
 #'   setNames(c("pkg", "version", "where"))
-#'   
+#'
 #' check_packages(pkgs)
 #' }
 check_packages <- function(reqs) {
   ok <- 0
-  
+
   all_installed <- utils::installed.packages()
   cat("...checking individual packages now...\n")
   for (pak in 1:nrow(reqs)) {
@@ -83,14 +83,14 @@ check_packages <- function(reqs) {
       }
     }
   }
-  
+
   # initial check is done, missing packages and/or packages with older versions
   # have been attempted to download
   # Now check if this solved it
   # If not, tell the user how to solve it manually
   pkg_missing <- NULL
   pkg_low <- NULL
-  
+
   if (ok == nrow(reqs)) {  # all packages are according to reqs
     verdict <- "Wonderful, all is fine."
     return(verdict)
@@ -107,47 +107,47 @@ check_packages <- function(reqs) {
       }
     }
   }
-  
+
   if ((is.null(pkg_low)) & (is.null(pkg_missing))) {
     verdict <- "Deficiencies have been fixed, all is fine now."
     return(verdict)
   }
-  
+
   # Not all has been solved automatically
   # Generate output to the user on how (s)he can solve this manually
   verdict <- logical(0)
   # missing packages
   if (!is.null(pkg_missing)) {  # some packages are still missing
     names_missing <- paste0("'", reqs[pkg_missing, "pkg"], "'", collapse = ", ")
-    verdict <- c(verdict, paste0("The following packages are missing: ", names_missing)) |> 
+    verdict <- c(verdict, paste0("The following packages are missing: ", names_missing)) |>
       c("Install these using:")
     reqs_missing <- reqs[pkg_missing, ]
-    
+
     # missing from CRAN
     reqs_missing_cran <- reqs_missing[reqs_missing[, "where"] == "CRAN", "pkg", drop = TRUE]
-    
+
     if (nrow(reqs_missing_cran) > 0) {
       verdict <- c(verdict, glue::glue("     install.packages('{package}')", package = reqs_missing_cran))
     }
-    
+
     reqs_missing_github <- reqs_missing[reqs_missing[, "where"] != "CRAN", ]
     if (nrow(reqs_missing_github) > 0) {
-      verdict <- c(verdict, 
-                        glue::glue("     remotes::install_github('{location}')", 
-                                          location = reqs_missing_github[, "where", drop = TRUE])) |> 
+      verdict <- c(verdict,
+                        glue::glue("     remotes::install_github('{location}')",
+                                          location = reqs_missing_github[, "where", drop = TRUE])) |>
         c("", "") ## add two empty lines below
     }
   }
-  
+
   if (!is.null(pkg_low)) { # There are packages with too low versions
     pkgs_low <- reqs[pkg_low, "pkg"]
     names_low <- paste0("'", pkgs_low, "'", collapse = ", ")
-    
-    verdict <- c(verdict, "", "", paste0("The version of the following packages is too low:", names_low)) |> 
-      c("Upgrade using:") |> 
+
+    verdict <- c(verdict, "", "", paste0("The version of the following packages is too low:", names_low)) |>
+      c("Upgrade using:") |>
       c((glue::glue('      update.packages({package})', package = pkgs_low)))
   }
-  
+
   return(noquote(verdict))
 }
 
@@ -158,30 +158,44 @@ check_packages <- function(reqs) {
 
 
 #' Check for correct version of RStudio
-#' 
+#'
 #' Check for correct version of RStudio
-#' 
+#'
 #' Checks whether the user is using the correct version of RStudio (or higher)
 #'
 #' @param version required version number (or higher)
 #'
 #' @return message with the result
 #' @keywords internal
-check_rstudio <- function(version = 4.1717) {
+check_rstudio <- function(version1 = "1.4.1717", version2021 = "2019.9.0.351") {
   ver <- rstudioapi::versionInfo()$version
+
+  ver_split <- strsplit(as.character(ver), ".", fixed = TRUE)[[1]]
   
-  ver <- sub("1.", "", ver)
-  
-  if(ver < version) {
-    
-    verdict <- "Sorry! Your Rstudio is not update. Please download version 1.4.1725 or above"
-    
+  if ((length(ver_split) == 3) & (ver_split[1] == "1")) {
+    if(ver < version1) {
+      
+      verdict <- "Sorry! Your Rstudio is not up-to-date. Please upgrade your Rstudio version."
+      
+    } else {
+      
+      verdict <- "Great! Your Rstudio is up to date!"
+    }
+  } else if ((length(ver_split) == 4) & ver_split[1] == "2021") {
+    if(ver < version2021) {
+      
+      verdict <- "Sorry! Your Rstudio is not up-to-date. Please upgrade your Rstudio version."
+      
+    } else {
+      
+      verdict <- "Great! Your Rstudio is up to date!"
+    }
   } else {
-    
-    verdict <- "Great! Your Rstudio is up to date!"
+
+    verdict <- "You have an unexpected version of RStudio, please inform Claudia and Roger about this"
   }
   return(verdict)
-  
+
 }
 
 
@@ -189,11 +203,11 @@ check_rstudio <- function(version = 4.1717) {
 
 
 #' Check for correct version of R
-#' 
+#'
 #' Check for correct version of R
-#' 
-#' Checks whether the user is using the correct version of R (exactly). 
-#' Note that this checks for the exact version: if a user has a higher version of 
+#'
+#' Checks whether the user is using the correct version of R (exactly).
+#' Note that this checks for the exact version: if a user has a higher version of
 #' R, the function will report that the user is not using the correct version.
 #'
 #' @param Major Major version number, e.g., 4
@@ -204,15 +218,15 @@ check_rstudio <- function(version = 4.1717) {
 check_r_equal <- function(Major = 4, Minor = 1.1) {
   major <- R.Version()$major
   minor <- R.Version()$minor
-  
+
   if((major == Major) & (minor == Minor )) {
-    
+
     verdict <- "Great! You have the correct R version!"
-    
+
   } else {
-    
+
     verdict <- "Sorry! You have the wrong R version. Please update R to version 4.1.1"
-    
+
   }
   return(verdict)
 }

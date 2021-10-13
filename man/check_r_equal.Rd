@@ -18,8 +18,8 @@ message with the result
 Check for correct version of R
 }
 \details{
-Checks whether the user is using the correct version of R (exactly). 
-Note that this checks for the exact version: if a user has a higher version of 
+Checks whether the user is using the correct version of R (exactly).
+Note that this checks for the exact version: if a user has a higher version of
 R, the function will report that the user is not using the correct version.
 }
 \keyword{internal}

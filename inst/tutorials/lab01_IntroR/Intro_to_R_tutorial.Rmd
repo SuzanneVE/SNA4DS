@@ -17,7 +17,12 @@ runtime: shiny_prerendered
 library(learnr)
 library(gradethis)
 tutorial_options(exercise.checker = gradethis::grade_learnr)
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE
+)
 ```
 
 
@@ -78,20 +83,7 @@ Please read the message below.
 
 ```{r rstudio check, include = TRUE}
 # R studio check version (required 1.4.1725 or above)
-ver <- rstudioapi::versionInfo()$version
-
-ver <- sub("1.", "", ver)
-
-if(ver < 4.1717) {
-
-  cat("Sorry! Your Rstudio is not update. Please download version 1.4.1725 or above")
-
-} else {
-
-  cat("Great! Your Rstudio is up to date!")
-}
-
-
+SNA4DS:::check_rstudio()
 ```
 
 
