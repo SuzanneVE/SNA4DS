@@ -17,7 +17,12 @@ library(learnr)
 library(gradethis)
 # library(magrittr)
 tutorial_options(exercise.checker = gradethis::grade_learnr)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE,
+	cache = FALSE
+)
 
 
 # Check whether required packages are installed
@@ -40,9 +45,7 @@ check_pkgs <- function(.pkgs = pkgs) {
 }
 
 # RStudio, at least 4.1717
-check_RStudio <- function(x = 0.351) {
-  SNA4DS:::check_rstudio(x)
-}
+check_RStudio <- SNA4DS:::check_rstudio
 
 
 # R check version (required 4.1.1)

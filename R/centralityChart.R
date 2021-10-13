@@ -82,7 +82,7 @@ centralityChart <- function(net,
 
   number <- betweenness + closeness + degree
 
-  opar <- par()
+  opar <- graphics::par()
   par(mfrow = c(1, number))
 
   if (betweenness) {
@@ -103,6 +103,6 @@ centralityChart <- function(net,
                        xlim = c(0, 1), pch = 16, xlab = "Degree", ...)
   }
 
-  suppressWarnings(par(opar))
+  suppressWarnings(graphics::par(opar))
   invisible()
 }
