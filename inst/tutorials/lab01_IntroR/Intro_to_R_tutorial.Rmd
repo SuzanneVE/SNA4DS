@@ -2324,7 +2324,7 @@ blue. Put x and y labels with the names of the variables, and set
 "Iris Sepal Plot" as the main title.
 
 
-````{r grade_code261, exercise = TRUE, echo = TRUE}
+```{r grade_code261, exercise = TRUE, echo = TRUE}
 
 
  
@@ -2461,7 +2461,7 @@ barplot(VADeaths[ , "Urban Female"],
 Can you make a bar chart of the variable "Rural Female", where each bar has a 
 different color, and every bar has a black border? 
 
-````{r grade_code26, exercise = TRUE, echo = TRUE}
+```{r grade_code26, exercise = TRUE, echo = TRUE}
 
 
 ```
