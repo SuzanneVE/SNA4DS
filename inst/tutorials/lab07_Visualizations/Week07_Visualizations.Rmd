@@ -30,22 +30,24 @@ source("../R/helper_code.R")
 pkgs <- matrix(c(
   "learnr", "0.10.0", "CRAN",
   "gradethis", "0.2.3.9001", "rstudio/gradethis",
-  "igraph", "1.2.6", "CRAN"
+  "outliertree", "1.7.4", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
 
 check_pkgs <- function(.pkgs = pkgs) {
-  SNA4DS:::check_packages(.pkgs)
+  bootcamp2021:::check_packages(.pkgs)
 }
 
 # RStudio, at least 4.1717
-check_RStudio <- SNA4DS:::check_rstudio
+check_RStudio <- function(x = 0.351) {
+  bootcamp2021:::check_rstudio(x)
+}
 
 
 # R check version (required 4.1.1)
 check_R <- function(x) {
-  SNA4DS:::check_r_equal(4, 1.1)
+  bootcamp2021:::check_r_equal(4, 1.1)
 }
 ```
 
@@ -125,8 +127,7 @@ check_R()
 
 ### R Studio Version
 
-You need to have installed RStudio version 1.4.1717 (or above) or 2021.9.0.351 
-(or above).
+You need to have installed RStudio version 2021.9.0.351 or above.
 Let's check by clicking `Run Code`:
 
 ```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
