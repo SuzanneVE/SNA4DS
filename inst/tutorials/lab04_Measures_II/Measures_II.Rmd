@@ -71,9 +71,7 @@ check_pkgs <- function(.pkgs = pkgs) {
 }
 
 # RStudio, at least 4.1717
-check_RStudio <- function(x = 0.351) {
-  SNA4DS:::check_rstudio(x)
-}
+check_RStudio <- SNA4DS:::check_rstudio
 
 
 # R check version (required 4.1.1)

@@ -18,6 +18,28 @@ library(learnr)
 library(gradethis)
 tutorial_options(exercise.checker = gradethis::grade_learnr)
 knitr::opts_chunk$set(echo = FALSE)
+
+
+# Check whether required packages are installed
+pkgs <- matrix(c(
+  "gradethis", "0.2.3.9001", "rstudio/gradethis",
+  "knitr", "1.34", "CRAN"
+), byrow = TRUE, ncol = 3) |> 
+  as.data.frame() |> 
+  setNames(c("pkg", "version", "where"))
+
+check_pkgs <- function(.pkgs = pkgs) {
+  SNA4DS:::check_packages(.pkgs)
+}
+
+# RStudio, at least 4.1717
+check_RStudio <- SNA4DS:::check_rstudio
+
+
+# R check version (required 4.1.1)
+check_R <- function(x) {
+  SNA4DS:::check_r_equal(4, 1.1)
+}
 ```
 
 
@@ -47,86 +69,37 @@ installed. If you are running this tutorial, you must have something installed.
 However, we need to make sure you have the right versions and that you have all 
 the packages we need.
 
+
 ### R Version 
 
 You need to have installed R version 4.1.1 and this tutorial is going to check it
-for you. Please read the message below.
-```{r rcheck, include = TRUE}
-# R check version (required 4.1.1)
+for you. Please hit the `Run Code` button.
 
-major <- R.Version()$major
-minor <- R.Version()$minor
-
-if((major == 4) & (minor == 1.1 )) {
-
-  cat("Great! You have the right version!")
-
-} else {
-
-  cat("Sorry! You have the wrong version. Please update R to version 4.4.1")
-
-}
-
-
+```{r r_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_R()
 ```
 
 
 ### R Studio Version
 
-You need to have installed RStudio version 2021.9.0.351 or above.
-Please read the message below.
+You need to have installed RStudio version 1.4.1717 or above.
+Let's check by clicking `Run Code`:
 
-```{r rstudio check, include = TRUE}
-# R studio check version (required 1.4.1725 or above)
-ver <- rstudioapi::versionInfo()$version
-
-ver <- sub("2021.9.", "", ver)
-
-if(ver != 0.351) {
-
-  cat("Sorry! Your Rstudio is not update. Please download version 1.4.1725 or above")
-
-} else {
-
-  cat("Great! Your Rstudio is up to date!")
-}
-
-
+```{r rstudio_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_RStudio()
 ```
-
 
 
 ### Packages
 
-You need to have a few packages installed:
+You need to have a few packages installed. 
+Click the `Run Code` to check. 
+It will check whether you have the required packages installed and will 
+attempt to install any missing packages in case there are any (or it will 
+advise you to upgrade `SNA4DS`).
 
-
-
-```{r}
-# Function to check whether package is installed
-
-# insert here packages that the students need to have installed.
-pkg <- c("SNA4DSData", "igraph", "sna", "gradethis", "papaja", "ina")
-
-
-is.installed <- function(mypkg){
-  is.element(mypkg, installed.packages()[,1])
-}
-
-
-
-for (i in 1:length(pkg)){
-
-if (isFALSE(is.installed(pkg[i]))){
-
-  install.packages(pkg[i])
-
-} else {
-
-  cat(paste0("Great! You have the ", pkg[i], " package\n"))
-
-  }
-}
+```{r package_check, echo = TRUE, include = TRUE, exercise = TRUE}
+check_pkgs()
 ```
 
 Do you have `SNA4DSData` installed? If not run this line of code on your *R*
@@ -137,7 +110,6 @@ console:
 Ok, check up completed! 
 Did you pass the checks? Yes? Great! Let's get started for real!
 If not, please close the tutorial, update/download and come back!
-
 
 
 ## Operators, Variables and Conditions
@@ -1087,7 +1059,7 @@ this sign *..*, you should specify `na.strings = c("NO", "..")`.
 
 let's consider this data file called *data.csv*, 
 
-```{r echo = FALSE, results = 'asis'}
+```{r remedy01, echo = FALSE, results = 'asis'}
 
 cn <- c("age", "gender", "eyes_col")
 one <- c(7, "M", "BLUE")
@@ -2324,7 +2296,7 @@ blue. Put x and y labels with the names of the variables, and set
 "Iris Sepal Plot" as the main title.
 
 
-````{r grade_code261, exercise = TRUE, echo = TRUE}
+```{r grade_code261, exercise = TRUE, echo = TRUE}
 
 
  
@@ -2461,7 +2433,7 @@ barplot(VADeaths[ , "Urban Female"],
 Can you make a bar chart of the variable "Rural Female", where each bar has a 
 different color, and every bar has a black border? 
 
-````{r grade_code26, exercise = TRUE, echo = TRUE}
+```{r grade_code26, exercise = TRUE, echo = TRUE}
 
 
 ```
