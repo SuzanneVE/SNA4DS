@@ -22,6 +22,7 @@
 #' SNA4DS_tutorials()
 #' }
 SNA4DS_tutorials <- function(graphics = TRUE) {
+  suppressMessages(require("learnr"))
   if (!is.logical(graphics)) stop("You need to set 'graphics' to TRUE or FALSE only (without parentheses)")
   all_tuts <- learnr::available_tutorials("SNA4DS")
   perform <- glue::glue("learnr::run_tutorial('{tuto}', package = 'SNA4DS')",
