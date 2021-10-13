@@ -4,7 +4,7 @@
 \alias{check_rstudio}
 \title{Check for correct version of RStudio}
 \usage{
-check_rstudio(version = 4.1717)
+check_rstudio(version1 = "1.4.1717", version2021 = "2019.9.0.351")
 }
 \arguments{
 \item{version}{required version number (or higher)}

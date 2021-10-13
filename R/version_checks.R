@@ -167,18 +167,32 @@ check_packages <- function(reqs) {
 #'
 #' @return message with the result
 #' @keywords internal
-check_rstudio <- function(version = 0.351) {
+check_rstudio <- function(version1 = "1.4.1717", version2021 = "2019.9.0.351") {
   ver <- rstudioapi::versionInfo()$version
 
-  ver <- sub("2021.9.", "", ver)
-
-  if(ver != version) {
-
-    verdict <- "Sorry! Your Rstudio is not update. Please download version 2021.9.0.351"
-
+  ver_split <- strsplit(as.character(ver), ".", fixed = TRUE)[[1]]
+  
+  if ((length(ver_split) == 3) & (ver_split[1] == "1")) {
+    if(ver < version1) {
+      
+      verdict <- "Sorry! Your Rstudio is not up-to-date. Please upgrade your Rstudio version."
+      
+    } else {
+      
+      verdict <- "Great! Your Rstudio is up to date!"
+    }
+  } else if ((length(ver_split) == 4) & ver_split[1] == "2021") {
+    if(ver < version2021) {
+      
+      verdict <- "Sorry! Your Rstudio is not up-to-date. Please upgrade your Rstudio version."
+      
+    } else {
+      
+      verdict <- "Great! Your Rstudio is up to date!"
+    }
   } else {
 
-    verdict <- "Great! Your Rstudio is up to date!"
+    verdict <- "You have an unexpected version of RStudio, please inform Claudia and Roger about this"
   }
   return(verdict)
 
