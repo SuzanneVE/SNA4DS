@@ -403,7 +403,7 @@ quiz(
   question("How do you interpret this visualization?",
     answer("The year matters for friednship formation but the gender does not"),
     answer("Both matter, but since there are many more males the year is a better predictor of friendship", correct = TRUE),
-    answer("The year does not matter for friednship formation but the gender does"),
+    answer("The year does not matter for friendship formation but the gender does"),
     answer("Both the year and the gender equally matter in predicting friendship"),
     correct = "Yes! Well done!",
     random_answer_order = TRUE,
