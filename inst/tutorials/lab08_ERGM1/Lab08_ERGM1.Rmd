@@ -504,7 +504,7 @@ One last thing. Can you simulate the control group of model four for me? Use `se
 
 flomodel.04 <- ergm::ergm(florentine ~ edges + nodecov("Wealth") + absdiff("Wealth"))  
 
-simNodecov <- simulate(flomodel.02, burnin = 1e+6, verbose = TRUE, seed = 8)
+simNodecov <- simulate(flomodel.04, burnin = 1e+6, verbose = TRUE, seed = 8)
 
 
 ```
