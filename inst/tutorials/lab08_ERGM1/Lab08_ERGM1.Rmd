@@ -160,7 +160,7 @@ To do so, we are going to use the Florentine marriage network. You are already f
 
 ```{r florentine_load, include = FALSE}
 
-florentine <- data(florentine, package='SNA4DSData')
+florentine <- SNA4DSData::florentine
 flo_mar <- florentine$flomarriage
 florentine <- intergraph::asNetwork(flo_mar)
 

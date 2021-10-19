@@ -145,7 +145,7 @@ if (window.hljs) {
 </div>
 <div id="section-leveling-machine" class="section level2">
 <h2>Leveling machine</h2>
-<p>As in every respectable ice rink, we first quickly make sure that the ice is smooth before skating!</p>
+<p>As in every respectable ice rink, we first make sure that the ice is smooth before skating!</p>
 <div id="section-r-version" class="section level3">
 <h3>R Version</h3>
 <p>You need to have installed R version 4.1.1 and this tutorial is going to check it for you. Please hit the <code>Run Code</code> button.</p>
@@ -174,9 +174,9 @@ if (window.hljs) {
 </div>
 <div id="section-erdos-renyi" class="section level2">
 <h2>Erdos Renyi</h2>
-<p>As we discussed it class, the Erdos Renyi model id the ERGM’s grandfather. AKA one of the simplest ERG models that you can possibly think of.</p>
-<p>To do so we are going to use the Florentine marriage network. You are already familiar with this graph, so I won’t spend more time on discussing it</p>
-<p>Let’s just print and check on its class</p>
+<p>As we discussed in class, the Erdos Renyi model is the ERGM’s grandfather. AKA is one of the simplest ERG models that you can possibly think of.</p>
+<p>To do so, we are going to use the Florentine marriage network. You are already familiar with this graph, so I won’t spend more time discussing it.</p>
+<p>Let’s just print it, and check on its class</p>
 <div class="tutorial-exercise" data-label="viewflo_mar" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>florentine
 class(florentine)</code></pre>
@@ -195,14 +195,14 @@ class(florentine)</code></pre>
 <pre class="text"><code>plot(florentine)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Now, let’s check at the network density in an alternative way.</p>
-<p>Running a summary on the formula that we will insert in the statistical model, we have a quick and good way to measure the effect that we will be introducing.</p>
-<p><code>edges</code>, surprise, surprise, counts the number of edges. Since we know that we have 20 of them out of N*(N-1) possible edges, we can definitely consider this term a proxy for density</p>
+<p>Now, let’s check the network density in an alternative way.</p>
+<p>Running a summary of the formula that we will insert in the statistical model, we have a quick and good way to measure the effect we will introduce into the model.</p>
+<p><code>edges</code>, surprise, surprise, counts the number of edges. Since we know that we have 20 of them out of N*(N-1) possible edges, we can definitely consider this term a proxy for density.</p>
 <div class="tutorial-exercise" data-label="densityflo_mar" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>summary(florentine ~ edges)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Yes, they are still 20 out of 16*15 possible edges. All good here!</p>
+<p>Yes, they are still 20 out of 16*15 possible edges. All is good here!</p>
 <p>Ok, let’s estimate an ERG model! How? with the <code>ergm</code> package from the <code>statnet</code> suite! We are going to use mainly one function. Guess what? <code>ergm</code>!</p>
 <p>Remember, we are testing the hypothesis that these Italian old privileged weirdos don’t marry by chance!</p>
 <div class="tutorial-exercise" data-label="ergmflo_mar" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -211,37 +211,36 @@ class(florentine)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>Here we go. The first row is the model specification. The second one is the model summary. Yes, you can also save the summary, and trust me, sometimes it is helpful, so keep it in mind! Congrats! You run your first ERGM.</p>
-<p>Edges, is an endogenous or structural term. Again, we are just checking on the probability that those 20 edges are not by chance. Could they have been between any family? In other words: Do they marry in a random way? Usually people marry for a reason. Love or some other, but it’s unlikely that they marry in a random way.</p>
-<p>How about this old Florentine folks? Well, according to the model results, they did not marry by chance too. P-value is &lt; 0.0001, hence there is a high probability that we can reject the null hypothesis of marrying by chance. Love is not blind, and when is the love of millionaires it is even better sighted!</p>
+<p>Edges is an endogenous or structural term. So again, we are just checking on the probability that those 20 edges are not by chance. Could they have been between any family? In other words: Do they marry randomly? Usually, people marry for a reason. Love or some other, but it’s unlikely that they marry in a random way.</p>
+<p>How about these old Florentine folks? Well, according to the model results, they did not marry by chance too. P-value is &lt; 0.0001. Hence there is a high probability that we can reject the null hypothesis of marrying by chance. Love is not blind, and when it is the love of millionaires, it sees even better!</p>
 <p>What about the coefficient? The fact that it is negative means that the network is sparse: there is a small probability of forming links.</p>
-<p>The probability of these edges is 16%. These old Florentine dudes, do not marry by chance, and do not marry that easily either. These weddings are well thought, and kind of exclusive. It’s not for every family to marry there!</p>
-<p>One more, crucial thing. Look at the model summary. Can you that it says: <code>Maximum Likelihood Results</code>?</p>
-<p>Well, that’s because here you only have one dyadic independent term and the model can be estimated not requiring the use of MCMC chains!</p>
+<p>The probability of these edges is 16%. These old Florentine dudes do not marry by chance and do not marry that easily either. These weddings are well thought, and kind of exclusive. It’s not for every family to marry there!</p>
+<p>One more crucial thing: Look at the model summary. Can you see that it says: <code>Maximum Likelihood Results</code>?</p>
+<p>Well, that’s because here, you only have one dyadic independent term, and the model can be estimated not requiring the use of MCMC chains!</p>
 <div id="section-simulation" class="section level3">
 <h3>Simulation</h3>
-<p>We said that we are checking on the probability that our observed network is different from some random others that are built using the same parameters but have no effects (null distribution). This means that we are comparing our observed Florentine network with many others simulated ones with the same parameters: Nodes and Edges.</p>
-<p>In Network Science, a random network with fixed number of nodes and edges is an Erdos Renyi one. Let’try</p>
+<p>We said that we are checking on the probability that our observed network is different from random others built using the same parameters but not having the specific features we observe in our real network (null distribution). This means that we are comparing our observed Florentine network with many other simulated ones with the same parameters: Nodes and Edges.</p>
+<p>In Network Science, a random network with a fixed number of nodes and edges is an Erdos Renyi one. Let’s try!</p>
 <div class="tutorial-exercise" data-label="erdos_renyi" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>plot(igraph::erdos.renyi.game(16, 20, type = &#39;gnm&#39;))</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This network we just plotted is really similar to the Florentine one, but still not quite the same. Generating a 1000 of these using this the <code>igraph::erdos.renyi.game()</code> function, we could manually test our hypothesis.</p>
-<p>Many other times, we have to compare our observed network in the absence of standard parameters (not every model as an ad hoc algorithm as the Erdos Renyi). To do so, in the future, we can simply use the function <code>simulate()</code> that will work with each and every ERGM formula.</p>
+<p>This network we just plotted is really similar to the Florentine one, but still not quite the same. We could manually test our hypothesis by generating 1000 of these using the <code>igraph::erdos.renyi.game()</code> function.</p>
+<p>Often, we have to compare our observed network in the absence of standard parameters (not every model has an ad hoc algorithm like the Erdos Renyi). To do so, in the future, we can simply use the function <code>simulate()</code> that will work with each and every ERGM formula.</p>
 <div class="tutorial-exercise" data-label="simulate_flo" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>flomodel.01 &lt;- ergm::ergm(florentine ~ edges)
 simflo &lt;- simulate(flomodel.01, burnin = 1e+6, verbose = TRUE, seed = 9)
 plot(simflo)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>In this case, we have full control on the parameters, since we are explicitly asking the function to simulate something that has exactly the same terms as our <code>flomodel.01</code>.</p>
+<p>In this case, we have complete control over the parameters since we explicitly ask the function to simulate something with exactly the same terms as our <code>flomodel.01</code>.</p>
 <p>Enough with this easy toy model! we are ready for something juicier!</p>
 </div>
 </div>
 <div id="section-p1" class="section level2">
 <h2>P1</h2>
-<p>The ER model ran as an ERGM is cute, but it explain reality to a very small extent. In this section we will take a look at the P1 that is considered ERGM’s father.</p>
-<p>In fact ERGMs are also called P* as a better (more complex and flexible) version of the P1 model.</p>
-<p>While the ER model can be also applied to undirected networks since it only considers whether there are ties or not (not checking on what kind of ties), the P1 checks on the kind of ties and for this reason it was designed for a directed network. We are going to use now the Sampson data that you are also already familiar with.</p>
+<p>The ER model ran as an ERGM is cute, but it explains reality to a very small extent. In this section, we will take a look at the P1 that is considered ERGM’s father.</p>
+<p>While the ER model can also be applied to undirected networks since it only considers whether there are ties or not (not checking on what kind of ties), the P1 checks on the kind of ties, and for this reason, it was designed for a directed network. We are going to use now the Sampson data that you are also already familiar with.</p>
 <p>I’m just going to remind you that it is an ethnographic study of a New England monastery’s community structure by Samuel F. Sampson. Social relationships among a group of men (novices) who were preparing to join a monastic order.</p>
 <p>Let’s quickly explore it. (Sorry, you won’t find my beer example here. But you can get a beer after you finish the tutorial if you like ^_^)</p>
 <div class="tutorial-exercise" data-label="plotSampson" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -249,7 +248,7 @@ plot(simflo)</code></pre>
 plot(sampson)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This is a subset of the Sampson data that only considers whether the monks like each other (directional edge) or not (no edge). We know it’s 18 nodes and 88 edges directed network with no loops and two attributes loaded in the network format.</p>
+<p>This subset of the Sampson data only considers whether the monks like each other (directional edge) or not (no edge). We know it’s 18 nodes and 88 edges directed network with no loops and two attributes loaded in the network format.</p>
 <p>The P1 model checks on the probability that the observed network is not random, but that it’s the outcome of some social dynamic focusing on:</p>
 <ul>
 <li>edges formation (as the ER),</li>
@@ -271,34 +270,35 @@ P1 &lt;- ergm::ergm(sampson ~ edges + sender + receiver + mutual)
 summary(P1)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Waw, what’s this output? It’s really long! Well, some terms that you specify in the ERG models estimate one statistic summarizing the all situation in your network. <code>edges</code> and <code>mutual</code> do so in this case. Some other terms such as <code>sender</code> and <code>receiver</code> compute a statistic for each single node in the network. That’s why this output is so insanely long. When you choose the terms for your model take this into account because commenting on each single node in a network with 200 of them is no fun.</p>
-<p><code>sender</code> and <code>receiver</code> look at the probability that each single connection is not random: an expression of likelihood between 2 and 5 is completely different from one between 5 and 2, as much as one between 12 and 18. This kind of approach is perfect for an ethnographic study like this that aims at understanding specific social dynamics in a small community. It would be not very helpful for explaining the behavior in an Twitter network.</p>
-<p>Note that not every node is in the output of the model though. Node number one is missing. This is not a mistake. Removing one node is necessary to avoid a linear dependency between all the others. Node one constitutes the reference category and every other result has to be compared to node one. Do you remember that we discussed that in the Bootcamp?</p>
-<p>Have you notice how much time and computational power it takes to run this super small model? That is because <code>mutual</code> is an endogenous dyadic dependent term and the model is running a MCMC simulation for you.</p>
+<p>Waw, what’s this output? It’s really long! Well, some terms that you specify in the ERG models estimate one statistic summarizing the entire situation in your network. <code>edges</code> and <code>mutual</code> do so in this case. Some other terms such as <code>sender</code> and <code>receiver</code> compute a statistic for every single node in the network.</p>
+<p>That’s why this output is so insanely long. When you choose the terms for your model, consider this because commenting on every node in a network with 200 of them is no fun.</p>
+<p><code>sender</code> and <code>receiver</code> look at the probability that every single connection is not random: an expression of likelihood between 2 and 5 is completely different from one between 5 and 2, as much as one between 12 and 18. This kind of approach is perfect for an ethnographic study that aims to understand specific social dynamics in a small community. It would not be very helpful for explaining the behavior of people in a Twitter network.</p>
+<p>Note that not every node is in the output of the model, though. Node number one is missing. This is not a mistake. Removing one node is necessary to avoid a linear dependency between all the others. Node one constitutes the reference category, and every other result has to be compared to node one. Do you remember that we discussed that in the Bootcamp?</p>
+<p>Have you noticed how much time and computational power it takes to run this super small model? That is because <code>mutual</code> is an endogenous dyadic dependent term, and the model is running an MCMC simulation for you.</p>
 <p>This time you can read <code>Monte Carlo Maximum Likelihood Results</code> in your model summary.</p>
-<p>ER and P1 consider only structural (endgenous) effects. When we run them we don’t take any attribute into consideration. But is not longer going to be the case from the next section and afterwards since explaining social reality requires way more sophistication that this :)</p>
+<p>ER and P1 consider only structural (endogenous) effects. When we run them, we don’t consider any attribute. But is no longer going to be the case from the next section and afterward since explaining social reality requires way more sophistication than this :)</p>
 </div>
-<div id="section-p-or-ergm" class="section level2">
-<h2>P* or ERGM</h2>
+<div id="section-ergm" class="section level2">
+<h2>ERGM</h2>
 <p>An ERGM (pronunciation “eurcoom” “eurghum”) is a statistical tool to assess causality using hypothesis testing when the outcome variable is a network.</p>
-<p>So far we fitted an ER and a P1 model. We fitted using the <code>ergm::ergm</code> function, but with this function we can do a lot more.</p>
+<p>So far, we have fitted an ER and a P1 model. We fitted using the <code>ergm::ergm</code> function, but we can do a lot more with this function.</p>
 <p>While the ER and the P1 only employ few mostly dyadic independent endogenous terms (but the dyadic dependent <code>mutual</code>), the ERGM model allows you to test your hypotheses with a wide array of terms.</p>
-<p>This class of models is employed to assess weather the structure of a network and its attributes are random or whether they originated by some sort of identifiable relational phenomena.</p>
-<p>The observed data is compared to simulated data (like you do when you run an experiment with a treatment and a control group) so you need to make sure that your simulated data (control group) is truly comparable to the treatment group (the real network). The parameters you insert in the model set up the simulated reality of the control group (Sim City). If you simulated reality is too far from the real network, your model will simply fail (technically speaking, it will not converge).</p>
-<p>This is a bit complicated, right? Let’s take it step by step starting from inserting exogenous effects in the model, since we haven’t done that yet!</p>
+<p>This class of models is employed to assess whether the structure of a network and its attributes are random or whether they originated by some sort of identifiable relational phenomena.</p>
+<p>The observed data is compared to simulated data (like you do when you run an experiment with a treatment and a control group), so you need to make sure that your simulated data (control group) is truly comparable to the treatment group (the real network). The parameters you insert in the model set up the simulated reality of the control group (Sim City). If your simulated reality is too far from the real network, your model will simply fail (technically speaking, it will not converge).</p>
+<p>This is a bit complicated, right? Let’s take it step by step, starting from inserting exogenous effects in the model since we haven’t done that yet!</p>
 <p>Let’s get crunching some numbers!</p>
 </div>
 <div id="section-dyadic-independent-terms" class="section level2">
 <h2>Dyadic Independent Terms</h2>
 <p>An ERG model is all about finding the best ‘dress’ to fit our data.</p>
-<p>The terms we employed so far but <code>mutual</code> only look at independent effects since the probability of observing them does not depend on the existence of other ties, but only on properties of the individual nodes. But, even still focusing only on the effects that do not involve edge dependencies, there are many more options. We need to explore more ERGM terms. If you type in your <code>RStudio</code> console <code>search.ergmTerms</code>, it will appear to you the help file. Now we focus on the dyadic independent terms only, that you can print out using the following line of code:</p>
+<p>The terms we employed so far, but <code>mutual</code> only look at independent effects since the probability of observing them does not depend on the existence of other ties but only on the properties of the individual nodes. But, even still focusing only on the effects that do not involve edge dependencies, there are many more options. We need to explore more ERGM terms. If you type in your <code>RStudio</code> console <code>search.ergmTerms</code>, it will appear to you the help file. Now we focus on the dyadic independent terms only, that you can print out using the following line of code:</p>
 <div class="tutorial-exercise" data-label="dyad-indepTerms" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>ergm::search.ergmTerms(categories = &#39;dyad-independent&#39;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>There are 60 terms that correspond to this description! Some of them are endogenous, but others are exogenous. Exogenous terms allow to insert attributes in the model. Usually they are dyadic independent since the presence of absence of attributes should not be depending on ties.</p>
-<p>There are several terms that allows you to insert exogenous variables (attributes) in the model.</p>
-<p>Let’s experiment one of the most popular: <code>nodecov</code>.</p>
+<p>Sixty terms correspond to this description! Some of them are endogenous, but others are exogenous. Exogenous terms allow inserting attributes in the model. Usually, they are dyadic independent since the presence or absence of attributes should not depend on ties.</p>
+<p>Several terms allow you to insert exogenous variables (attributes) in the model.</p>
+<p>Let’s experiment with one of the most popular: <code>nodecov</code>.</p>
 <div class="tutorial-exercise" data-label="nodecov-search" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>ergm::search.ergmTerms(name = &#39;nodecov&#39;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
@@ -313,14 +313,14 @@ flomodel.02 &lt;- ergm::ergm(florentine ~ edges + nodecov(&quot;Wealth&quot;))
 texreg::screenreg(list(flomodel.01, flomodel.02))</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>In this case it is helpful to look at AIC and BIC for model comparison According to</p>
+<p>In this case, it is helpful to look at AIC and BIC for model comparison According to</p>
 <ul>
 <li>AIC Model two is better.<br />
 </li>
 <li>BIC Model one and two are roughly the same, with model two a tiny bit better</li>
 </ul>
 <p>The <code>nodecov</code> term’s result and say that it is likely that rich families are mutually married.</p>
-<p>You read the results exactly like a logit model, so if you don’t remember it, check the GLM tutorial in the <code>Bootcamp</code> package.</p>
+<p>You read the results exactly like a logit model, so check the GLM tutorial in the <code>Bootcamp</code> package if you don’t remember it.</p>
 <p>For what concerns <code>edges</code> you can interpret it as the model intercept.</p>
 <p>We can also simulate flomodel.02.</p>
 <div class="tutorial-exercise" data-label="simulate_nodecov" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -330,15 +330,15 @@ simNodecov &lt;- simulate(flomodel.02, burnin = 1e+6, verbose = TRUE, seed = 9)
 plot(simNodecov)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This simulation represents out base line random model, our control group in the experiment, our null hypothesis. The simulated data is originated by the same features, but does not show the remarkable qualities of our observed networks. There are families and they marry, but randomly.</p>
-<p>When we use <code>nodecov</code> we are computing the correlation of a vector that expresses the amount of liras that each family owns, and the edge list of the network.</p>
-<p>There are other ways, still in the dyadic independent universe, to check on the possibility that wealth influences marriages in the old Florence.</p>
-<p>One term that can help us doing that is <code>absdiff</code></p>
+<p>This simulation represents our baseline random model, our control group in the experiment, our null hypothesis. The simulated data originated by the same features but does not show the remarkable qualities of our observed networks. There are families, and they marry, but randomly.</p>
+<p>When we use <code>nodecov</code>, we compute the correlation of a vector that expresses the number of Liras that each family owns and the edge list of the network.</p>
+<p>There are other ways, still in the dyadic independent universe, to check on the possibility that wealth influences marriages in old Florence.</p>
+<p>One term that can help us do that is <code>absdiff</code>.</p>
 <div class="tutorial-exercise" data-label="absdiffSearch" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>ergm::search.ergmTerms(name = &#39;absdiff&#39;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This term computes the mixingmatrix that calculate the absolute difference between the amount of money each family owes. Rather than checking whether being rich influences the probability of a marriage in old Florence, we check in the probability of being equally rich (or equally non-rich).</p>
+<p>This term computes the mixing matrix that calculates the absolute difference between the amount of money each family owes. Thus, rather than checking whether being rich influences the probability of marriage in old Florence, we check the likelihood of being equally rich (or equally non-rich).</p>
 <p>Should we try this out?</p>
 <div class="tutorial-exercise" data-label="absdiffModel1" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>flomodel.01 &lt;- ergm::ergm(florentine ~ edges)  
@@ -351,10 +351,10 @@ flomodel.03 &lt;- ergm::ergm(florentine ~ edges + absdiff(&quot;Wealth&quot;))
 texreg::screenreg(list(flomodel.01, flomodel.02, flomodel.03))</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>From model three results we also see that it is likely that being equally rich influences the probability of getting married to each other.</p>
-<p>The AIC and he BIC comparison also show that model 3 is better than the other two.</p>
-<p>Ok, let’s nest a fourth model where we put these two terms in the same model. Can you do this form me?</p>
-<p>Please re-run all of them and print them out next to each other</p>
+<p>From model three results, we also see that it is likely that being equally rich influences the probability of getting married to each other.</p>
+<p>The AIC and the BIC comparison also show that model 3 is better than the other two.</p>
+<p>Ok, let’s nest a fourth model where we put these two terms in the same model. Can you do this for me?</p>
+<p>Please re-run all of them and print them out next to each other.</p>
 <div class="tutorial-exercise" data-label="absdiffModel2" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
@@ -370,16 +370,18 @@ flomodel.04 &lt;- ergm::ergm(florentine ~ edges + nodecov(&quot;Wealth&quot;) + 
 texreg::screenreg(list(flomodel.01, flomodel.02, flomodel.03, flomodel.04))</code></pre>
 </div>
 <p>Ok, do you see that the story in model 4 is changed? This is the beauty of nesting models!</p>
-<p>Even if in model two and three our terms are significant, when we put them together they are not anymore. Also the AIC and BIC are lower than model 3 ones. This could be because we are trying to estimate two effects that are too similar and they interfere with each other. Remember, one is estimating a vector and the other a matrix, but the substantive meaning is not that different. In general we know that model 4 is not a good fit to our network. We are going in the wrong direction and when this happens you simply discard that option and test others. But the good thing is that we checked! If we did not run model 3 and jump to model 4 (as I did in the ERGM 2 class), we would not have known that being equally rich is a better explanation than being just rich! It is, in fact, unlikely that people don’t marry at all because they are not rich enough!</p>
-<p>That’s how much you can fine tune your hypothesis using ERG models! Isn’t it awesome? I answer: it is. But it is also quite challenging and unless you know what you are doing you will be entangled in the almost unlimited options that this class of model offers you!</p>
-<p>One last thing. Can you simulate the control group of model four for me? Use <code>seed = 8</code> and a burn in of 1e+6. We will discuss what a burn it is next week!</p>
+<p>Even if in models two and three, our terms are significant, they are not anymore when we put them together. Also, the AIC and BIC are lower than the model 3 ones.</p>
+<p>This could be because we are trying to estimate two effects that are too similar and interfere with each other. Remember, one estimates a vector and the other a matrix, but the substantive meaning is not that different.</p>
+<p>In general, we know that model 4 is not a good fit for our network. We are going in the wrong direction, and when this happens, you simply discard that option and test others. But the good thing is that we checked! If we did not run model 3 and jump to model 4 (as I did in the ERGM 2 class), we would not have known that being equally rich is a better explanation than being just rich! It is, in fact, unlikely that people don’t marry at all because they are not rich enough!</p>
+<p>That’s how much you can fine-tune your hypothesis using ERG models! Isn’t it awesome? I answer: it is. But it is also quite challenging, and unless you know what you are doing, you will be entangled in the almost unlimited options that this class of model offers you!</p>
+<p>One last thing. Can you simulate the control group of model four for me? Use <code>seed = 8</code> and a burn-in of 1e+6. We will discuss what a burn it is next week!</p>
 <div class="tutorial-exercise" data-label="absdiffModel4" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="absdiffModel4-solution" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>flomodel.04 &lt;- ergm::ergm(florentine ~ edges + nodecov(&quot;Wealth&quot;) + absdiff(&quot;Wealth&quot;))  
 
-simNodecov &lt;- simulate(flomodel.02, burnin = 1e+6, verbose = TRUE, seed = 8)</code></pre>
+simNodecov &lt;- simulate(flomodel.04, burnin = 1e+6, verbose = TRUE, seed = 8)</code></pre>
 </div>
 </div>
 <div id="section-conclusion" class="section level2">
@@ -404,7 +406,11 @@ source("../R/helper_code.R")
 pkgs <- matrix(c(
   "learnr", "0.10.0", "CRAN",
   "gradethis", "0.2.3.9001", "rstudio/gradethis",
-  "outliertree", "1.7.4", "CRAN"
+  "igraph", "1.2.6", "CRAN",
+  "knitr", "1.34", "CRAN",
+  "sna", "2.6", "CRAN",
+  "SNA4DSData", "0.9.904", "SNAnalyst/SNA4DSData",
+  "ergm", "4.1.2", "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
@@ -454,7 +460,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -500,7 +508,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -546,7 +556,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -593,14 +605,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "viewflo_mar", code = "florentine\nclass(florentine)\n", 
         opts = list(label = "\"viewflo_mar\"", exercise = "TRUE", 
@@ -643,14 +657,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "plotflo_mar", code = "plot(florentine)", 
         opts = list(label = "\"plotflo_mar\"", exercise = "TRUE", 
@@ -693,14 +709,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "densityflo_mar", code = "\nsummary(florentine ~ edges)\n", 
         opts = list(label = "\"densityflo_mar\"", exercise = "TRUE", 
@@ -743,14 +761,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "ergmflo_mar", code = "\nflomodel.01 <- ergm::ergm(florentine ~ edges)  \n(s1 <- summary(flomodel.01))\n", 
         opts = list(label = "\"ergmflo_mar\"", exercise = "TRUE", 
@@ -794,7 +814,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -840,14 +862,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "simulate_flo", code = "flomodel.01 <- ergm::ergm(florentine ~ edges)\nsimflo <- simulate(flomodel.01, burnin = 1e+6, verbose = TRUE, seed = 9)\nplot(simflo)", 
         opts = list(label = "\"simulate_flo\"", exercise = "TRUE", 
@@ -892,7 +916,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -942,7 +968,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -993,7 +1021,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -1039,7 +1069,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -1085,14 +1117,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "nodecovModel", code = "flomodel.01 <- ergm::ergm(florentine ~ edges)  \n\nflomodel.02 <- ergm::ergm(florentine ~ edges + nodecov(\"Wealth\"))   \n\ntexreg::screenreg(list(flomodel.01, flomodel.02))", 
         opts = list(label = "\"nodecovModel\"", exercise = "TRUE", 
@@ -1137,14 +1171,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "simulate_nodecov", code = "flomodel.02 <- ergm::ergm(florentine ~ edges + nodecov(\"Wealth\"))  \n\nsimNodecov <- simulate(flomodel.02, burnin = 1e+6, verbose = TRUE, seed = 9)\nplot(simNodecov)", 
         opts = list(label = "\"simulate_nodecov\"", exercise = "TRUE", 
@@ -1189,7 +1225,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
@@ -1235,14 +1273,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "absdiffModel1", code = "flomodel.01 <- ergm::ergm(florentine ~ edges)  \n\nflomodel.02 <- ergm::ergm(florentine ~ edges + nodecov(\"Wealth\"))   \n\nflomodel.03 <- ergm::ergm(florentine ~ edges + absdiff(\"Wealth\")) \n\n\ntexreg::screenreg(list(flomodel.01, flomodel.02, flomodel.03))", 
         opts = list(label = "\"absdiffModel1\"", exercise = "TRUE", 
@@ -1288,14 +1328,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "absdiffModel2", code = "\n\n\n", 
         opts = list(label = "\"absdiffModel2\"", exercise = "TRUE", 
@@ -1345,14 +1387,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "\tmessage = FALSE,", "\twarning = FALSE,", "\tcache = FALSE", 
 ")", "", "source(\"../R/helper_code.R\")", "", "# Check whether required packages are installed", 
 "pkgs <- matrix(c(", "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
-"  \"outliertree\", \"1.7.4\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
+"  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"ergm\", \"4.1.2\", \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
 "  as.data.frame() |> ", "  setNames(c(\"pkg\", \"version\", \"where\"))", 
 "", "check_pkgs <- function(.pkgs = pkgs) {", "  SNA4DS:::check_packages(.pkgs)", 
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
-    chunks = list(list(label = "florentine_load", code = "\nforentine <- data(florentine, package='SNA4DSData')\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    include = FALSE)), setup = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
+    chunks = list(list(label = "florentine_load", code = "\nflorentine <- SNA4DSData::florentine\nflo_mar <- florentine$flomarriage\nflorentine <- intergraph::asNetwork(flo_mar)\n\n", 
         opts = list(label = "\"florentine_load\"", include = "FALSE"), 
         engine = "r"), list(label = "absdiffModel4", code = "\n\n\n", 
         opts = list(label = "\"absdiffModel4\"", exercise = "TRUE", 
@@ -1360,7 +1404,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     code_check = NULL, error_check = NULL, check = structure("gradethis::grade_code(correct = \"Oh yes!\")", chunk_opts = list(
         label = "absdiffModel4-check")), solution = structure(c("", 
     "", "flomodel.04 <- ergm::ergm(florentine ~ edges + nodecov(\"Wealth\") + absdiff(\"Wealth\"))  ", 
-    "", "simNodecov <- simulate(flomodel.02, burnin = 1e+6, verbose = TRUE, seed = 8)", 
+    "", "simNodecov <- simulate(flomodel.04, burnin = 1e+6, verbose = TRUE, seed = 8)", 
     "", ""), chunk_opts = list(label = "absdiffModel4-solution")), 
     options = list(eval = FALSE, echo = TRUE, results = "markup", 
         tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
@@ -1392,7 +1436,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","SNA4DS","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.3.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.28","0.3.2","0.14","1.1.0","0.2.4.9000","4.1.1","4.1.1","0.5.2","1.5.4","1.6.3","0.1.4","1.7.2","1.36","1.3.0","0.10.1.9016","1.0.1","2.0.1","1.1","4.1.1","0.12","1.2.0.1","2.5.1","1.0.7","0.4.11","2.11","2.0.2","0.4.0","1.7.1","0.11.2","4.1.1","1.7.5","1.4.0","4.1.1","4.1.1","2.4.2","0.26","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","SNA4DS","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.3.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.28","0.3.2","0.14","1.1.0","0.2.4.9000","4.1.1","4.1.1","0.5.2","1.5.4","1.6.3","0.1.4","1.7.2","1.36","1.3.0","0.10.1.9016","1.0.1","2.0.1","1.1","4.1.1","0.12","1.2.0.1","2.5.1","1.0.7","0.4.11","2.11","2.0.2","0.4.0","1.7.1","0.11.4","4.1.1","1.7.5","1.4.0","4.1.1","4.1.1","2.4.2","0.26","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>
