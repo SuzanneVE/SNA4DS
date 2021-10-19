@@ -35,7 +35,9 @@ pkgs <- matrix(c(
   "knitr", "1.34", "CRAN",
   "sna", "2.6", "CRAN",
   "SNA4DSData", "0.9.904", "SNAnalyst/SNA4DSData",
-  "ergm", "4.1.2", "CRAN"
+  "ergm", "4.1.2", "CRAN",
+  "network","1.17.1" , "CRAN",
+  "texreg", "1.37.5" , "CRAN"
 ), byrow = TRUE, ncol = 3) |> 
   as.data.frame() |> 
   setNames(c("pkg", "version", "where"))
