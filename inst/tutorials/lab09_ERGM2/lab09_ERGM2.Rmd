@@ -164,7 +164,7 @@ check_pkgs()
 Turn on the over, we are ready for some mouth watering bun to cook!
 
 
-## More complex dyadic independent example
+## A dyadic independent model
 
 In the first ERGM tutorial, we run very simple models on very small networks. 
 However, very often, networks are larger than the Florentine or Sampson's ones and the relationships they map down require more sophisticated efforts to be 
@@ -364,7 +364,7 @@ summary(mesaM4)
 ```
 
 
-This looks like a pretty nice mode! Let's comment on this model's overall meaning. 
+This looks like a pretty nice model! Let's comment on this model's overall meaning. 
 
 * nodematch-grade (differential homophily): There is a homophilic effect due to grade. The strongest homophily is in grade 7 and the weakest in grade 12 (check the odds ratios!).
 
@@ -411,11 +411,11 @@ Let's run a dyadic independent
 ```{r flob_dyad_indep, exercise = TRUE, exercise.setup = "load_flob"}
 
 fit <- ergm::ergm(flobusiness ~ edges)
+summary(fit)
 
 ```
 
-This text informs us that the results are estimated computing maximum
-pseudolikelihood estimation (MPLE). 
+You cannot see it in the tutorial, but if you check on your Rstudio console you will see some text informing us that the results are estimated computing maximum pseudolikelihood estimation (MPLE). 
 
 Let's check a dyadic dependent example to compare. We can simply add the dyadic
 dependent term `degree` to the previous model. This specification checks on the probability that the number of nodes with degree one in the florentine business network is non-random. We care only about the output text now, though. Let's read on.
@@ -423,10 +423,11 @@ dependent term `degree` to the previous model. This specification checks on the 
 ```{r flob_dyad_dep, exercise = TRUE, exercise.setup = "load_flob"}
 
 fit <- ergm::ergm(flobusiness ~ edges + degree(1))
+summary(fit)
 
 ```
 
-This text tells us that results are computed using Monte Carlo Markov Chains (MCMC). What does it mean? 
+This text (also in the console) tells us that results are computed using Monte Carlo Markov Chains (MCMC). What does it mean? 
 Dyadic dependent models cannot be estimated as the dyadic independent ones. 
 They are solved using Monte Carlo Markov Chains that stochastically approximate the Maximum Likelihood. 
 
@@ -570,7 +571,7 @@ Sometimes it also happens that even if your model does not degenerate and conver
 
 Let's take the model we just run with the magnolia data and substitute the incriminated term `triangle` with his geometrically weighted equivalent (terms with some math tricks to improve convergence).
 
-This model might take a few minutes. Be patient and read the output in the meanwhile so you see what happens with the algorithm!
+This model might take a few minutes. Be patient and read the output in the meanwhile so you see what happens with the algorithm! If it does not run at all, try to run it in your Rstudio directly. You can load the data by using `data(faux.magnolia.high, package = "ergm")` (obviously change the name in the model ^_^!) 
 
 
 ```{r magnolia_gwesp, exercise = TRUE, exercise.setup = "load_magnolia"}
@@ -600,7 +601,8 @@ Let's fit our model again with a nice MCMC diagnostic and check whether it also 
 fit <- ergm::ergm(flobusiness ~ edges + degree(1))
 fit.gof <- ergm::gof(fit)
 plot(fit.gof)
-
+# If you also want to see the numeric output, uncomment below and rerun
+# fit.gof
 ```
 
 
@@ -656,7 +658,7 @@ If you use this term in an ERGM with a direct network, it will check on the exis
 
 Let's try out with the Sampson data we already used many times before.
 
-````{r sampson_load, include = FALSE}
+```{r sampson_load, include = FALSE}
 SampsonIgraphtot <- SNA4DSData::Sampson
 
 SampsonLike2Ig <-SampsonIgraphtot$Sampson_like2
@@ -717,7 +719,7 @@ When you want to analyze three nodes patterns, other terms that might be often u
 * `transitive`
 * `balance`
 
-Why don't you try to use them and see what happens in with the Sampson data?
+Why don't you try to use them and see what happens with the Sampson data?
 
 ```{r Playground, exercise = TRUE, exercise.setup = "sampson_load"}
 

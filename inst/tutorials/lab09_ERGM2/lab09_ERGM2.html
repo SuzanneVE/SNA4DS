@@ -13,7 +13,7 @@
 <meta name="progressive" content="true" />
 <meta name="allow-skip" content="true" />
 
-<title>Lab 08 - ERGM1</title>
+<title>Lab 09 - ERGM2</title>
 
 
 <!-- highlightjs -->
@@ -181,8 +181,8 @@ if (window.hljs) {
 <p>Turn on the over, we are ready for some mouth watering bun to cook!</p>
 </div>
 </div>
-<div id="section-more-complex-dyadic-independent-example" class="section level2">
-<h2>More complex dyadic independent example</h2>
+<div id="section-a-dyadic-independent-model" class="section level2">
+<h2>A dyadic independent model</h2>
 <p>In the first ERGM tutorial, we run very simple models on very small networks. However, very often, networks are larger than the Florentine or Sampson’s ones and the relationships they map down require more sophisticated efforts to be explained.</p>
 <p>Let’s take a look at the <code>faux.mesa.high</code> data set, one of the networks included in the <code>ergm</code> package and employed in the <code>statnet</code> tutorials. Remember, <code>statnet</code> is the project that developed the <code>r</code> package <code>ergm</code>. Their tutorials are the first source of information if you are running ERGMs in <code>r</code>.</p>
 <p>The <code>faux.mesa.high</code> is modified data collected at the Mesa High School in the US</p>
@@ -190,7 +190,7 @@ if (window.hljs) {
 <p>Go Rabbits! Carry On!</p>
 <p>Let’s explore this network</p>
 <div class="tutorial-exercise" data-label="explore_mesa" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>mesa</code></pre>
+<pre class="text"><code>summary(mesa)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>The mesa network contains information about 203 relationships among 205 students enrolled at the Mesa High School. Well, not quite. The real information about the students is classified, but we can look at something that is close enough. This way we can explore the network without revealing any sensitive data.</p>
@@ -295,7 +295,7 @@ summary(mesaM3)</code></pre>
 summary(mesaM4)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This looks like a pretty nice mode! Let’s comment on this model’s overall meaning.</p>
+<p>This looks like a pretty nice model! Let’s comment on this model’s overall meaning.</p>
 <ul>
 <li><p>nodematch-grade (differential homophily): There is a homophilic effect due to grade. The strongest homophily is in grade 7 and the weakest in grade 12 (check the odds ratios!).</p></li>
 <li><p>nodefactor-grade: this term tell us the likelihood of students in each grade to make friends. Grade 12 students have the highest number of friends.</p></li>
@@ -315,16 +315,18 @@ summary(mesaM4)</code></pre>
 <p>In practice, you know when you are running a dyadic independent or dependent model by reading the information that the model prints for you while running.</p>
 <p>Let’s run a dyadic independent</p>
 <div class="tutorial-exercise" data-label="flob_dyad_indep" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges)</code></pre>
+<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges)
+summary(fit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This text informs us that the results are estimated computing maximum pseudolikelihood estimation (MPLE).</p>
+<p>You cannot see it in the tutorial, but if you check on your Rstudio console you will see some text informing us that the results are estimated computing maximum pseudolikelihood estimation (MPLE).</p>
 <p>Let’s check a dyadic dependent example to compare. We can simply add the dyadic dependent term <code>degree</code> to the previous model. This specification checks on the probability that the number of nodes with degree one in the florentine business network is non-random. We care only about the output text now, though. Let’s read on.</p>
 <div class="tutorial-exercise" data-label="flob_dyad_dep" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1))</code></pre>
+<pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1))
+summary(fit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This text tells us that results are computed using Monte Carlo Markov Chains (MCMC). What does it mean? Dyadic dependent models cannot be estimated as the dyadic independent ones. They are solved using Monte Carlo Markov Chains that stochastically approximate the Maximum Likelihood.</p>
+<p>This text (also in the console) tells us that results are computed using Monte Carlo Markov Chains (MCMC). What does it mean? Dyadic dependent models cannot be estimated as the dyadic independent ones. They are solved using Monte Carlo Markov Chains that stochastically approximate the Maximum Likelihood.</p>
 <p>This means that when you have dyadic dependent terms, your model is computationally more complex. It might take longer to run, and you also need to check whether the simulation is actually doing its job correctly or if your specification is driving the model in some other directions. To check on all these things, you need to run MCMC diagnostics.</p>
 <p>Nitty-gritty: If you get great statistics (coefficients, p-values) next to poor diagnostics results, you can trash your model. It’s important!</p>
 </div>
@@ -404,7 +406,7 @@ ergm::mcmc.diagnostics(fit2)</code></pre>
 <h3>A bad fit</h3>
 <p>Sometimes it also happens that even if your model does not degenerate and converge, providing you with results, you check the <code>mcmc.diagnostics</code>, and you see that your model does not fit your data very well.</p>
 <p>Let’s take the model we just run with the magnolia data and substitute the incriminated term <code>triangle</code> with his geometrically weighted equivalent (terms with some math tricks to improve convergence).</p>
-<p>This model might take a few minutes. Be patient and read the output in the meanwhile so you see what happens with the algorithm!</p>
+<p>This model might take a few minutes. Be patient and read the output in the meanwhile so you see what happens with the algorithm! If it does not run at all, try to run it in your Rstudio directly. You can load the data by using <code>data(faux.magnolia.high, package = "ergm")</code> (obviously change the name in the model ^_^!)</p>
 <div class="tutorial-exercise" data-label="magnolia_gwesp" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>fit3 &lt;- ergm::ergm(magnolia ~ edges + gwesp(0.25, fixed = T))
 
@@ -423,7 +425,9 @@ ergm::mcmc.diagnostics(fit3)</code></pre>
 <div class="tutorial-exercise" data-label="flob_gof" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1))
 fit.gof &lt;- ergm::gof(fit)
-plot(fit.gof)</code></pre>
+plot(fit.gof)
+# If you also want to see the numeric output, uncomment below and rerun
+# fit.gof</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p><code>gof</code>’s output is composed of 4 Parts</p>
@@ -463,94 +467,73 @@ plot(gofdegree)</code></pre>
 </div>
 <p>If you use this term in an ERGM with a direct network, it will check on the existence of each of the 16 options and provide you with the probability of observing each of them. If you use the undirected one, it is going to check only on the configurations that make sense with undirected data. Can you tell me how many are those?</p>
 <p>Let’s try out with the Sampson data we already used many times before.</p>
+<p>Since the Sampson data about monks’ frindships is directed we are checking whether these 16 configurations do exist in the network.</p>
 <div class="tutorial-exercise" data-label="Sam_summ_triadcensus" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>summary(sampson ~ edges + triadcensus)
-
-```
-
-Waw! In the Sampson network we observe every configuration but the 120C. 
-That&#39;s a useful term indeed!
-
-Let&#39;s run the model and see what happens.</code></pre>
+<pre class="text"><code>summary(sampson ~ edges + triadcensus)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>Waw! In the Sampson network we observe every configuration but the 120C. That’s a useful term indeed!</p>
+<p>Let’s run the model and see what happens.</p>
 <div class="tutorial-exercise" data-label="Sam_triadcensus" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>samM1 &lt;- ergm::ergm(sampson ~ edges + triadcensus)
 
-summary(samM1)
-
-```
-
-The model will either not converge or take a long time to do so. If you read the output it is also clear that the model is not happy with this specification.
-
-There is no theoretical reason that would make us think that all these effects are happening at the same time for a specific -non random- reason in this small network. Hence, the model does not behave well. 
-
-We might want to try to be more specific and to decrease the level of complexity of our educated guess.
-
-Checking on the model summary above, we see that the configurations that are highly represented in this sample are 012, 102, 021C, 021U, 201, 111D. The term 
-`intransitive` checks on three of them: 021C, 201, 111D. Let&#39;s try to run it and to see whether this time our model might make more sense. But before that, why don&#39;t you check what the term `intransitive` exactly does and whether this might make sense knowing the Sampson network&#39;s features?</code></pre>
+summary(samM1)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>The model will either not converge or take a long time to do so. If you read the output it is also clear that the model is not happy with this specification.</p>
+<p>There is no theoretical reason that would make us think that all these effects are happening at the same time for a specific -non random- reason in this small network. Hence, the model does not behave well.</p>
+<p>We might want to try to be more specific and to decrease the level of complexity of our educated guess.</p>
+<p>Checking on the model summary above, we see that the configurations that are highly represented in this sample are 012, 102, 021C, 021U, 201, 111D. The term <code>intransitive</code> checks on three of them: 021C, 201, 111D. Let’s try to run it and to see whether this time our model might make more sense. But before that, why don’t you check what the term <code>intransitive</code> exactly does and whether this might make sense knowing the Sampson network’s features?</p>
 <div class="tutorial-exercise" data-label="Sam_intransitive" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>samM2 &lt;- ergm::ergm(sampson ~ edges + intransitive)
 
-summary(samM2)
-```
-
-This time our results seem to be more interesting. Obviously, we cannot be sure since we did not check the MCMC diagnostics and the goodness of fit. If the model fit is good, what do these results mean for the Sampson network? 
-
-We could say that it is unlikely that if two monks are friends with a third one, are not friends among each other. They live in the same place all together. It is likely that friendship triangles close. 
-
-Can you think of other possible terms that help in the explanation of the social effects underneath the formation of these edges?
-
-When you want to analyze three nodes patterns, other terms that might be often useful are
-
-* `ctriple` 
-* `ttriple` 
-* `transitive`
-* `balance`
-
-Why don&#39;t you try to use them and see what happens in with the Sampson data?</code></pre>
+summary(samM2)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>This time our results seem to be more interesting. Obviously, we cannot be sure since we did not check the MCMC diagnostics and the goodness of fit. If the model fit is good, what do these results mean for the Sampson network?</p>
+<p>We could say that it is unlikely that if two monks are friends with a third one, are not friends among each other. They live in the same place all together. It is likely that friendship triangles close.</p>
+<p>Can you think of other possible terms that help in the explanation of the social effects underneath the formation of these edges?</p>
+<p>When you want to analyze three nodes patterns, other terms that might be often useful are</p>
+<ul>
+<li><code>ctriple</code></li>
+<li><code>ttriple</code></li>
+<li><code>transitive</code></li>
+<li><code>balance</code></li>
+</ul>
+<p>Why don’t you try to use them and see what happens in with the Sampson data?</p>
 <div class="tutorial-exercise" data-label="Playground" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>```
-
-
-### Cycles
-You do not only care about patterns with three nodes, but you might want to check on other numbers of nodes patterns too, on other motifs, and whether their edges form cycles. You do that with the `cycle` term.
-
-For instance, in the code below, we are checking on four nodes cycles in the Sampson data. Why don&#39;t you try to think which number might easier to observe in the Sampson data and re-run the model? Just try to analyze what you know about this network and plot it below if it helps you remember it. 
-
-Hint: the correct number to pass to `cycle` makes that term work exactly like `mutual`!</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+</div>
+<div id="section-cycles" class="section level3">
+<h3>Cycles</h3>
+<p>You do not only care about patterns with three nodes, but you might want to check on other numbers of nodes patterns too, on other motifs, and whether their edges form cycles. You do that with the <code>cycle</code> term.</p>
+<p>For instance, in the code below, we are checking on four nodes cycles in the Sampson data. Why don’t you try to think which number might easier to observe in the Sampson data and re-run the model? Just try to analyze what you know about this network and plot it below if it helps you remember it.</p>
+<p>Hint: the correct number to pass to <code>cycle</code> makes that term work exactly like <code>mutual</code>!</p>
 <div class="tutorial-exercise" data-label="grade_cycle" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>samM3 &lt;- ergm::ergm(sampson ~ edges + cycle(4))
-summary(samM3)
-```</code></pre>
+summary(samM3)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="grade_cycle-solution" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>samM3 &lt;- ergm::ergm(sampson ~ edges + cycle(2))
-summary(samM3)
-
-```</code></pre>
+summary(samM3)</code></pre>
 </div>
+</div>
+</div>
+<div id="section-simulating-specific-networks" class="section level2">
+<h2>Simulating Specific Networks</h2>
+<p>In the first ERGM tutorial we learned how to simulate random network given some model specifications. For example:</p>
 <div class="tutorial-exercise" data-label="SamSim" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>SamM &lt;- ergm::ergm(sampson ~ edges + mutual)
 
 SamSim &lt;- simulate(SamM, nsim=3,  burnin = 1e+6, verbose = TRUE)
 
-plot(SamSim[[1]])
-```
-
-But we can actually do more than this! We can also create a network from scratch and simulate a certain specific structure by setting terms to output specific coefficients. 
-
-Let&#39;s create an undirected network with 16 nodes and a density of 0.1. 
-Then let&#39;s say that we want to simulate two networks that, when inserted into an ERGM model with the term `edges`, will output a coefficient of -1.8. With the term `kstar` set to two, will output a coefficient of 0.03. That&#39;s how you do it!</code></pre>
+plot(SamSim[[1]])</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>But we can actually do more than this! We can also create a network from scratch and simulate a certain specific structure by setting terms to output specific coefficients.</p>
+<p>Let’s create an undirected network with 16 nodes and a density of 0.1. Then let’s say that we want to simulate two networks that, when inserted into an ERGM model with the term <code>edges</code>, will output a coefficient of -1.8. With the term <code>kstar</code> set to two, will output a coefficient of 0.03. That’s how you do it!</p>
 <div class="tutorial-exercise" data-label="simCoef" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>g.use &lt;- network::network(16,density=0.1,directed=FALSE)
 
@@ -563,39 +546,26 @@ g.sim[[1]]
 
 
 g.simModel &lt;- ergm::ergm(g.sim[[1]] ~ edges + kstar(2))
-summary(g.simModel)
-```
-
-
-
-The results of `g.sim[[1]]` and `g.simModel`, will vary each time since this is a simulation, but they will always be quite close to the values we set with `coef = c(-1.8, 0.03)`.
-
-That&#39;s how the faux mesa and the faux magnolia data was created! :)
-
-
-## Get your hands dirty!
-
-At this point, we covered together every essential topic that you need to know in order to be able to run exponential random graph models. Do you still feel a bit shaky at the idea of running these models? 
-Of course you do! What you do need now is practice, and no class can make up for that! 
-
-Hence, this tutorial ends with a guided, practical task to get some familiarity with ERGMs. 
-
-For this task, we are going to use the UK faculty data from the `igraphdata` package. You already used it for the homeplay in week 7. Still, let&#39;s pretend that you spent one year of your time collecting this data about these British academics and that now you are looking forward to understanding a bit better what is going on with your sample.
-
-You always start by understanding your data. Let&#39;s take a look.</code></pre>
+summary(g.simModel)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>The results of <code>g.sim[[1]]</code> and <code>g.simModel</code>, will vary each time since this is a simulation, but they will always be quite close to the values we set with <code>coef = c(-1.8, 0.03)</code>.</p>
+<p>That’s how the faux mesa and the faux magnolia data was created! :)</p>
+</div>
+<div id="section-get-your-hands-dirty" class="section level2">
+<h2>Get your hands dirty!</h2>
+<p>At this point, we covered together every essential topic that you need to know in order to be able to run exponential random graph models. Do you still feel a bit shaky at the idea of running these models? Of course you do! What you do need now is practice, and no class can make up for that!</p>
+<p>Hence, this tutorial ends with a guided, practical task to get some familiarity with ERGMs.</p>
+<p>For this task, we are going to use the UK faculty data from the <code>igraphdata</code> package. You already used it for the homeplay in week 7. Still, let’s pretend that you spent one year of your time collecting this data about these British academics and that now you are looking forward to understanding a bit better what is going on with your sample.</p>
+<p>You always start by understanding your data. Let’s take a look.</p>
 <div class="tutorial-exercise" data-label="exploreUKF" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKF
 
-igraph::V(UKF)$Group # school
-```
-
-So we know that this network is stored in `igraph` format and that we have one nodal attribute `Group`. There are 81 nodes and 817 edges and the network is directed.
-
-Let&#39;s visualize it (one more time)</code></pre>
+igraph::V(UKF)$Group # school</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>So we know that this network is stored in <code>igraph</code> format and that we have one nodal attribute <code>Group</code>. There are 81 nodes and 817 edges and the network is directed.</p>
+<p>Let’s visualize it (one more time)</p>
 <div class="tutorial-exercise" data-label="plotUKF" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>plot(UKfaculty,
      vertex.shape=&quot;circle&quot;,
@@ -604,90 +574,61 @@ Let&#39;s visualize it (one more time)</code></pre>
      edge.width = igraph::E(UKfaculty)$weight*0.5,
      edge.arrow.size = 0.1,
      layout = igraph::layout.fruchterman.reingold,
-     main= &quot;Homophilic behavior by group&quot;)
-
-```
-
-Ok, from the plot we can see that these British academics are coming from four different groups, let&#39;s say University departments, and some of them are friends with each other across groups since they usually dine at the university canteen. 
-
-We want to know more, don&#39;t we? Let&#39;s take a look at the centrality chart!</code></pre>
+     main= &quot;Homophilic behavior by group&quot;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>Ok, from the plot we can see that these British academics are coming from four different groups, let’s say University departments, and some of them are friends with each other across groups since they usually dine at the university canteen.</p>
+<p>We want to know more, don’t we? Let’s take a look at the centrality chart!</p>
 <div class="tutorial-exercise" data-label="UKFcentrality" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>SNA4DS::centralityChart(UKF)
-```
-
-How do you interpret this result? 
-
-Which other exploratory analysis do you think you should run considering what you already know about this network? 
-
-
-After we have a clear idea of what we are dealing with (also reading relevant literature on friendship networks), it is time to ask ourselves a research question and to formulate some hypotheses.
-
-Q: What does characterize this friendship network? 
-
-H1: Friendship relationships are reciprocal
-
-H2: There are groups of friends in this network
-
-H3: People belonging to the same group are more likely to be friends  
-
-
-Let&#39;s try to translate our expectations into ERGM terms!
-
-If we want to check whether relationships are reciprocated, we can use the term `mutual` (or `cycle(2)`). Shall we run it?</code></pre>
+<pre class="text"><code>SNA4DS::centralityChart(UKF)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>How do you interpret this result?</p>
+<p>Which other exploratory analysis do you think you should run considering what you already know about this network?</p>
+<p>After we have a clear idea of what we are dealing with (also reading relevant literature on friendship networks), it is time to ask ourselves a research question and to formulate some hypotheses.</p>
+<p>Q: What does characterize this friendship network?</p>
+<p>H1: Friendship relationships are reciprocal</p>
+<p>H2: There are groups of friends in this network</p>
+<p>H3: People belonging to the same group are more likely to be friends</p>
+<p>Let’s try to translate our expectations into ERGM terms!</p>
+<p>If we want to check whether relationships are reciprocated, we can use the term <code>mutual</code> (or <code>cycle(2)</code>). Shall we run it?</p>
 <div class="tutorial-exercise" data-label="Model1" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 
 UKFit.1 &lt;- ergm::ergm(UKFN ~ edges + cycle(2))
 
-summary(UKFit.1)
-```
-
-And we were right! It seems that something is interesting here. Do you want to try to run it again using `mutual` instead?
-
-Let&#39;s add one or more terms to test whether there are groups of friends in the network. How many friends do we expect to find? Let&#39;s try with `triangles` and take into account that this model might take a while.</code></pre>
+summary(UKFit.1)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>And we were right! It seems that something is interesting here. Do you want to try to run it again using <code>mutual</code> instead?</p>
+<p>Let’s add one or more terms to test whether there are groups of friends in the network. How many friends do we expect to find? Let’s try with <code>triangles</code> and take into account that this model might take a while.</p>
 <div class="tutorial-exercise" data-label="Model2" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 
 UKFit.2 &lt;- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )
 
-summary(UKFit.2)
-```
-
-Ouch, we used `tringles`, but do you remember that this model has convergence issues? In fact, it did not converge. Why don&#39;t you re-run it using the curved term alternative?
-
-Let&#39;s focus on our third hypothesis. We can do that by checking for homophily, considering the group a nodal attribute. We want to check on the probability of having homophilic effects in each group. Hence we should check for differential homophily. </code></pre>
+summary(UKFit.2)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>Ouch, we used <code>tringles</code>, but do you remember that this model has convergence issues? In fact, it did not converge. Why don’t you re-run it using the curved term alternative?</p>
+<p>Let’s focus on our third hypothesis. We can do that by checking for homophily, considering the group a nodal attribute. We want to check on the probability of having homophilic effects in each group. Hence we should check for differential homophily.</p>
 <div class="tutorial-exercise" data-label="Model3" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 
 UKFit.3 &lt;- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch(&#39;Group&#39;, diff = TRUE) )
 
-summary(UKFit.3)
-```
-
-It seems we were right in a certain way, but group four has an odd result! We should have checked the model descriptive statics before! Shame on us! ;)
-Why don&#39;t you do it now? 
-
-Ok, Let&#39;s wrap up what we found out and what we know so far. Remember to insert a curved term replacing `triangles` to improve to improve convergence!
-
-[insert two more terms in the model]</code></pre>
+summary(UKFit.3)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>It seems we were right in a certain way, but group four has an odd result! We should have checked the model descriptive statics before! Shame on us! ;) Why don’t you do it now?</p>
+<p>Ok, Let’s wrap up what we found out and what we know so far. Remember to insert a curved term replacing <code>triangles</code> to improve to improve convergence!</p>
+<p>[insert two more terms in the model]</p>
 <div class="tutorial-exercise" data-label="grade_model4" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit.4 &lt;- ergm::ergm(UKFN ~ edges + 
                         mutual)
 
-summary(UKFit.4)
-
-```</code></pre>
+summary(UKFit.4)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":true,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="grade_model4-solution" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -697,72 +638,47 @@ UKFit.4 &lt;- ergm::ergm(UKFN ~ edges +
                         nodematch(&#39;Group&#39;) +
                         gwesp(0.25, fixed = T) )
 
-summary(UKFit.4)
-
-```</code></pre>
+summary(UKFit.4)</code></pre>
 </div>
+<p>Well done! How else can we improve this model? Why don’t you try a few more options?</p>
 <div class="tutorial-exercise" data-label="PlaygroundModel" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>```
-
-
-
-Ok, have you decided on your favorite configuration? Yes? Let&#39;s move on to check goodness of fit. Substitute the model below with your best one and run `mcmc.diagnostics`.</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>Ok, have you decided on your favorite configuration? Yes? Let’s move on to check goodness of fit. Substitute the model below with your best one and run <code>mcmc.diagnostics</code>.</p>
 <div class="tutorial-exercise" data-label="UKFBestModel" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
 ergm::mcmc.diagnostics(UKFit)
 
-plot(ergm::gof(UKFit))
-
-```
-
-
-
-What is the MCMC diagnostics telling you? Is your model good? Shall you spend some more time changing terms to improve the fit?
-
-
-If, and only if, your MCMC diagnostic is good enough, you can move on to the goodness of fit.</code></pre>
+plot(ergm::gof(UKFit))</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>What is the MCMC diagnostics telling you? Is your model good? Shall you spend some more time changing terms to improve the fit?</p>
+<p>If, and only if, your MCMC diagnostic is good enough, you can move on to the goodness of fit.</p>
 <div class="tutorial-exercise" data-label="UKFBestModelgof" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
 
-plot(ergm::gof(UKFit))
-
-```
-
-
-What is the `gof` telling you? Is the model good? 
-
-If it&#39;s not, you have to go back and try to specify different terms. If, and only if, it&#39;s good enough you can plot results again and comment on them!
-
-Again, copy and paste your best model here below and comment on the results</code></pre>
+plot(ergm::gof(UKFit))</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+<p>What is the <code>gof</code> telling you? Is the model good?</p>
+<p>If it’s not, you have to go back and try to specify different terms. If, and only if, it’s good enough you can plot results again and comment on them!</p>
+<p>Again, copy and paste your best model here below and comment on the results</p>
 <div class="tutorial-exercise" data-label="UKFBestModelres" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
 
-summary(UKFit)
-
-```
-
-
-## Conclusion
-
-It&#39;s great that you got to the end of this tutorial. It wasn&#39;t an easy journey and you should pat yourself on the back! 
-
-
-![](images/pat-on-back.png){width=75%}
-
-Now you should have got enough training to be able to go out and run your first &#39;real&#39; exponential random graph model!
-
-Good luck and keep up the good work!</code></pre>
+summary(UKFit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
+</div>
+<div id="section-conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>It’s great that you got to the end of this tutorial. It wasn’t an easy journey and you should pat yourself on the back!</p>
+<p><img src="images/pat-on-back.png" style="width:75.0%" /></p>
+<p>Now you should have got enough training to be able to go out and run your first ‘real’ exponential random graph model!</p>
+<p>Good luck and keep up the good work!</p>
 
 <script type="application/shiny-prerendered" data-context="server-start">
 library(learnr)
@@ -997,7 +913,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "data(faux.mesa.high, package = 'ergm')\n\nmesa <- faux.mesa.high", 
     chunks = list(list(label = "load_mesa", code = "data(faux.mesa.high, package = 'ergm')\n\nmesa <- faux.mesa.high", 
         opts = list(label = "\"load_mesa\"", include = "FALSE"), 
-        engine = "r"), list(label = "explore_mesa", code = "mesa", 
+        engine = "r"), list(label = "explore_mesa", code = "summary(mesa)", 
         opts = list(label = "\"explore_mesa\"", exercise = "TRUE", 
             exercise.setup = "\"load_mesa\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1020,7 +936,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "explore_mesa", exercise = TRUE, exercise.setup = "load_mesa", 
-        code = "mesa", out.width.px = 624, out.height.px = 384, 
+        code = "summary(mesa)", out.width.px = 624, out.height.px = 384, 
         params.src = "explore_mesa, exercise = TRUE, exercise.setup = \"load_mesa\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -1493,7 +1409,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
     chunks = list(list(label = "load_flob", code = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_dyad_indep", code = "\nfit <- ergm::ergm(flobusiness ~ edges)\n", 
+        engine = "r"), list(label = "flob_dyad_indep", code = "\nfit <- ergm::ergm(flobusiness ~ edges)\nsummary(fit)\n", 
         opts = list(label = "\"flob_dyad_indep\"", exercise = "TRUE", 
             exercise.setup = "\"load_flob\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1517,7 +1433,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "flob_dyad_indep", exercise = TRUE, exercise.setup = "load_flob", 
         code = c("", "fit <- ergm::ergm(flobusiness ~ edges)", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "flob_dyad_indep, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        "summary(fit)", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "flob_dyad_indep, exercise = TRUE, exercise.setup = \"load_flob\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -1546,7 +1463,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
     chunks = list(list(label = "load_flob", code = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_dyad_dep", code = "\nfit <- ergm::ergm(flobusiness ~ edges + degree(1))\n", 
+        engine = "r"), list(label = "flob_dyad_dep", code = "\nfit <- ergm::ergm(flobusiness ~ edges + degree(1))\nsummary(fit)\n", 
         opts = list(label = "\"flob_dyad_dep\"", exercise = "TRUE", 
             exercise.setup = "\"load_flob\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1570,7 +1487,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "flob_dyad_dep", exercise = TRUE, exercise.setup = "load_flob", 
         code = c("", "fit <- ergm::ergm(flobusiness ~ edges + degree(1))", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "flob_dyad_dep, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        "summary(fit)", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "flob_dyad_dep, exercise = TRUE, exercise.setup = \"load_flob\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -1869,7 +1787,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
     chunks = list(list(label = "load_flob", code = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_gof", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\nfit.gof <- ergm::gof(fit)\nplot(fit.gof)\n", 
+        engine = "r"), list(label = "flob_gof", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\nfit.gof <- ergm::gof(fit)\nplot(fit.gof)\n# If you also want to see the numeric output, uncomment below and rerun\n# fit.gof", 
         opts = list(label = "\"flob_gof\"", exercise = "TRUE", 
             exercise.setup = "\"load_flob\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1893,8 +1811,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "flob_gof", exercise = TRUE, exercise.setup = "load_flob", 
         code = c("fit <- ergm::ergm(flobusiness ~ edges + degree(1))", 
-        "fit.gof <- ergm::gof(fit)", "plot(fit.gof)", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "flob_gof, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        "fit.gof <- ergm::gof(fit)", "plot(fit.gof)", "# If you also want to see the numeric output, uncomment below and rerun", 
+        "# fit.gof"), out.width.px = 624, out.height.px = 384, 
+        params.src = "flob_gof, exercise = TRUE, exercise.setup = \"load_flob\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2024,10 +1943,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "Sam_summ_triadcensus", code = "\nsummary(sampson ~ edges + triadcensus)\n\n\n```\n\nWaw! In the Sampson network we observe every configuration but the 120C. \nThat's a useful term indeed!\n\nLet's run the model and see what happens.\n", 
+        engine = "r"), list(label = "Sam_summ_triadcensus", code = "\nsummary(sampson ~ edges + triadcensus)\n\n", 
         opts = list(label = "\"Sam_summ_triadcensus\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2051,9 +1970,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Sam_summ_triadcensus", exercise = TRUE, exercise.setup = "sampson_load", 
         code = c("", "summary(sampson ~ edges + triadcensus)", 
-        "", "", "```", "", "Waw! In the Sampson network we observe every configuration but the 120C. ", 
-        "That's a useful term indeed!", "", "Let's run the model and see what happens.", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "Sam_summ_triadcensus, exercise = TRUE, exercise.setup = \"sampson_load\"", 
+        "", ""), out.width.px = 624, out.height.px = 384, params.src = "Sam_summ_triadcensus, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2079,10 +1996,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "Sam_triadcensus", code = "\nsamM1 <- ergm::ergm(sampson ~ edges + triadcensus)\n\nsummary(samM1)\n\n```\n\nThe model will either not converge or take a long time to do so. If you read the output it is also clear that the model is not happy with this specification.\n\nThere is no theoretical reason that would make us think that all these effects are happening at the same time for a specific -non random- reason in this small network. Hence, the model does not behave well. \n\nWe might want to try to be more specific and to decrease the level of complexity of our educated guess.\n\nChecking on the model summary above, we see that the configurations that are highly represented in this sample are 012, 102, 021C, 021U, 201, 111D. The term \n`intransitive` checks on three of them: 021C, 201, 111D. Let's try to run it and to see whether this time our model might make more sense. But before that, why don't you check what the term `intransitive` exactly does and whether this might make sense knowing the Sampson network's features?\n\n", 
+        engine = "r"), list(label = "Sam_triadcensus", code = "\nsamM1 <- ergm::ergm(sampson ~ edges + triadcensus)\n\nsummary(samM1)\n", 
         opts = list(label = "\"Sam_triadcensus\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2106,12 +2023,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Sam_triadcensus", exercise = TRUE, exercise.setup = "sampson_load", 
         code = c("", "samM1 <- ergm::ergm(sampson ~ edges + triadcensus)", 
-        "", "summary(samM1)", "", "```", "", "The model will either not converge or take a long time to do so. If you read the output it is also clear that the model is not happy with this specification.", 
-        "", "There is no theoretical reason that would make us think that all these effects are happening at the same time for a specific -non random- reason in this small network. Hence, the model does not behave well. ", 
-        "", "We might want to try to be more specific and to decrease the level of complexity of our educated guess.", 
-        "", "Checking on the model summary above, we see that the configurations that are highly represented in this sample are 012, 102, 021C, 021U, 201, 111D. The term ", 
-        "`intransitive` checks on three of them: 021C, 201, 111D. Let's try to run it and to see whether this time our model might make more sense. But before that, why don't you check what the term `intransitive` exactly does and whether this might make sense knowing the Sampson network's features?", 
-        "", ""), out.width.px = 624, out.height.px = 384, params.src = "Sam_triadcensus, exercise = TRUE, exercise.setup = \"sampson_load\"", 
+        "", "summary(samM1)", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "Sam_triadcensus, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2137,10 +2050,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "Sam_intransitive", code = "\nsamM2 <- ergm::ergm(sampson ~ edges + intransitive)\n\nsummary(samM2)\n```\n\nThis time our results seem to be more interesting. Obviously, we cannot be sure since we did not check the MCMC diagnostics and the goodness of fit. If the model fit is good, what do these results mean for the Sampson network? \n\nWe could say that it is unlikely that if two monks are friends with a third one, are not friends among each other. They live in the same place all together. It is likely that friendship triangles close. \n\nCan you think of other possible terms that help in the explanation of the social effects underneath the formation of these edges?\n\nWhen you want to analyze three nodes patterns, other terms that might be often useful are\n\n* `ctriple` \n* `ttriple` \n* `transitive`\n* `balance`\n\nWhy don't you try to use them and see what happens in with the Sampson data?\n", 
+        engine = "r"), list(label = "Sam_intransitive", code = "\nsamM2 <- ergm::ergm(sampson ~ edges + intransitive)\n\nsummary(samM2)", 
         opts = list(label = "\"Sam_intransitive\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2164,13 +2077,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Sam_intransitive", exercise = TRUE, exercise.setup = "sampson_load", 
         code = c("", "samM2 <- ergm::ergm(sampson ~ edges + intransitive)", 
-        "", "summary(samM2)", "```", "", "This time our results seem to be more interesting. Obviously, we cannot be sure since we did not check the MCMC diagnostics and the goodness of fit. If the model fit is good, what do these results mean for the Sampson network? ", 
-        "", "We could say that it is unlikely that if two monks are friends with a third one, are not friends among each other. They live in the same place all together. It is likely that friendship triangles close. ", 
-        "", "Can you think of other possible terms that help in the explanation of the social effects underneath the formation of these edges?", 
-        "", "When you want to analyze three nodes patterns, other terms that might be often useful are", 
-        "", "* `ctriple` ", "* `ttriple` ", "* `transitive`", 
-        "* `balance`", "", "Why don't you try to use them and see what happens in with the Sampson data?", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "Sam_intransitive, exercise = TRUE, exercise.setup = \"sampson_load\"", 
+        "", "summary(samM2)"), out.width.px = 624, out.height.px = 384, 
+        params.src = "Sam_intransitive, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2196,10 +2104,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "Playground", code = "\n```\n\n\n### Cycles\nYou do not only care about patterns with three nodes, but you might want to check on other numbers of nodes patterns too, on other motifs, and whether their edges form cycles. You do that with the `cycle` term.\n\nFor instance, in the code below, we are checking on four nodes cycles in the Sampson data. Why don't you try to think which number might easier to observe in the Sampson data and re-run the model? Just try to analyze what you know about this network and plot it below if it helps you remember it. \n\nHint: the correct number to pass to `cycle` makes that term work exactly like `mutual`!\n", 
+        engine = "r"), list(label = "Playground", code = "", 
         opts = list(label = "\"Playground\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2222,11 +2130,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Playground", exercise = TRUE, exercise.setup = "sampson_load", 
-        code = c("", "```", "", "", "### Cycles", "You do not only care about patterns with three nodes, but you might want to check on other numbers of nodes patterns too, on other motifs, and whether their edges form cycles. You do that with the `cycle` term.", 
-        "", "For instance, in the code below, we are checking on four nodes cycles in the Sampson data. Why don't you try to think which number might easier to observe in the Sampson data and re-run the model? Just try to analyze what you know about this network and plot it below if it helps you remember it. ", 
-        "", "Hint: the correct number to pass to `cycle` makes that term work exactly like `mutual`!", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "Playground, exercise = TRUE, exercise.setup = \"sampson_load\"", 
-        fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
+        code = "", out.width.px = 624, out.height.px = 384, params.src = "Playground, exercise = TRUE, exercise.setup = \"sampson_load\"", 
+        fig.num = 0L, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -2251,18 +2156,16 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "grade_cycle", code = "\nsamM3 <- ergm::ergm(sampson ~ edges + cycle(4))\nsummary(samM3)\n```\n", 
+        engine = "r"), list(label = "grade_cycle", code = "\nsamM3 <- ergm::ergm(sampson ~ edges + cycle(4))\nsummary(samM3)", 
         opts = list(label = "\"grade_cycle\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
-    code_check = NULL, error_check = NULL, check = structure(c("gradethis::grade_code(correct = \"Well Done!\")", 
-    "```", "", "", "", "## Simulating Specific Networks", "", 
-    "In the first ERGM tutorial we learned how to simulate random network given some model specifications. For example:", 
-    ""), chunk_opts = list(label = "grade_cycle-check")), solution = structure(c("", 
+    code_check = NULL, error_check = NULL, check = structure("gradethis::grade_code(correct = \"Well Done!\")", chunk_opts = list(
+        label = "grade_cycle-check")), solution = structure(c("", 
     "samM3 <- ergm::ergm(sampson ~ edges + cycle(2))", "summary(samM3)", 
-    "", "```", "", ""), chunk_opts = list(label = "grade_cycle-solution")), 
+    ""), chunk_opts = list(label = "grade_cycle-solution")), 
     options = list(eval = FALSE, echo = TRUE, results = "markup", 
         tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
         comment = NA, highlight = FALSE, size = "normalsize", 
@@ -2283,7 +2186,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "grade_cycle", exercise = TRUE, exercise.setup = "sampson_load", 
         code = c("", "samM3 <- ergm::ergm(sampson ~ edges + cycle(4))", 
-        "summary(samM3)", "```", ""), out.width.px = 624, out.height.px = 384, 
+        "summary(samM3)"), out.width.px = 624, out.height.px = 384, 
         params.src = "grade_cycle, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -2310,10 +2213,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
-    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)\n```\n\n\nSince the Sampson data about monks' frindships is directed we are checking whether these 16 configurations do exist in the network.\n", 
+    include = FALSE)), setup = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
+    chunks = list(list(label = "sampson_load", code = "SampsonIgraphtot <- SNA4DSData::Sampson\n\nSampsonLike2Ig <-SampsonIgraphtot$Sampson_like2\n\nsampson <- intergraph::asNetwork(SampsonLike2Ig)", 
         opts = list(label = "\"sampson_load\"", include = "FALSE"), 
-        engine = "r"), list(label = "SamSim", code = "\nSamM <- ergm::ergm(sampson ~ edges + mutual)\n\nSamSim <- simulate(SamM, nsim=3,  burnin = 1e+6, verbose = TRUE)\n\nplot(SamSim[[1]])\n```\n\nBut we can actually do more than this! We can also create a network from scratch and simulate a certain specific structure by setting terms to output specific coefficients. \n\nLet's create an undirected network with 16 nodes and a density of 0.1. \nThen let's say that we want to simulate two networks that, when inserted into an ERGM model with the term `edges`, will output a coefficient of -1.8. With the term `kstar` set to two, will output a coefficient of 0.03. That's how you do it!\n", 
+        engine = "r"), list(label = "SamSim", code = "\nSamM <- ergm::ergm(sampson ~ edges + mutual)\n\nSamSim <- simulate(SamM, nsim=3,  burnin = 1e+6, verbose = TRUE)\n\nplot(SamSim[[1]])", 
         opts = list(label = "\"SamSim\"", exercise = "TRUE", 
             exercise.setup = "\"sampson_load\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2338,10 +2241,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "SamSim", exercise = TRUE, exercise.setup = "sampson_load", 
         code = c("", "SamM <- ergm::ergm(sampson ~ edges + mutual)", 
         "", "SamSim <- simulate(SamM, nsim=3,  burnin = 1e+6, verbose = TRUE)", 
-        "", "plot(SamSim[[1]])", "```", "", "But we can actually do more than this! We can also create a network from scratch and simulate a certain specific structure by setting terms to output specific coefficients. ", 
-        "", "Let's create an undirected network with 16 nodes and a density of 0.1. ", 
-        "Then let's say that we want to simulate two networks that, when inserted into an ERGM model with the term `edges`, will output a coefficient of -1.8. With the term `kstar` set to two, will output a coefficient of 0.03. That's how you do it!", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "SamSim, exercise = TRUE, exercise.setup = \"sampson_load\"", 
+        "", "plot(SamSim[[1]])"), out.width.px = 624, out.height.px = 384, 
+        params.src = "SamSim, exercise = TRUE, exercise.setup = \"sampson_load\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2368,7 +2269,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
     include = FALSE)), setup = NULL, chunks = list(list(label = "simCoef", 
-    code = "g.use <- network::network(16,density=0.1,directed=FALSE)\n\ng.sim <- simulate(~ edges + kstar(2), nsim = 2, coef = c(-1.8, 0.03),\n                  basis = g.use, \n                  control = ergm::control.simulate(\n                    MCMC.burnin=1000,\n                    MCMC.interval=100))\ng.sim[[1]]\n\n\ng.simModel <- ergm::ergm(g.sim[[1]] ~ edges + kstar(2))\nsummary(g.simModel)\n```\n\n\n\nThe results of `g.sim[[1]]` and `g.simModel`, will vary each time since this is a simulation, but they will always be quite close to the values we set with `coef = c(-1.8, 0.03)`.\n\nThat's how the faux mesa and the faux magnolia data was created! :)\n\n\n## Get your hands dirty!\n\nAt this point, we covered together every essential topic that you need to know in order to be able to run exponential random graph models. Do you still feel a bit shaky at the idea of running these models? \nOf course you do! What you do need now is practice, and no class can make up for that! \n\nHence, this tutorial ends with a guided, practical task to get some familiarity with ERGMs. \n\nFor this task, we are going to use the UK faculty data from the `igraphdata` package. You already used it for the homeplay in week 7. Still, let's pretend that you spent one year of your time collecting this data about these British academics and that now you are looking forward to understanding a bit better what is going on with your sample.\n\nYou always start by understanding your data. Let's take a look.\n", 
+    code = "g.use <- network::network(16,density=0.1,directed=FALSE)\n\ng.sim <- simulate(~ edges + kstar(2), nsim = 2, coef = c(-1.8, 0.03),\n                  basis = g.use, \n                  control = ergm::control.simulate(\n                    MCMC.burnin=1000,\n                    MCMC.interval=100))\ng.sim[[1]]\n\n\ng.simModel <- ergm::ergm(g.sim[[1]] ~ edges + kstar(2))\nsummary(g.simModel)", 
     opts = list(label = "\"simCoef\"", exercise = "TRUE"), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
     options = list(eval = FALSE, echo = TRUE, results = "markup", 
@@ -2394,15 +2295,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         "                  basis = g.use, ", "                  control = ergm::control.simulate(", 
         "                    MCMC.burnin=1000,", "                    MCMC.interval=100))", 
         "g.sim[[1]]", "", "", "g.simModel <- ergm::ergm(g.sim[[1]] ~ edges + kstar(2))", 
-        "summary(g.simModel)", "```", "", "", "", "The results of `g.sim[[1]]` and `g.simModel`, will vary each time since this is a simulation, but they will always be quite close to the values we set with `coef = c(-1.8, 0.03)`.", 
-        "", "That's how the faux mesa and the faux magnolia data was created! :)", 
-        "", "", "## Get your hands dirty!", "", "At this point, we covered together every essential topic that you need to know in order to be able to run exponential random graph models. Do you still feel a bit shaky at the idea of running these models? ", 
-        "Of course you do! What you do need now is practice, and no class can make up for that! ", 
-        "", "Hence, this tutorial ends with a guided, practical task to get some familiarity with ERGMs. ", 
-        "", "For this task, we are going to use the UK faculty data from the `igraphdata` package. You already used it for the homeplay in week 7. Still, let's pretend that you spent one year of your time collecting this data about these British academics and that now you are looking forward to understanding a bit better what is going on with your sample.", 
-        "", "You always start by understanding your data. Let's take a look.", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "simCoef, exercise = TRUE", 
-        fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
+        "summary(g.simModel)"), out.width.px = 624, out.height.px = 384, 
+        params.src = "simCoef, exercise = TRUE", fig.num = 0, 
+        exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -2427,10 +2322,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "exploreUKF", code = "\nUKF\n\nigraph::V(UKF)$Group # school\n```\n\nSo we know that this network is stored in `igraph` format and that we have one nodal attribute `Group`. There are 81 nodes and 817 edges and the network is directed.\n\nLet's visualize it (one more time)\n", 
+        engine = "r"), list(label = "exploreUKF", code = "\nUKF\n\nigraph::V(UKF)$Group # school", 
         opts = list(label = "\"exploreUKF\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2453,10 +2348,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "exploreUKF", exercise = TRUE, exercise.setup = "load_UKfaculty", 
-        code = c("", "UKF", "", "igraph::V(UKF)$Group # school", 
-        "```", "", "So we know that this network is stored in `igraph` format and that we have one nodal attribute `Group`. There are 81 nodes and 817 edges and the network is directed.", 
-        "", "Let's visualize it (one more time)", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "exploreUKF, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        code = c("", "UKF", "", "igraph::V(UKF)$Group # school"
+        ), out.width.px = 624, out.height.px = 384, params.src = "exploreUKF, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2482,10 +2375,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "plotUKF", code = "\nplot(UKfaculty,\n     vertex.shape=\"circle\",\n     vertex.label = NA,\n     vertex.color = igraph::V(UKfaculty)$Group,\n     edge.width = igraph::E(UKfaculty)$weight*0.5,\n     edge.arrow.size = 0.1,\n     layout = igraph::layout.fruchterman.reingold,\n     main= \"Homophilic behavior by group\")\n\n\n```\n\nOk, from the plot we can see that these British academics are coming from four different groups, let's say University departments, and some of them are friends with each other across groups since they usually dine at the university canteen. \n\nWe want to know more, don't we? Let's take a look at the centrality chart!\n\n", 
+        engine = "r"), list(label = "plotUKF", code = "\nplot(UKfaculty,\n     vertex.shape=\"circle\",\n     vertex.label = NA,\n     vertex.color = igraph::V(UKfaculty)$Group,\n     edge.width = igraph::E(UKfaculty)$weight*0.5,\n     edge.arrow.size = 0.1,\n     layout = igraph::layout.fruchterman.reingold,\n     main= \"Homophilic behavior by group\")\n\n", 
         opts = list(label = "\"plotUKF\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2512,10 +2405,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         "     vertex.label = NA,", "     vertex.color = igraph::V(UKfaculty)$Group,", 
         "     edge.width = igraph::E(UKfaculty)$weight*0.5,", 
         "     edge.arrow.size = 0.1,", "     layout = igraph::layout.fruchterman.reingold,", 
-        "     main= \"Homophilic behavior by group\")", "", "", 
-        "```", "", "Ok, from the plot we can see that these British academics are coming from four different groups, let's say University departments, and some of them are friends with each other across groups since they usually dine at the university canteen. ", 
-        "", "We want to know more, don't we? Let's take a look at the centrality chart!", 
-        "", ""), out.width.px = 624, out.height.px = 384, params.src = "plotUKF, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "     main= \"Homophilic behavior by group\")", "", ""
+        ), out.width.px = 624, out.height.px = 384, params.src = "plotUKF, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2541,10 +2432,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFcentrality", code = "\nSNA4DS::centralityChart(UKF)\n```\n\nHow do you interpret this result? \n\nWhich other exploratory analysis do you think you should run considering what you already know about this network? \n\n\nAfter we have a clear idea of what we are dealing with (also reading relevant literature on friendship networks), it is time to ask ourselves a research question and to formulate some hypotheses.\n\nQ: What does characterize this friendship network? \n\nH1: Friendship relationships are reciprocal\n\nH2: There are groups of friends in this network\n\nH3: People belonging to the same group are more likely to be friends  \n\n\nLet's try to translate our expectations into ERGM terms!\n\nIf we want to check whether relationships are reciprocated, we can use the term `mutual` (or `cycle(2)`). Shall we run it?\n", 
+        engine = "r"), list(label = "UKFcentrality", code = "\nSNA4DS::centralityChart(UKF)", 
         opts = list(label = "\"UKFcentrality\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2567,16 +2458,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFcentrality", exercise = TRUE, exercise.setup = "load_UKfaculty", 
-        code = c("", "SNA4DS::centralityChart(UKF)", "```", "", 
-        "How do you interpret this result? ", "", "Which other exploratory analysis do you think you should run considering what you already know about this network? ", 
-        "", "", "After we have a clear idea of what we are dealing with (also reading relevant literature on friendship networks), it is time to ask ourselves a research question and to formulate some hypotheses.", 
-        "", "Q: What does characterize this friendship network? ", 
-        "", "H1: Friendship relationships are reciprocal", "", 
-        "H2: There are groups of friends in this network", "", 
-        "H3: People belonging to the same group are more likely to be friends  ", 
-        "", "", "Let's try to translate our expectations into ERGM terms!", 
-        "", "If we want to check whether relationships are reciprocated, we can use the term `mutual` (or `cycle(2)`). Shall we run it?", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "UKFcentrality, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        code = c("", "SNA4DS::centralityChart(UKF)"), out.width.px = 624, 
+        out.height.px = 384, params.src = "UKFcentrality, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2602,10 +2485,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "Model1", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2))\n\nsummary(UKFit.1)\n```\n\nAnd we were right! It seems that something is interesting here. Do you want to try to run it again using `mutual` instead?\n\nLet's add one or more terms to test whether there are groups of friends in the network. How many friends do we expect to find? Let's try with `triangles` and take into account that this model might take a while.\n\n", 
+        engine = "r"), list(label = "Model1", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2))\n\nsummary(UKFit.1)", 
         opts = list(label = "\"Model1\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2630,9 +2513,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "Model1", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("", "UKFN <- intergraph::asNetwork(UKF)", "", 
         "UKFit.1 <- ergm::ergm(UKFN ~ edges + cycle(2))", "", 
-        "summary(UKFit.1)", "```", "", "And we were right! It seems that something is interesting here. Do you want to try to run it again using `mutual` instead?", 
-        "", "Let's add one or more terms to test whether there are groups of friends in the network. How many friends do we expect to find? Let's try with `triangles` and take into account that this model might take a while.", 
-        "", ""), out.width.px = 624, out.height.px = 384, params.src = "Model1, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "summary(UKFit.1)"), out.width.px = 624, out.height.px = 384, 
+        params.src = "Model1, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2658,10 +2540,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "Model2", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )\n\nsummary(UKFit.2)\n```\n\nOuch, we used `tringles`, but do you remember that this model has convergence issues? In fact, it did not converge. Why don't you re-run it using the curved term alternative?\n\nLet's focus on our third hypothesis. We can do that by checking for homophily, considering the group a nodal attribute. We want to check on the probability of having homophilic effects in each group. Hence we should check for differential homophily. \n\n\n", 
+        engine = "r"), list(label = "Model2", code = "\nUKFN <- intergraph::asNetwork(UKF)\n\nUKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )\n\nsummary(UKFit.2)", 
         opts = list(label = "\"Model2\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2686,9 +2568,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "Model2", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("", "UKFN <- intergraph::asNetwork(UKF)", "", 
         "UKFit.2 <- ergm::ergm(UKFN ~ edges + cycle(2) + triangle )", 
-        "", "summary(UKFit.2)", "```", "", "Ouch, we used `tringles`, but do you remember that this model has convergence issues? In fact, it did not converge. Why don't you re-run it using the curved term alternative?", 
-        "", "Let's focus on our third hypothesis. We can do that by checking for homophily, considering the group a nodal attribute. We want to check on the probability of having homophilic effects in each group. Hence we should check for differential homophily. ", 
-        "", "", ""), out.width.px = 624, out.height.px = 384, 
+        "", "summary(UKFit.2)"), out.width.px = 624, out.height.px = 384, 
         params.src = "Model2, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -2715,10 +2595,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "Model3", code = "UKFN <- intergraph::asNetwork(UKF)\n\nUKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE) )\n\nsummary(UKFit.3)\n```\n\nIt seems we were right in a certain way, but group four has an odd result! We should have checked the model descriptive statics before! Shame on us! ;)\nWhy don't you do it now? \n\nOk, Let's wrap up what we found out and what we know so far. Remember to insert a curved term replacing `triangles` to improve to improve convergence!\n\n[insert two more terms in the model]\n\n", 
+        engine = "r"), list(label = "Model3", code = "UKFN <- intergraph::asNetwork(UKF)\n\nUKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE) )\n\nsummary(UKFit.3)", 
         opts = list(label = "\"Model3\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2742,10 +2622,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "Model3", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "", "UKFit.3 <- ergm::ergm(UKFN ~ edges + cycle(2) + nodematch('Group', diff = TRUE) )", 
-        "", "summary(UKFit.3)", "```", "", "It seems we were right in a certain way, but group four has an odd result! We should have checked the model descriptive statics before! Shame on us! ;)", 
-        "Why don't you do it now? ", "", "Ok, Let's wrap up what we found out and what we know so far. Remember to insert a curved term replacing `triangles` to improve to improve convergence!", 
-        "", "[insert two more terms in the model]", "", ""), 
-        out.width.px = 624, out.height.px = 384, params.src = "Model3, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "", "summary(UKFit.3)"), out.width.px = 624, out.height.px = 384, 
+        params.src = "Model3, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2771,24 +2649,22 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "grade_model4", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit.4 <- ergm::ergm(UKFN ~ edges + \n                        mutual)\n\nsummary(UKFit.4)\n\n```\n\n", 
+        engine = "r"), list(label = "grade_model4", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit.4 <- ergm::ergm(UKFN ~ edges + \n                        mutual)\n\nsummary(UKFit.4)\n", 
         opts = list(label = "\"grade_model4\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
-    code_check = NULL, error_check = NULL, check = structure(c("gradethis::grade_code(correct = \"Well Done!\")", 
-    "```", "", "", "", "Well done! How else can we improve this model? Why don't you try a few more options? ", 
-    "", ""), chunk_opts = list(label = "grade_model4-check")), 
-    solution = structure(c("UKFN <- intergraph::asNetwork(UKF)", 
+    code_check = NULL, error_check = NULL, check = structure("gradethis::grade_code(correct = \"Well Done!\")", chunk_opts = list(
+        label = "grade_model4-check")), solution = structure(c("UKFN <- intergraph::asNetwork(UKF)", 
     "UKFit.4 <- ergm::ergm(UKFN ~ edges + ", "                        mutual + ", 
     "                        nodematch('Group') +", "                        gwesp(0.25, fixed = T) )", 
-    "", "summary(UKFit.4)", "", "```", "", ""), chunk_opts = list(
-        label = "grade_model4-solution")), options = list(eval = FALSE, 
-        echo = TRUE, results = "markup", tidy = FALSE, tidy.opts = NULL, 
-        collapse = FALSE, prompt = FALSE, comment = NA, highlight = FALSE, 
-        size = "normalsize", background = "#F7F7F7", strip.white = TRUE, 
-        cache = 0, cache.path = "lab09_ERGM2_cache/html/", cache.vars = NULL, 
+    "", "summary(UKFit.4)", ""), chunk_opts = list(label = "grade_model4-solution")), 
+    options = list(eval = FALSE, echo = TRUE, results = "markup", 
+        tidy = FALSE, tidy.opts = NULL, collapse = FALSE, prompt = FALSE, 
+        comment = NA, highlight = FALSE, size = "normalsize", 
+        background = "#F7F7F7", strip.white = TRUE, cache = 0, 
+        cache.path = "lab09_ERGM2_cache/html/", cache.vars = NULL, 
         cache.lazy = TRUE, dependson = NULL, autodep = FALSE, 
         cache.rebuild = FALSE, fig.keep = "high", fig.show = "asis", 
         fig.align = "default", fig.path = "lab09_ERGM2_files/figure-html/", 
@@ -2805,8 +2681,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "grade_model4", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit.4 <- ergm::ergm(UKFN ~ edges + ", 
         "                        mutual)", "", "summary(UKFit.4)", 
-        "", "```", "", ""), out.width.px = 624, out.height.px = 384, 
-        params.src = "grade_model4, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        ""), out.width.px = 624, out.height.px = 384, params.src = "grade_model4, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2832,10 +2707,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "PlaygroundModel", code = "\n\n```\n\n\n\nOk, have you decided on your favorite configuration? Yes? Let's move on to check goodness of fit. Substitute the model below with your best one and run `mcmc.diagnostics`.\n", 
+        engine = "r"), list(label = "PlaygroundModel", code = "\n", 
         opts = list(label = "\"PlaygroundModel\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2858,9 +2733,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         max.print = 1000, exercise.timelimit = 60, exercise.checker = "function (label = NULL, solution_code = NULL, user_code = NULL, \n    check_code = NULL, envir_result = NULL, evaluate_result = NULL, \n    envir_prep = NULL, last_value = NULL, ...) \n{\n    (utils::getFromNamespace(\"check_exercise\", \"gradethis\"))(label = label, \n        solution_code = solution_code, user_code = user_code, \n        check_code = check_code, envir_result = envir_result, \n        evaluate_result = evaluate_result, envir_prep = envir_prep, \n        last_value = last_value, ...)\n}", 
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "PlaygroundModel", exercise = TRUE, exercise.setup = "load_UKfaculty", 
-        code = c("", "", "```", "", "", "", "Ok, have you decided on your favorite configuration? Yes? Let's move on to check goodness of fit. Substitute the model below with your best one and run `mcmc.diagnostics`.", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "PlaygroundModel, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
-        fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
+        code = c("", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "PlaygroundModel, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        fig.num = 0L, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -2885,10 +2760,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModel", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\nergm::mcmc.diagnostics(UKFit)\n\nplot(ergm::gof(UKFit))\n\n```\n\n\n\nWhat is the MCMC diagnostics telling you? Is your model good? Shall you spend some more time changing terms to improve the fit?\n\n\nIf, and only if, your MCMC diagnostic is good enough, you can move on to the goodness of fit.\n", 
+        engine = "r"), list(label = "UKFBestModel", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\nergm::mcmc.diagnostics(UKFit)\n\nplot(ergm::gof(UKFit))\n", 
         opts = list(label = "\"UKFBestModel\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2913,8 +2788,6 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "UKFBestModel", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
         "ergm::mcmc.diagnostics(UKFit)", "", "plot(ergm::gof(UKFit))", 
-        "", "```", "", "", "", "What is the MCMC diagnostics telling you? Is your model good? Shall you spend some more time changing terms to improve the fit?", 
-        "", "", "If, and only if, your MCMC diagnostic is good enough, you can move on to the goodness of fit.", 
         ""), out.width.px = 624, out.height.px = 384, params.src = "UKFBestModel, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
@@ -2941,10 +2814,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModelgof", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nplot(ergm::gof(UKFit))\n\n```\n\n\nWhat is the `gof` telling you? Is the model good? \n\nIf it's not, you have to go back and try to specify different terms. If, and only if, it's good enough you can plot results again and comment on them!\n\nAgain, copy and paste your best model here below and comment on the results\n", 
+        engine = "r"), list(label = "UKFBestModelgof", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nplot(ergm::gof(UKFit))\n", 
         opts = list(label = "\"UKFBestModelgof\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2968,10 +2841,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModelgof", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
-        "", "plot(ergm::gof(UKFit))", "", "```", "", "", "What is the `gof` telling you? Is the model good? ", 
-        "", "If it's not, you have to go back and try to specify different terms. If, and only if, it's good enough you can plot results again and comment on them!", 
-        "", "Again, copy and paste your best model here below and comment on the results", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "UKFBestModelgof, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "", "plot(ergm::gof(UKFit))", ""), out.width.px = 624, 
+        out.height.px = 384, params.src = "UKFBestModelgof, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2997,10 +2868,10 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "}", "", "# RStudio, at least 4.1717", "check_RStudio <- SNA4DS:::check_rstudio", 
 "", "", "# R check version (required 4.1.1)", "check_R <- function(x) {", 
 "  SNA4DS:::check_r_equal(4, 1.1)", "}"), chunk_opts = list(label = "setup", 
-    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
-    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty\n```\n\n\n", 
+    include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
+    chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModelres", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nsummary(UKFit)\n\n```\n\n\n## Conclusion\n\nIt's great that you got to the end of this tutorial. It wasn't an easy journey and you should pat yourself on the back! \n\n\n![](images/pat-on-back.png){width=75%}\n\nNow you should have got enough training to be able to go out and run your first 'real' exponential random graph model!\n\nGood luck and keep up the good work!\n", 
+        engine = "r"), list(label = "UKFBestModelres", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nsummary(UKFit)\n", 
         opts = list(label = "\"UKFBestModelres\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -3024,12 +2895,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModelres", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
-        "", "summary(UKFit)", "", "```", "", "", "## Conclusion", 
-        "", "It's great that you got to the end of this tutorial. It wasn't an easy journey and you should pat yourself on the back! ", 
-        "", "", "![](images/pat-on-back.png){width=75%}", "", 
-        "Now you should have got enough training to be able to go out and run your first 'real' exponential random graph model!", 
-        "", "Good luck and keep up the good work!", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "UKFBestModelres, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "", "summary(UKFit)", ""), out.width.px = 624, out.height.px = 384, 
+        params.src = "UKFBestModelres, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  <!--html_preserve-->
@@ -3039,10 +2906,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","SNA4DS","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.3.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.28","0.3.2","0.14","1.1.0","0.2.4.9000","4.1.1","4.1.1","0.5.2","1.5.4","1.6.3","0.1.4","1.7.2","1.36","1.3.0","0.10.1.9016","1.0.1","2.0.1","1.1","4.1.1","0.12","1.2.0.1","2.5.1","1.0.7","0.4.11","2.11","2.0.2","0.4.0","1.7.1","0.11.4","4.1.1","1.7.5","1.4.0","4.1.1","4.1.1","2.4.2","0.26","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","SNA4DS","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.3.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.28","0.3.2","0.14","1.1.0","0.2.4.9000","4.1.1","4.1.1","0.5.2","1.5.4","1.6.3","0.1.4","1.7.2","1.36","1.3.0","0.10.1.9016","1.0.1","2.0.1","1.1","4.1.1","0.12","1.2.0.1","2.5.1","1.0.7","0.4.11","2.11","2.0.2","0.4.0","1.7.1","0.11.5","4.1.1","1.7.5","1.4.0","4.1.1","4.1.1","2.4.2","0.26","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
-</div>
 </div>
 
 </div> <!-- topics -->
@@ -3054,7 +2920,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 
 <!-- begin doc-metadata -->
 <div id="doc-metadata">
-<h2 class="title toc-ignore" style="display:none;">Lab 08 - ERGM1</h2>
+<h2 class="title toc-ignore" style="display:none;">Lab 09 - ERGM2</h2>
 </div>
 <!-- end doc-metadata -->
 
