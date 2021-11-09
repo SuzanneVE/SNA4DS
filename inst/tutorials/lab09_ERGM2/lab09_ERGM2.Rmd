@@ -161,7 +161,7 @@ check_pkgs()
 ```
 
 
-Turn on the over, we are ready for some mouth watering bun to cook!
+Turn on the oven, we are ready for some mouth watering bun to cook!
 
 
 ## A dyadic independent model
