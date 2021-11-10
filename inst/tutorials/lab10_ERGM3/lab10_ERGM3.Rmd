@@ -292,7 +292,22 @@ summary(kidsnet ~ b2degree(1:10))
 
 ```
 
+and stars
 
+
+```{r bip06_01, exercise = TRUE, exercise.setup = "bip04readynet"}
+
+
+# Total 2 to 10 stars
+summary(kidsnet ~ kstar(2:10))
+
+# 2 to 4 stars partition 1 (kids) --- max 4 playdates (max possible degree)
+summary(kidsnet ~ b1star(2:4))
+
+# 2 to 10  stars partition 2 (play-dates) --- max 10 kids (maximum possible degree)
+summary(kidsnet ~ b2star(2:10))
+
+```
 
 
 
@@ -557,7 +572,13 @@ Note1: In the `GERGM` environment, you specify the formula of the ERGM before ru
 
 Note2: In the `GERGM` environment, a baseline model with `edges` only does not work. Hence try directly with the other variables.
 
-NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, follow the instructions in the tutorial and run it on `Rstudio` directly.
+NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
+
+`data("lending_2005", package = "GERGM")
+data("covariate_data_2005", package = "GERGM")
+data("net_exports_2005", package = "GERGM")`
+
+As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
 
 ```{r weight06, exercise = TRUE, exercise.setup = "weightloadData"}
@@ -575,10 +596,15 @@ m0 <- GERGM::gergm(formula0,
 ```
 
 
-
 Why don't you run other exploratory models here by trying some other terms? I give you the final one below, but first try to play a little :)
 
-NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, follow the instructions in the tutorial and run it on `Rstudio` directly.
+NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
+
+`data("lending_2005", package = "GERGM")
+data("covariate_data_2005", package = "GERGM")
+data("net_exports_2005", package = "GERGM")`
+
+As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
 ```{r weight07, exercise = TRUE, exercise.setup = "weightloadData"}
 formula1 <- lending_2005 ~ edges + sender("log_GDP")
@@ -599,8 +625,13 @@ m1 <- GERGM::gergm(formula1,
 
 Ok, let's get to our final model. 
 
-NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, follow the instructions in the tutorial and run it on `Rstudio` directly.
+NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
 
+`data("lending_2005", package = "GERGM")
+data("covariate_data_2005", package = "GERGM")
+data("net_exports_2005", package = "GERGM")`
+
+As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
 
 
