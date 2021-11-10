@@ -458,7 +458,8 @@ summary(m5)</code></pre>
 <p>Note1: In the <code>GERGM</code> environment, you specify the formula of the ERGM before running the model.</p>
 <p>Note2: In the <code>GERGM</code> environment, a baseline model with <code>edges</code> only does not work. Hence try directly with the other variables.</p>
 <p>NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on <code>Rstudio</code> directly. You can load the data using the <code>data</code> function.</p>
-<p><code>data("lending_2005", package = "GERGM") data("covariate_data_2005", package = "GERGM") data("net_exports_2005", package = "GERGM")</code></p>
+<p><code>data("lending_2005", package = "GERGM")</code></p>
+<p><code>data("covariate_data_2005", package = "GERGM")</code></p>
 <p>As you can see in the specification, this data set is located in the <code>GERGM</code> package itself.</p>
 <div class="tutorial-exercise" data-label="weight06" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>formula0 &lt;- lending_2005 ~ edges + mutual
@@ -476,7 +477,8 @@ m0 &lt;- GERGM::gergm(formula0,
 </div>
 <p>Why don’t you run other exploratory models here by trying some other terms? I give you the final one below, but first try to play a little :)</p>
 <p>NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on <code>Rstudio</code> directly. You can load the data using the <code>data</code> function.</p>
-<p><code>data("lending_2005", package = "GERGM") data("covariate_data_2005", package = "GERGM") data("net_exports_2005", package = "GERGM")</code></p>
+<p><code>data("lending_2005", package = "GERGM")</code></p>
+<p><code>data("covariate_data_2005", package = "GERGM")</code></p>
 <p>As you can see in the specification, this data set is located in the <code>GERGM</code> package itself.</p>
 <div class="tutorial-exercise" data-label="weight07" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>formula1 &lt;- lending_2005 ~ edges + sender(&quot;log_GDP&quot;)
@@ -494,7 +496,8 @@ m1 &lt;- GERGM::gergm(formula1,
 </div>
 <p>Ok, let’s get to our final model.</p>
 <p>NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on <code>Rstudio</code> directly. You can load the data using the <code>data</code> function.</p>
-<p><code>data("lending_2005", package = "GERGM") data("covariate_data_2005", package = "GERGM") data("net_exports_2005", package = "GERGM")</code></p>
+<p><code>data("lending_2005", package = "GERGM")</code></p>
+<p><code>data("covariate_data_2005", package = "GERGM")</code></p>
 <p>As you can see in the specification, this data set is located in the <code>GERGM</code> package itself.</p>
 <div class="tutorial-exercise" data-label="weight08" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>formula4 &lt;- lending_2005 ~ edges + mutual(alpha = 0.8) + sender(&quot;log_GDP&quot;) + 
@@ -2100,17 +2103,17 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "testquiz", question = structure("Does the trace plot look good to you? ", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_73fe54c", 
+"character")), answers = list(structure(list(id = "lnr_ans_e6f3466", 
     option = "Yes, the spikes are reaching the bottom and the top of the plot,", 
     value = "Yes, the spikes are reaching the bottom and the top of the plot,", 
     label = structure("Yes, the spikes are reaching the bottom and the top of the plot,", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_404abb7", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_921755", 
     option = "A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly ", 
     value = "A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly ", 
     label = structure("A bit, the chain is mixing well, and the several iteraition of the simulation vary smoothly ", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6e85584", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_3a06129", 
     option = "No, the chain is not mixing well, and the plot is not centered on the black line", 
     value = "No, the chain is not mixing well, and the plot is not centered on the black line", 
     label = structure("No, the chain is not mixing well, and the plot is not centered on the black line", html = TRUE, class = c("html", 
@@ -2123,7 +2126,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "testquiz-answer", question = "testquiz"), loading = structure("<strong>Loading:<\u002fstrong> \nDoes the trace plot look good to you? \n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = FALSE, 
-    seed = 1253550089.41627, options = list()), class = c("learnr_radio", 
+    seed = 2063251307.53922, options = list()), class = c("learnr_radio", 
 "tutorial_question")), session = session)
 </script>
  
@@ -2184,17 +2187,17 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "testquiz1", question = structure("Does this fitlook good?? ", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_adc497c", 
+"character")), answers = list(structure(list(id = "lnr_ans_5ef62b8", 
     option = "Yes, since the observed mean match with the simulated ones", 
     value = "Yes, since the observed mean match with the simulated ones", 
     label = structure("Yes, since the observed mean match with the simulated ones", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2e8182", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a1231b8", 
     option = "A bit, since the observed mean match with the simulated ones most of the time but not always", 
     value = "A bit, since the observed mean match with the simulated ones most of the time but not always", 
     label = structure("A bit, since the observed mean match with the simulated ones most of the time but not always", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_bbdad5f", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a7de79a", 
     option = "No, since the observed mean never match with the simulated ones", 
     value = "No, since the observed mean never match with the simulated ones", 
     label = structure("No, since the observed mean never match with the simulated ones", html = TRUE, class = c("html", 
@@ -2207,7 +2210,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "testquiz1-answer", question = "testquiz1"), loading = structure("<strong>Loading:<\u002fstrong> \nDoes this fitlook good?? \n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = FALSE, 
-    seed = 1291588818.89856, options = list()), class = c("learnr_radio", 
+    seed = 1876555779.62616, options = list()), class = c("learnr_radio", 
 "tutorial_question")), session = session)
 </script>
  

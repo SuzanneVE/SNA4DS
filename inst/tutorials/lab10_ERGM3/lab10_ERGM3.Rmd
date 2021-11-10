@@ -574,9 +574,10 @@ Note2: In the `GERGM` environment, a baseline model with `edges` only does not w
 
 NOTE3: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
 
-`data("lending_2005", package = "GERGM")
-data("covariate_data_2005", package = "GERGM")
-data("net_exports_2005", package = "GERGM")`
+`data("lending_2005", package = "GERGM")`
+
+`data("covariate_data_2005", package = "GERGM")`
+
 
 As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
@@ -600,9 +601,10 @@ Why don't you run other exploratory models here by trying some other terms? I gi
 
 NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
 
-`data("lending_2005", package = "GERGM")
-data("covariate_data_2005", package = "GERGM")
-data("net_exports_2005", package = "GERGM")`
+`data("lending_2005", package = "GERGM")`
+
+`data("covariate_data_2005", package = "GERGM")`
+
 
 As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
@@ -627,9 +629,10 @@ Ok, let's get to our final model.
 
 NOTE: This model might be too heavy to run in your tutorial, depending on your computer. If it does not run, run it on `Rstudio` directly. You can load the data using the `data` function. 
 
-`data("lending_2005", package = "GERGM")
-data("covariate_data_2005", package = "GERGM")
-data("net_exports_2005", package = "GERGM")`
+`data("lending_2005", package = "GERGM")`
+
+`data("covariate_data_2005", package = "GERGM")`
+
 
 As you can see in the specification, this data set is located in the `GERGM` package itself. 
 
