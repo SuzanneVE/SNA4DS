@@ -41,6 +41,7 @@ Imports:
 Remotes:
 	github::rstudio-education/gradethis,
 	github::SNAnalyst/SNA4DSData
+        github::matthewjdenny/GERGM
 Suggests:
 	desc,
 	fs,
