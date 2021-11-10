@@ -29,7 +29,6 @@ Imports:
 	influenceR,
 	intergraph,
     knitr,
-	learnr,
 	ndtv,
 	network,
 	networkDynamic,
@@ -40,8 +39,9 @@ Imports:
 	stringr
 Remotes:
 	github::rstudio-education/gradethis,
-	github::SNAnalyst/SNA4DSData
-        github::matthewjdenny/GERGM
+	github::SNAnalyst/SNA4DSData,
+        github::matthewjdenny/GERGM,
+        github::rstudio/learnr
 Suggests:
 	desc,
 	fs,
