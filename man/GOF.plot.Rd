@@ -16,7 +16,7 @@ Four Plots displaying the Goodness of Fit
 Plots the Goodness of fit for the output of a model of clas `ergm`
 }
 \details{
-This function processes the output of unipartite Exponential Random Graphs Models only. 
+This function processes the output of unipartite Exponential Random Graphs Models only.
 
 It does not process bipartite ERGMs model objects nor other types of Exponential random graph models object.
 }
