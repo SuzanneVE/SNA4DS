@@ -178,7 +178,7 @@ if (window.hljs) {
 <pre class="text"><code>check_pkgs()</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Turn on the over, we are ready for some mouth watering bun to cook!</p>
+<p>Turn on the oven, we are ready for some mouth watering bun to cook!</p>
 </div>
 </div>
 <div id="section-a-dyadic-independent-model" class="section level2">
@@ -427,7 +427,10 @@ ergm::mcmc.diagnostics(fit3)</code></pre>
 fit.gof &lt;- ergm::gof(fit)
 plot(fit.gof)
 # If you also want to see the numeric output, uncomment below and rerun
-# fit.gof</code></pre>
+# fit.gof
+# 
+# Or plot the gof using
+SNA4DS::GOF.plot(fit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p><code>gof</code>’s output is composed of 4 Parts</p>
@@ -441,8 +444,7 @@ plot(fit.gof)
 <div class="tutorial-exercise" data-label="flob_gofDegree" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>fit &lt;- ergm::ergm(flobusiness ~ edges + degree(1))
 gofdegree &lt;- ergm::gof(fit ~ degree)
-gofdegree
-plot(gofdegree)</code></pre>
+gofdegree</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>The goodness of fit table for degrees has one row for each degree value in the distribution of the observed network. The column <code>obs</code> reports how many nodes with that degree are in the observed network, while the column min, mean and max report the simulated values for each degree value. The last column reports the p-value, and, as we said, we want it as close as possible to one.</p>
@@ -500,7 +502,7 @@ summary(samM2)</code></pre>
 <li><code>transitive</code></li>
 <li><code>balance</code></li>
 </ul>
-<p>Why don’t you try to use them and see what happens in with the Sampson data?</p>
+<p>Why don’t you try to use them and see what happens with the Sampson data?</p>
 <div class="tutorial-exercise" data-label="Playground" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
@@ -650,7 +652,9 @@ summary(UKFit.4)</code></pre>
 UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
 ergm::mcmc.diagnostics(UKFit)
 
-plot(ergm::gof(UKFit))</code></pre>
+ergm::gof(UKFit)
+
+SNA4DS::GOF.plot(UKFit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>What is the MCMC diagnostics telling you? Is your model good? Shall you spend some more time changing terms to improve the fit?</p>
@@ -659,7 +663,9 @@ plot(ergm::gof(UKFit))</code></pre>
 <pre class="text"><code>UKFN &lt;- intergraph::asNetwork(UKF)
 UKFit &lt;- ergm::ergm(UKFN ~ edges + mutual)
 
-plot(ergm::gof(UKFit))</code></pre>
+ergm::gof(UKFit)
+
+SNA4DS::GOF.plot(UKFit)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>What is the <code>gof</code> telling you? Is the model good?</p>
@@ -1787,7 +1793,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
     chunks = list(list(label = "load_flob", code = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_gof", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\nfit.gof <- ergm::gof(fit)\nplot(fit.gof)\n# If you also want to see the numeric output, uncomment below and rerun\n# fit.gof", 
+        engine = "r"), list(label = "flob_gof", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\nfit.gof <- ergm::gof(fit)\nplot(fit.gof)\n# If you also want to see the numeric output, uncomment below and rerun\n# fit.gof\n# \n# Or plot the gof using\nSNA4DS::GOF.plot(fit)", 
         opts = list(label = "\"flob_gof\"", exercise = "TRUE", 
             exercise.setup = "\"load_flob\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1812,8 +1818,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "flob_gof", exercise = TRUE, exercise.setup = "load_flob", 
         code = c("fit <- ergm::ergm(flobusiness ~ edges + degree(1))", 
         "fit.gof <- ergm::gof(fit)", "plot(fit.gof)", "# If you also want to see the numeric output, uncomment below and rerun", 
-        "# fit.gof"), out.width.px = 624, out.height.px = 384, 
-        params.src = "flob_gof, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        "# fit.gof", "# ", "# Or plot the gof using", "SNA4DS::GOF.plot(fit)"
+        ), out.width.px = 624, out.height.px = 384, params.src = "flob_gof, exercise = TRUE, exercise.setup = \"load_flob\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -1842,7 +1848,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
     chunks = list(list(label = "load_flob", code = "\n \nflorentine <- SNA4DSData::florentine\nflo_bus <- florentine$flobusiness\nflobusiness <- intergraph::asNetwork(flo_bus)\n", 
         opts = list(label = "\"load_flob\"", include = "FALSE"), 
-        engine = "r"), list(label = "flob_gofDegree", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\ngofdegree <- ergm::gof(fit ~ degree)\ngofdegree\nplot(gofdegree)\n", 
+        engine = "r"), list(label = "flob_gofDegree", code = "fit <- ergm::ergm(flobusiness ~ edges + degree(1))\ngofdegree <- ergm::gof(fit ~ degree)\ngofdegree\n\n", 
         opts = list(label = "\"flob_gofDegree\"", exercise = "TRUE", 
             exercise.setup = "\"load_flob\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -1867,8 +1873,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         label = "flob_gofDegree", exercise = TRUE, exercise.setup = "load_flob", 
         code = c("fit <- ergm::ergm(flobusiness ~ edges + degree(1))", 
         "gofdegree <- ergm::gof(fit ~ degree)", "gofdegree", 
-        "plot(gofdegree)", ""), out.width.px = 624, out.height.px = 384, 
-        params.src = "flob_gofDegree, exercise = TRUE, exercise.setup = \"load_flob\"", 
+        "", ""), out.width.px = 624, out.height.px = 384, params.src = "flob_gofDegree, exercise = TRUE, exercise.setup = \"load_flob\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2763,7 +2768,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModel", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\nergm::mcmc.diagnostics(UKFit)\n\nplot(ergm::gof(UKFit))\n", 
+        engine = "r"), list(label = "UKFBestModel", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\nergm::mcmc.diagnostics(UKFit)\n\nergm::gof(UKFit)\n\nSNA4DS::GOF.plot(UKFit)\n", 
         opts = list(label = "\"UKFBestModel\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2787,8 +2792,9 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModel", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
-        "ergm::mcmc.diagnostics(UKFit)", "", "plot(ergm::gof(UKFit))", 
-        ""), out.width.px = 624, out.height.px = 384, params.src = "UKFBestModel, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "ergm::mcmc.diagnostics(UKFit)", "", "ergm::gof(UKFit)", 
+        "", "SNA4DS::GOF.plot(UKFit)", ""), out.width.px = 624, 
+        out.height.px = 384, params.src = "UKFBestModel, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2817,7 +2823,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
     include = FALSE)), setup = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
     chunks = list(list(label = "load_UKfaculty", code = "\ndata(UKfaculty, package = \"igraphdata\")\nUKF <- UKfaculty", 
         opts = list(label = "\"load_UKfaculty\"", include = "FALSE"), 
-        engine = "r"), list(label = "UKFBestModelgof", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nplot(ergm::gof(UKFit))\n", 
+        engine = "r"), list(label = "UKFBestModelgof", code = "UKFN <- intergraph::asNetwork(UKF)\nUKFit <- ergm::ergm(UKFN ~ edges + mutual)\n\nergm::gof(UKFit)\n\nSNA4DS::GOF.plot(UKFit)\n", 
         opts = list(label = "\"UKFBestModelgof\"", exercise = "TRUE", 
             exercise.setup = "\"load_UKfaculty\""), engine = "r")), 
     code_check = NULL, error_check = NULL, check = NULL, solution = NULL, 
@@ -2841,8 +2847,8 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
         exercise.error.check.code = "gradethis_error_checker()", 
         label = "UKFBestModelgof", exercise = TRUE, exercise.setup = "load_UKfaculty", 
         code = c("UKFN <- intergraph::asNetwork(UKF)", "UKFit <- ergm::ergm(UKFN ~ edges + mutual)", 
-        "", "plot(ergm::gof(UKFit))", ""), out.width.px = 624, 
-        out.height.px = 384, params.src = "UKFBestModelgof, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
+        "", "ergm::gof(UKFit)", "", "SNA4DS::GOF.plot(UKFit)", 
+        ""), out.width.px = 624, out.height.px = 384, params.src = "UKFBestModelgof, exercise = TRUE, exercise.setup = \"load_UKfaculty\"", 
         fig.num = 0, exercise.df_print = "paged"), engine = "r"), class = "tutorial_exercise"))
 </script>
  
@@ -2906,7 +2912,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","SNA4DS","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.3.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.28","0.3.2","0.14","1.1.0","0.2.4.9000","4.1.1","4.1.1","0.5.2","1.5.4","1.6.3","0.1.4","1.7.2","1.36","1.3.0","0.10.1.9016","1.0.1","2.0.1","1.1","4.1.1","0.12","1.2.0.1","2.5.1","1.0.7","0.4.11","2.11","2.0.2","0.4.0","1.7.1","0.11.5","4.1.1","1.7.5","1.4.0","4.1.1","4.1.1","2.4.2","0.26","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","gradethis","graphics","grDevices","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","SNA4DS","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.1.1","0.3.1","2.0.0","4.1.1","4.3.2","4.1.1","0.6.28","0.3.2","0.14","1.1.0","0.2.4.9000","4.1.1","4.1.1","0.5.2","1.5.4","1.6.3","0.1.4","1.7.2","1.36","1.3.0","0.10.1.9016","1.0.1","2.0.1","1.1","4.1.1","0.12","1.2.0.1","2.5.1","1.0.7","0.4.11","2.11","2.0.2","0.4.0","1.7.1","0.12.6","4.1.1","1.7.5","1.4.0","4.1.1","4.1.1","2.4.2","0.26","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>

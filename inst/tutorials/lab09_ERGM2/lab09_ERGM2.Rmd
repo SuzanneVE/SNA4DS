@@ -603,6 +603,9 @@ fit.gof <- ergm::gof(fit)
 plot(fit.gof)
 # If you also want to see the numeric output, uncomment below and rerun
 # fit.gof
+# 
+# Or plot the gof using
+SNA4DS::GOF.plot(fit)
 ```
 
 
@@ -619,7 +622,7 @@ We can also print and plot only one of these four points. Let's have a closer lo
 fit <- ergm::ergm(flobusiness ~ edges + degree(1))
 gofdegree <- ergm::gof(fit ~ degree)
 gofdegree
-plot(gofdegree)
+
 
 ```
 
@@ -957,7 +960,9 @@ UKFN <- intergraph::asNetwork(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual)
 ergm::mcmc.diagnostics(UKFit)
 
-plot(ergm::gof(UKFit))
+ergm::gof(UKFit)
+
+SNA4DS::GOF.plot(UKFit)
 
 ```
 
@@ -972,7 +977,9 @@ If, and only if, your MCMC diagnostic is good enough, you can move on to the goo
 UKFN <- intergraph::asNetwork(UKF)
 UKFit <- ergm::ergm(UKFN ~ edges + mutual)
 
-plot(ergm::gof(UKFit))
+ergm::gof(UKFit)
+
+SNA4DS::GOF.plot(UKFit)
 
 ```
 
