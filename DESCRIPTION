@@ -22,26 +22,27 @@ BugReports: https://github.com/SNAnalyst/SNA4DS/issues
 RoxygenNote: 7.1.2
 Imports:
 	fontawesome,
-    glue,
-    gradethis,
+  glue,
+  gradethis,
 	igraph,
 	igraphdata,
 	influenceR,
 	intergraph,
-    knitr,
+  knitr,
 	ndtv,
 	network,
 	networkDynamic,
 	remotes,
-    rmarkdown,
+  rmarkdown,
 	rstudioapi,
 	sna,
-	stringr
+	stringr,
+	tsna
 Remotes:
 	github::rstudio-education/gradethis,
 	github::SNAnalyst/SNA4DSData,
-        github::matthewjdenny/GERGM,
-        github::rstudio/learnr
+  github::matthewjdenny/GERGM,
+  github::rstudio/learnr
 Suggests:
 	desc,
 	fs,
