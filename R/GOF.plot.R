@@ -23,9 +23,7 @@
 #' }
 GOF.plot <- function(m) {
 
-  summary(m)
-
-  g <- ergm::gof(m1)
+  g <- ergm::gof(m)
 
   ergm:::plot.gof(g)
 }
