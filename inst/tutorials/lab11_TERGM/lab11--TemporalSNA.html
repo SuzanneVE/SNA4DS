@@ -139,9 +139,11 @@ if (window.hljs) {
 </style>
 <div id="section-welcome" class="section level2">
 <h2>Welcome</h2>
-<p>Until now, we have focused on the analysis of static networks, that is: networks that do not change. The networks you considered were stable over time (or stable enough to be considered to be stable) and analyzed that. You learned how to visualize the networks, calculate vertex-level statistics, edge-level statistics, graph-level statistics, and perform statistical tests on the networks and built statistical models of networks. That’s a lot, you’ve done a lot already in this course.</p>
+<p>Until now, the tutorials have focused on the analysis of static networks, that is: networks that do not change. The networks you considered were stable over time (or stable enough to be considered to be stable) and analyzed that. You learned how to visualize the networks, calculate vertex-level statistics, edge-level statistics, graph-level statistics, and perform statistical tests on the networks and built statistical models of networks. That’s a lot, you’ve done a lot already in this course.</p>
 <p>At the same time, this is only the beginning of the journey. There are very many topics, models, and approaches left. In this tutorial, we are going to look at one extension of networks: networks that change over time. There are many names for this type of network, and we will call them <em>temporal networks</em> in this tutorial.</p>
-<p>There are many different kinds of temporal networks and you can do a great many things with this type of data. In this tutorial we will consider a specific type of temporal network: a network where</p>
+<p>There are many different kinds of temporal networks and you can do a great many things with this type of data.</p>
+<p>In the lecture, you learned how to apply ERGM’s to temporal networks. These models deal with a set of repeated observations of a network. For example, you can look at collaborative projects between organizations and measure the network once every month (or quarter, or year, of whatever is appropriate for your study at hand). Here, you do not know exactly when each edge started or ended, you only know what it is like when you measure it. Of course, this requires the assumption that your data are stable enough to justify measuring only every other month, quarter, year, or whatever frequency you adopt in your study. In many cases, this works quite well.</p>
+<p>In this tutorial we will consider a specific type of temporal network: a network where</p>
 <ul>
 <li><p>you know the starting and ending times of each edge (where edges are allowed to start and end multiple times during the observation period);</p></li>
 <li><p>you know the starting and ending times of each possible vertex (and vertices are allowed to join and leave the network multiple times during the observation period);</p></li>
@@ -152,6 +154,10 @@ if (window.hljs) {
 <p>You will find that we can build on a lot of the things you have already learned in this course, both conceptually and programming-related. At the same time, thinking about dynamics is hard for everybody, and you will find you will have to rethink some of the earlier concepts you learned in the context of static networks.</p>
 <p>In this tutorial, we will make a first start with considering this type of data.</p>
 <p>Ready for the adventure? Let’s get started!</p>
+<blockquote>
+<p><strong><em>Let’s do some time travel!</em></strong></p>
+</blockquote>
+<p><img src="images/pexels-giallo-859895_sml.jpg" /></p>
 </div>
 <div id="section-buckle-up" class="section level2">
 <h2>Buckle up!</h2>
@@ -180,14 +186,21 @@ if (window.hljs) {
 <pre class="text"><code>check_pkgs()</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>All packed up! Let’s roll!!</p>
+</div>
+<div id="section-lift-off" class="section level3">
+<h3>Lift off!</h3>
+<p>And you are ready for lift off! Let’s blast into space.</p>
+<blockquote>
+<p><strong>IGNITION!</strong></p>
+</blockquote>
+<p><img src="images/pexels-pixabay-2163_sml.jpg" title="We have lift off!" /></p>
 </div>
 </div>
 <div id="section-temporal-network-data" class="section level2">
 <h2>Temporal network data</h2>
 <p>The example we will use throughout this tutorial is based on data gathered by <a href="https://ed.stanford.edu/faculty/mcfarland">Daniel McFarland</a>, a really nice and really smart colleague with whom we have an active research collaboration.</p>
-<p>The dataset we use here is of the interactions between teachers and students in a classroom for a single 45-minute lesson. McFarland actually coded many classes and many lessons, and we are going to focus on one such network.</p>
-<p>In this dataset, a classroom had 18 pupils and two instructors (ie. the regular instructor and a guest instructor). Hence, there are 20 vertices in the network. Several attributes were coded of the vertices: gender and role, these are constant. Further, for the edges the type of interaction (“task” and “sociable”) is coded and the weight of the interaction (somewhat arbitrarily assessed by the coder).</p>
+<p>The data set we use here is of the interactions between teachers and students in a classroom for a single 45-minute lesson. McFarland actually coded many classes and many lessons, and we are going to focus on one such network.</p>
+<p>In this data set, a classroom had 18 pupils and two instructors (ie. the regular instructor and a guest instructor). Hence, there are 20 vertices in the network. Several attributes were coded of the vertices: gender and role, these are constant. Further, for the edges the type of interaction (“task” and “sociable”) is coded and the weight of the interaction (somewhat arbitrarily assessed by the coder).</p>
 <p>The researchers wanted to understand the interaction dynamics in this classroom and coded the network of conversation throughout the lesson. Each conversation has a “sender” (ie. the person talking) and a “receiver” (ie. the person(s) talked to).</p>
 <p>The class is an economics class composed of 11th and 12th graders. On this day, economics has two teachers. The first is the usual teacher and the second is a businessman who donates his time a couple days a month to assist the class with their lesson on stock investments. After a minute of undefined class time, the two teachers prescribe collaborative group work and assist students in conducting it. The students are assigned groups within which they are to study the stock market and make mock investments they can follow over time. The groups compete with each other over the course of the semester to see who can make the greatest profit.</p>
 <p>Anyway, let’s look at the data. It is available for you under the name <em>classroom</em>.</p>
@@ -308,12 +321,12 @@ sna::components(net_3)</code></pre>
 </div>
 <div id="section-measures-over-time" class="section level2">
 <h2>Measures over time</h2>
-<p>You just computed components across a couple of intervals, using the <code>sna</code> package on collapsed subnetworks. You can also make this process simpler by using the <code>tsna</code> package. This package has a function <code>tsna::tSnaStats</code> that allows you to compute any measure from the <code>sna</code> package on a series of subnetworks. You do this as follows.</p>
+<p>You just computed components across a couple of intervals, using the <code>sna</code> package on collapsed sub-networks. You can also make this process simpler by using the <code>tsna</code> package. This package has a function <code>tsna::tSnaStats</code> that allows you to compute any measure from the <code>sna</code> package on a series of sub-networks. You do this as follows.</p>
 <div class="tutorial-exercise" data-label="sna1" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>tsna::tSnaStats(classroom, snafun = &quot;components&quot;, time.interval = 15, aggregate.dur = 15)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>This collapses the network into intervals. At each step of 15 (<code>time.interval</code>) it extracts data of length 15 (<code>aggregate.dur</code>). So, the function creates the subnetworks from time [0, 15), [15, 30), [30, 45), [45, 49) and then applies the <code>sna</code> function <code>components</code> to each subnetwork.</p>
+<p>This collapses the network into intervals. At each step of 15 (<code>time.interval</code>) it extracts data of length 15 (<code>aggregate.dur</code>). So, the function creates the sub-networks from time [0, 15), [15, 30), [30, 45), [45, 49) and then applies the <code>sna</code> function <code>components</code> to each sub-network.</p>
 <p>You get the same results as above (but now you have four intervals instead of three before).</p>
 <p>This creates interesting ways to analyze the evolution of the network. For example, you can compute how the density of the network develops. Below, compute the density of the network for blocks of 5 minutes and plot how it develops.</p>
 <div class="tutorial-exercise" data-label="remedy003" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -345,7 +358,7 @@ summary(edgeDuration)
 plot(edgeDuration, type = &quot;l&quot;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Since we specified <code>mode = "counts"</code>, this tells you how many times the edge occured during the observation time (of course, you can also specify a time interval you want to consider, rather than the entire dataset). The function also offers you the option to calculate <em>how much time</em> an edge was active. However, since the edges in this particular dataset have no time length (ie. they all have a duration of 0, see the previous “networkDynamic” section where you extracted the <code>data.frame</code> of this graph), the total time each edge is active would also be 0. If we had coded durations as well, we could totally do this.</p>
+<p>Since we specified <code>mode = "counts"</code>, this tells you how many times the edge occured during the observation time (of course, you can also specify a time interval you want to consider, rather than the entire data set). The function also offers you the option to calculate <em>how much time</em> an edge was active. However, since the edges in this particular data set have no time length (ie. they all have a duration of 0, see the previous “networkDynamic” section where you extracted the <code>data.frame</code> of this graph), the total time each edge is active would also be 0. If we had coded durations as well, we could totally do this.</p>
 <p>What does this plot tell you about the interactions in this classroom?</p>
 <p>Edge durations can tell us the relative rates at which individual edges are active, but what if we want to know how active the vertices are across their relationships? The <code>tsna::tiedDuration</code> function provides a vertex-level aggregation of the amount of time each vertex is “in a relationship”.</p>
 <div class="tutorial-exercise" data-label="vertexduration" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="3">
@@ -354,7 +367,7 @@ plot(edgeDuration, type = &quot;l&quot;)</code></pre>
 </div>
 <p>Again, if durations had been coded, we could have measured this in terms of minutes.</p>
 <p>Feel free to make a plot of this as well, potentially a line plot or a histogram, or a density plot (or another plot you might find informative or fun to try out here).</p>
-<p>Do you notice there are some zeroes in here? Mmm, that is odd, because I know for sure that person 2 did engage in conversation (again, look back at the <code>data.frame</code> in the “networkDynamic” section). Check the help function for <code>tsna::tiedDuration</code> and find out why person 2 has a zero here and why this is actually correct.</p>
+<p>Do you notice there are some zeroes in here? Hmm, that is odd, because I know for sure that person 2 did engage in conversation (again, look back at the <code>data.frame</code> in the “networkDynamic” section). Check the help function for <code>tsna::tiedDuration</code> and find out why person 2 has a zero here and why this is actually correct.</p>
 <p>You probably also noticed that the amount of talking (which is what is measured in this network) is definitely not equally divided. Could it be that this has to do with some vertices being instructors and the others being pupils? Let’s find out.</p>
 <div class="tutorial-exercise" data-label="durationvertextypes" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>data.frame(type = network::get.vertex.attribute(classroom, &quot;type&quot;), 
@@ -380,7 +393,7 @@ plot(edgeDuration, type = &quot;l&quot;)</code></pre>
      ylab = &quot;unique edges per time point&quot;)</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>The plots are very similar. It looks like the conversing activity in the network is driven by general activityof edges, not so much by some edges hijacking the conversation. (although you could certainly compute a measure for that as well)</p>
+<p>The plots are very similar. It looks like the conversing activity in the network is driven by general activity of edges, not so much by some edges hijacking the conversation. (although you could certainly compute a measure for that as well)</p>
 </div>
 </div>
 <div id="section-temporal-paths" class="section level2">
@@ -405,7 +418,7 @@ tsna::tPath(classroom, v = 12, direction = &quot;fwd&quot;, start = 0, end = .9)
 <p>We focused on paths starting at vertex 12 (<code>v = 12</code>). You see that it takes 0.750 minute before node 1 is reached. Indeed, starting from time 0, only at 0.75 does vertex 12 contact vertex 1. This only takes a single step, you see this also in the <code>gsteps</code> output.</p>
 <p>Starting at time 0, it takes until time 0.875 that information from vertex 12 reaches vertex 17. This actually takes 2 steps: vertex 12 connects with vertex 14 at 0.250, who then connects with vertex 17 at 0.875.</p>
 <p>There are many vertices that can not be reached from vertex 12 within the time segment considered. They have value <code>Inf</code>.</p>
-<p>If you participated in the SNAckathon, with the soccer data, you may have already considered specific paths between players over time. For example: how many passes does it take before our most valuable offending player is reached? Is the passing pattern performed within a particular given amount of time? Et cetera.<br> These are temporal paths.</p>
+<p>Just think of passing networks on the soccer pitch. For example: how many passes does it take before our most valuable offending player is reached? Is the passing pattern performed within a particular given amount of time? Et cetera.<br> These are temporal paths.</p>
 <p>(note that above we considered “forward temporal paths”, but you can also consider other directions of flow, such as how long it takes for others to reach a specific vertex)</p>
 <p>We can plot the temporal paths, to make it more visual. Let’s do that for these paths.</p>
 <div class="tutorial-exercise" data-label="tpathplot" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -497,7 +510,7 @@ ndtv::render.d3movie(classroom, usearrows = TRUE, displaylabels = FALSE ,
                      )</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
-<p>Finally, I want to keep each vertex in the same place. The moving around of vertices is informative (because at every time point the optimal visualization shows clearly which vertices are more central than others within that timeframe), but you lose the ability to focus on specific<br />
+<p>Finally, I want to keep each vertex in the same place. The moving around of vertices is informative (because at every time point the optimal visualization shows clearly which vertices are more central than others within that time frame), but you lose the ability to focus on specific<br />
 vertices. <br> We do this by first determining coordinates for the vertices and then add these to the network object as attributes that remain unchanged throughout the time period. <br> Then, we specify <code>animation.mode = "useAttribute"</code> to tell the algorithm to use the “x” and “y” attributes for the coordinates. Since these do not change, vertices remain in the same place.</p>
 <p>Below, we set the coordinates by asking the <em>kamadakawai</em> algorithm to find an optimal layout for the network as a whole. But you can also manually set these coordinates the way you like them. Or you can change the locations of vertices at specific time points, whatever you want. Below, we will keep the vertices in one place for the entire animation. In order to make this happen, we have to run <code>ndtv::compute.animation</code> again.</p>
 <p>Also, I will make the vertex labels readable making their names visible when you click on a vertex.</p>
@@ -537,7 +550,15 @@ ndtv::render.d3movie(classroom, usearrows = TRUE, displaylabels = FALSE ,
 </div>
 <div id="section-we-landed-safely-back-in-our-own-timezone" class="section level2">
 <h2>We landed safely, back in our own timezone!</h2>
-XXXXXXXXXXXXXXX 
+<p>That was an adventurous ride through time! You safely landed your time capsule, great work!</p>
+<p>With these tools, you can now unravel quite complicated network patterns, taking into account how they unfold through time. You gained the ability to travel forwards and backwards through time.</p>
+<p>Does it feel like this?</p>
+<p><img src="images/steampunk-4692384_640_sml.jpg" title="Time has no secrets anymore!" width="282" /></p>
+<p><img src="images/fantasy-4032943_640_sml.jpg" title="Time has no secrets anymore!" width="275" /></p>
+<p>Couple this with your knowledge of temporal ERGM’s, and you can formulate and test quite advanced hypotheses of how interactions unfold, whether it relates to humans, groups, organizations, countries, computers, viruses, trains, traffic, online discussion fora, criminal behavior, sports, and so much more.</p>
+<p>Just realize that this is “only” an introductory course to network analysis and there are so many more models and measures to add to your bag of knowledge and so many more applications you can use it for. We have only scratched the surface, but you already have very powerful tools under your belt and already know more about SNA than most data scientists. Use this to your advantage!</p>
+<p>We wish you all the best and hope you will enjoy using your network analysis power to do cool research, with data, that matters! Let’s goooooooooooo!</p>
+<img src="images/pexels-kelly-l-2519374_med.jpg" title="The road ahead!" width="469" /> 
 <script type="application/shiny-prerendered" data-context="server-start">
 library(learnr)
 library(gradethis)
@@ -560,7 +581,7 @@ pkgs <- matrix(c(
   "igraph", "1.2.6", "CRAN",
   "knitr", "1.34", "CRAN",
   "sna", "2.6", "CRAN",
-  "SNA4DSData", "0.9.904", "SNAnalyst/SNA4DSData",
+  "SNA4DSData", "0.9.91", "SNAnalyst/SNA4DSData",
   "ergm", "4.1.2", "CRAN",
   "network","1.17.1" , "CRAN",
   "ndtv","0.13.2" , "CRAN",
@@ -627,7 +648,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -680,7 +701,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -734,7 +755,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -789,7 +810,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -842,7 +863,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -896,7 +917,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -950,7 +971,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1004,7 +1025,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1057,7 +1078,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1110,7 +1131,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1169,7 +1190,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1223,7 +1244,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1277,7 +1298,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1333,7 +1354,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1386,7 +1407,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1441,7 +1462,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1496,7 +1517,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1550,7 +1571,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1604,7 +1625,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1658,7 +1679,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1712,7 +1733,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1768,7 +1789,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1823,7 +1844,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1877,7 +1898,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -1933,7 +1954,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -2000,7 +2021,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
@@ -2067,7 +2088,7 @@ learnr:::store_exercise_cache(structure(list(global_setup = structure(c("library
 "", "# Check whether required packages are installed", "pkgs <- matrix(c(", 
 "  \"learnr\", \"0.10.0\", \"CRAN\",", "  \"gradethis\", \"0.2.3.9001\", \"rstudio/gradethis\",", 
 "  \"igraph\", \"1.2.6\", \"CRAN\",", "  \"knitr\", \"1.34\", \"CRAN\",", 
-"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.904\", \"SNAnalyst/SNA4DSData\",", 
+"  \"sna\", \"2.6\", \"CRAN\",", "  \"SNA4DSData\", \"0.9.91\", \"SNAnalyst/SNA4DSData\",", 
 "  \"ergm\", \"4.1.2\", \"CRAN\",", "  \"network\",\"1.17.1\" , \"CRAN\",", 
 "  \"ndtv\",\"0.13.2\" , \"CRAN\",", "  \"tsna\", \"0.3.5\" , \"CRAN\",", 
 "  \"networkDynamic\", \"0.11.0\" , \"CRAN\"", "), byrow = TRUE, ncol = 3) |> ", 
