@@ -44,7 +44,6 @@ Remotes:
 	github::rstudio-education/gradethis,
 	github::SNAnalyst/SNA4DSData,
   github::matthewjdenny/GERGM,
-  github::leifeld/btergm,
   github::rstudio/learnr
 Suggests:
 	desc,
