@@ -1,11 +1,11 @@
 ---
 title: "SNA4DS cheatsheet<br><br>"
 output:
-  html_document:
+  html_document: 
     theme: flatly
     toc: yes
     number_sections: yes
-    anchor_sections: false
+    anchor_sections: no
 vignette: |
   %\VignetteIndexEntry{SNA4DS cheatsheet} 
   \VignetteEncoding{UTF-8}
@@ -1070,39 +1070,126 @@ plot(ergm::gof(fit))
 
 ## ERGM for temporal networks
 
+The TERGM (=Temporal ERGM) can be used to model a sequence of **binary**
+networks. The model is very similar to the ERGM, but the dependent
+variable is now a list of networks: the first element is the network at
+time 1, the second element is the network at time 2, et cetera.
 
+### How to store the data for a TERGM
+
+You store the data needed for fitting a TERGM as follows.
 
 ```{r tergms_24, echo = FALSE, eval = TRUE}
 df <- as.data.frame(matrix(ncol = 2, nrow = 3))
 df[1,] <- c("Time-varying dyadic covariates", "Either as a list of networks or matrices")
 df[2,] <- c("Constant dyadic covariates", "Single network or matrix")
-df[3,] <- c("Node level attributes", "As vertex attributes inside the observed network objects")
+df[3,] <- c("Vertex level attributes", "As vertex attributes inside the observed network objects")
 
 colnames(df) <- c("What", "How to store")
 knitr::kable(df)
 ```
 
-jbkjbkjbkjbkjbkjb
+### How to fit a TERGM
 
-```{r, figures-side, fig.show="hold", out.width="50%", eval = TRUE, echo = FALSE}
-par(mar = c(4, 4, .1, .1))
-knitr::include_graphics("memory_terms.jpg")
-knitr::include_graphics("reciprocity_terms.jpg")
-```
+You fit a TERGM with the `btergm` package (to be installed from CRAN).
+This fits the model with MPLE, using bootstrapping to derive the
+standard errors.
 
+The `btergm` package is compatible with the `ergm` package and you can
+use the terms from that package inside `btergm`.
 
-lkjlkjlkjlkjlkj
+There are three groups of temporal measures you can specify: `memory`,
+`delayed reciprocity`, and `time covariates`.
+
+<br>
 
 ```{r, echo = FALSE, eval = TRUE}
 htmltools::includeHTML("df_btergm_terms.html")
 ```
 
-jnkjnkjnkjnkjn
+<br>Visually:
 
-gof + gofplot
+![](tergm_terms.jpg "TERGM temporal terms")
 
+<br>When a `timecov` is specified without including the value for the
+`transform`, the specification defaults to a linear trend over time. For
+example: `timecov()` (= the effect of time per se) or
+`timecov(militaryDisputes)` (= a linearly increasing or decreasing
+effect of `militaryDisputes` over time).
 
+### Parallel processing
 
+The `btergm` package uses MPLE and that lends itself well to parallel
+processing. You specificy that you want to use parallel processing using
+the argument `parallel`.
+
+Windows users can only use `parallel = "snow"`. Other systems can use
+either `parallel = "snow"` or `parallel = "multicore"`. The latter is
+probably often the better choice for non-Windows machines. Both options
+require that you have the `parallel` package installed.
+
+If you use the `parallel` option, you should also specify the
+appropriate number of cores you want to use. Either set `ncpus = 4` (for
+four cores) or use `ncpus = parallel::detectCores()` to have R recognize
+the number of cores automatically (this usually works well, but not
+always). The `ncpus` argument is ignored if you do not specify the
+`parallel` argument.
+
+The default is no parallel processing.
+
+### Goodness-of-fit
+
+Goodness of fit is determined by
+`gof_m <- btergm:::gof.btergm(m, statistics = btergm_statistics)`, where
+`m` is a fitted `btergm` model and `btergm_statistics` is a vector with
+statistics to be included in the GoF. The default is
+`c(btergm::dsp,`btergm::`esp,`btergm::`deg,`btergm::`ideg,`btergm::`geodesic,`btergm::`rocpr,`btergm::`walktrap.modularity)`.
+Of course, the more statistics you include (and the more complex the
+statistics), the more time it will take for the GoF calculations to
+finish.
+
+Use `` ?btergm:::`gof,btergm-method` `` for more options.
+
+The GoF object can be plotted using `btergm:::plot.gof(gof_m)`.
+
+More convenient is to use the helper function from the `SNA4DS` package.
+This is:
+
+`gof_m <- GOF_and_plot_as_btergm(m)`
+
+By default, this includes the statistics
+`c(btergm::esp, btergm::geodesic, btergm::deg, btergm::rocpr)` in the
+goodness-of-fit, but you can specify other statistics if you prefer. The
+function returns the goodness-of-fit (in this case, in the `gof_m`
+object) and plots it as well. This prevents you from having to use the
+triple colon `:::` for `btergm:::gof.btergm` and is generally more
+convenient. If you need the full flexibility of the
+`btergm:::gof.btergm` function, use that directly. The results between
+the two functions are identical.
+
+If you include the `btergm::rocpr` "statistic" in your GoF, the
+[red]{style="color:red;"} line is the Receiver Operating Characteristic
+(ROC) curve and the [blue]{style="color:blue;"} line is the
+Precision-Recall curve.
+
+If you see value in the ROC or PR, you can find the arreas under the
+curves using `` gof_m$`Tie prediction`$auc.roc `` and
+`` gof_m$`Tie prediction`$auc.pr ``. Note that Precision-Recall is most
+appropriate for sparse networks, while ROC works well for more connected
+networks. Either way, the plots for the network statistics are generally
+much more informative compared to ROC and PR (because the ROC and PR)
+don't take the dependency structure in your data into account.
+
+In the other plots, the grey boxplots represent the distribution of the
+values from the observed networks, the thick black line is the median of
+the simulations and the dashed line is the mean of the simulations. You
+can suppress the median by plotting using:
+
+`plot(gof_m, median = FALSE)`
+
+Note: you can also feed a fitted ERGM model to
+`GOF_and_plot_as_btergm(m)` and determine the goodness-of-fit for the
+fitted ERGM that way.
 
 # Temporal networks (exploration and description)
 
@@ -1235,8 +1322,8 @@ statistics (e.g., `sna:betweenness`) or graph-level measures (e.g.,
 time segments they should be calculated on. The function returns a time
 series, which makes the outcomes easy to plot.<br> For example, you want
 to calculate transitivity of intervals that are 5 time points wide. The
-following function calculates transitivity for time intervals [0-5),
-[5-10), [10-15), etc:
+following function calculates transitivity for time intervals \[0-5),
+\[5-10), \[10-15), etc:
 
 `tsna::tSnaStats(g, snafun = "gtrans", time.interval = 5, aggregate.dur = 5)`
 
